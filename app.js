@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require( 'mongoose' ); 
+var flash = require('connect-flash');
 
 var routes = require('./routes/index');
 var dashboard = require('./routes/dashboard');
@@ -90,6 +91,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 app.use('/', routes);
 app.use('/dashboard', ensureAuthenticated, dashboard);
