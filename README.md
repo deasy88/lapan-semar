@@ -1,1 +1,5 @@
-# lap
+Install :
+
+	npm install
+
+	./start
