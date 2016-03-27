@@ -7,11 +7,17 @@ var bodyParser = require('body-parser');
 var mongoose = require( 'mongoose' ); 
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var dashboard = require('./routes/dashboard');
 var db = require('./routes/database');
+
+var User = require('./models/user');
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+var session = require('express-session');
 
 var app = express();
 
+// connection
 mongoose.connect(db.lapan); 
 mongoose.connection.on('connected', function () {  
   console.log('Mongoose default connection open to ' + db.lapan);
@@ -29,20 +35,74 @@ process.on('SIGINT', function() {
   }); 
 });
 
+// check user
+User.findOne({username:'admin', password:'admin'}, function(err, usr){
+  if(usr==null){
+    console.log('admin not found');
+    User.create({name:'Suradmin', username:'admin', password:'admin', access:'admin'}, function(err, nw){
+      console.log('admin created');
+      console.log(nw);
+    });
+  }else{
+    console.log('admin found');
+    console.log(usr);
+  }
+});
+
+// setup passport
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    User.findOne({ username: username, password: password }, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Login failed' });
+      }
+      return done(null, user);
+    });
+  }
+));
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next(); 
+  }
+  res.redirect('/');
+}
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(session({secret: "iniadalahsecret"}));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/dashboard', ensureAuthenticated, dashboard);
+app.post('/login',
+  passport.authenticate('local', { successRedirect: '/dashboard',
+                                   failureRedirect: '/',
+                                   failureFlash: true })
+);
+app.get('/logout', function(req, res){
+  console.log('logging out');
+  req.logout();
+  res.redirect('/');
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
