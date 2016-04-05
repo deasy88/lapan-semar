@@ -311,12 +311,13 @@
 			</div>
 		</div>
 	</section>
+
 	<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content modal-popup">
 				<a href="#" class="close-link"><i class="icon_close_alt2"></i></a>
 				<h3 class="white">Sign Up</h3>
-				<form action="" class="popup-form">
+				<form action="" class="popup-form" method="post">
 					<input type="text" class="form-control form-white" placeholder="Full Name">
 					<input type="text" class="form-control form-white" placeholder="Email Address">
 					<div class="dropdown">
@@ -337,10 +338,28 @@
 						</div>
 					</div>
 					<button type="submit" class="btn btn-submit">Submit</button>
+					<br/>
+					<button type="button" data-toggle="modal" data-target="#modal2" class="btn btn-blue">Sign In</button>
 				</form>
 			</div>
 		</div>
 	</div>
+
+	<div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content modal-popup">
+				<h3 class="white">Sign In</h3>
+				<form action="/login" class="popup-form" method="post">
+					<input type="text" class="form-control form-white" placeholder="Username" name="username">
+					<input type="text" class="form-control form-white" placeholder="Password" name="password">
+					<button type="submit" class="btn btn-submit">Login</button>
+					<br/>
+					<button type="button" data-dismiss="modal" aria-label="Sign Up" class="btn btn-blue">Sign Up</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
 	<footer>
 		<div class="container">
 			<div class="row">

@@ -16,8 +16,9 @@ var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 var session = require('express-session');
 
-var app = express();
 var cons = require('consolidate');
+
+var app = express();
 
 // connection
 mongoose.connect(db.lapan); 
@@ -91,8 +92,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
