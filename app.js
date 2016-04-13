@@ -110,6 +110,16 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+app.get('/login', function(req, res){
+  console.log(req.connection.remoteAddress);
+  res.render('login');
+});
+
+app.get('/administrator', function(req, res){
+  console.log(req.connection.remoteAddress);
+  res.render('administrator');
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
