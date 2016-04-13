@@ -157,7 +157,7 @@ var boroughs = L.geoJson(null, {
     });
   }
 });
-$.getJSON("/templates/dashboard/data/boroughs.geojson", function (data) {
+$.getJSON("/templates/dashboard/data/*.geojson", function (data) {
   boroughs.addData(data);
 });
 
@@ -271,7 +271,7 @@ var subwayLines = L.geoJson(null, {
     });
   }
 });
-$.getJSON("/templates/dashboard/data/subways.geojson", function (data) {
+$.getJSON("/templates/dashboard/data/*.geojson", function (data) {
   subwayLines.addData(data);
 });
 
