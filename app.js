@@ -4,7 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mongoose = require( 'mongoose' ); 
 var flash = require('connect-flash');
 
 var routes = require('./routes/index');
@@ -21,36 +20,7 @@ var cons = require('consolidate');
 var app = express();
 
 // connection
-mongoose.connect(db.lapan); 
-mongoose.connection.on('connected', function () {  
-  console.log('Mongoose default connection open to ' + db.lapan);
-}); 
-mongoose.connection.on('error',function (err) {  
-  console.log('Mongoose default connection error: ' + err);
-}); 
-mongoose.connection.on('disconnected', function () {  
-  console.log('Mongoose default connection disconnected'); 
-});
-process.on('SIGINT', function() {  
-  mongoose.connection.close(function () { 
-    console.log('Mongoose default connection disconnected through app termination'); 
-    process.exit(0); 
-  }); 
-});
 
-// check user
-User.findOne({username:'admin', password:'admin'}, function(err, usr){
-  if(usr==null){
-    console.log('admin not found');
-    User.create({name:'Suradmin', username:'admin', password:'admin', access:'admin'}, function(err, nw){
-      console.log('admin created');
-      console.log(nw);
-    });
-  }else{
-    console.log('admin found');
-    console.log(usr);
-  }
-});
 
 // setup passport
 passport.use(new LocalStrategy(
