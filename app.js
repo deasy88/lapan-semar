@@ -147,9 +147,9 @@ app.use(function(err, req, res, next) {
 
 // connection
 database.createPool( {
-    user          : "SYSTEM",
-    password      : "root",
-    connectString : "localhost/XE"
+	user          : "DSSSEMAR",
+    password      : "lapansemar",
+    connectString : "10.40.1.210/bismadb"
 } ).then(function() {
         console.log( "connected" );
 
