@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="ftp://acdisc.gsfc.nasa.gov/data/s4pa//S4paGran2HTML.xsl"?>
+<S4PAGranuleMetaDataFile>
+  <CollectionMetaData>
+    <Description>OMI/Aura L3 daily Ozone (O3) Total Column density on a 0.25x0.25 degree grid</Description>
+    <LongName>OMI/Aura Ozone (O3) Total Column Daily L3 Global 0.25deg Lat/Lon Grid</LongName>
+    <ShortName>OMTO3e</ShortName>
+    <VersionID>003</VersionID>
+    <URL xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="ftp://acdisc.gsfc.nasa.gov/data/s4pa//Aura_OMI_Level3/OMTO3e.003/GES_DISC_OMTO3e_V003_dif.xml" xlink:show="new" xlink:actuate="onRequest" xlink:title="Click to view OMTO3e collection">ftp://acdisc.gsfc.nasa.gov/data/s4pa//Aura_OMI_Level3/OMTO3e.003/GES_DISC_OMTO3e_V003_dif.xml</URL>
+  </CollectionMetaData>
+  <DataGranule>
+    <GranuleID>OMI-Aura_L3-OMTO3e_2015m0101_v003-2015m0108t113901.he5</GranuleID>
+    <LocalGranuleID>OMI-Aura_L3-OMTO3e_2015m0101_v003-2015m0108t113901.he5</LocalGranuleID>
+    <Format>HDF-EOS5</Format>
+    <CheckSum>
+      <CheckSumType>CRC32</CheckSumType>
+      <CheckSumValue>1657668361</CheckSumValue>
+    </CheckSum>
+    <SizeBytesDataGranule>2819782</SizeBytesDataGranule>
+    <InsertDateTime>2015-01-08 16:51:48</InsertDateTime>
+    <ProductionDateTime>2015-01-08T11:39:01EST</ProductionDateTime>
+    <DayNightFlag>Day</DayNightFlag>
+  </DataGranule>
+  <RangeDateTime>
+    <RangeEndingDate>2015-01-01</RangeEndingDate>
+    <RangeEndingTime>23:59:59</RangeEndingTime>
+    <RangeBeginningDate>2015-01-01</RangeBeginningDate>
+    <RangeBeginningTime>00:00:00</RangeBeginningTime>
+  </RangeDateTime>
+  <SpatialDomainContainer>
+    <HorizontalSpatialDomainContainer>
+      <BoundingRectangle>
+        <WestBoundingCoordinate>-180</WestBoundingCoordinate>
+        <NorthBoundingCoordinate>90</NorthBoundingCoordinate>
+        <EastBoundingCoordinate>180</EastBoundingCoordinate>
+        <SouthBoundingCoordinate>-90</SouthBoundingCoordinate>
+      </BoundingRectangle>
+    </HorizontalSpatialDomainContainer>
+  </SpatialDomainContainer>
+  <Platform>
+    <PlatformShortName>Aura</PlatformShortName>
+    <Instrument>
+      <InstrumentShortName>OMI</InstrumentShortName>
+      <Sensor>
+        <SensorShortName>CCD Ultra Violet</SensorShortName>
+      </Sensor>
+      <Sensor>
+        <SensorShortName>CCD Visible</SensorShortName>
+      </Sensor>
+    </Instrument>
+  </Platform>
+</S4PAGranuleMetaDataFile>

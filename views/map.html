@@ -1,67 +1,222 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="/libs/angularjs/css/angular-material.min.css">
+    <script src="/map/libs/angularjs/js/angular.js"></script>
+    <script src="/map/libs/jquery/jquery.min.js"></script>
+    
+    <script src="https://cdn.rawgit.com/abdmob/x2js/master/xml2json.js"></script>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <link rel="stylesheet" href="/map/scripts/css/main.css">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
 
-    <title>LIVE MAP - Sistem Embaran Maritim</title>
+    <title>SEMAR - Sistem Embaran Maritim</title>
 
-    <!-- Bootstrap Core CSS -->
-    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css">
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css">
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.css">
+    <link rel="stylesheet" href="/map/assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.css">
+    <link rel="stylesheet" href="/map/assets/css/app.css">
 
-    <!-- Custom CSS -->
-    <link href="/stylesheets/sb-admin.css" rel="stylesheet">
-
-    <!-- Morris Charts CSS -->
-    <link href="/stylesheets/plugins/morris.css" rel="stylesheet">
-
-    <!-- Custom Fonts -->
-    <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
+    <link rel="apple-touch-icon" sizes="76x76" href="/map/assets/img/favicon-76.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/map/assets/img/favicon-120.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/map/assets/img/favicon-152.png">
+    <link rel="icon" sizes="196x196" href="/map/assets/img/favicon-196.png">
+    <link rel="icon" type="image/x-icon" href="/map/assets/img/favicon.ico">
 </head>
 
-<body>
-
-    <div id="wrapper">
-
-        <!-- Navigation -->
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand">PETA Sistem Embaran Maritim</a>
-				<center> <img src="/img/logolapan.png" width='52' height='52'>
-				<img src="/img/logodiy.png" width='52' height='52'>
-				<img src="/img/logokkp.png" width='52' height='52'>
-				<img src="/img/logobmkg.png" width='47' height='52'> </center>
+<body ng-app="myApp" style="overflow: hidden;">
+<section layout="row" flex ng-controller="AppCtrl as ctrl" >
+    <div layout="column" style="position: absolute; top: 1px; z-index: 2; width: 100%; background-color: #fff">
+        <md-toolbar flex>
+            <div class="md-toolbar-tools">
+                <div flex="80" layout="column">
+                    <h2 flex style="text-align: left;font-size:20pt">
+                        DSS - SEMAR
+                    </h2>
+                    <h1 flex style="text-align: font-size:5pt">
+                    <marquee scrollamount="3">Selamat Datang di Sistem Embaran Maritim DI. Yogyakarta</marquee>
+                    </h1>    
+                </div>
+                <img src="/assets/img/logolapan.png" width='52' height='52'>
+              <img src="/assets/img/logodiy.png" width='52' height='52'>
+              <img src="/assets/img/logokkp.png" width='52' height='52'>
+              <img src="/assets/img/logobmkg.png" width='47' height='52'>
+                <md-button aria-label="Menu" ng-click="toggleLeft()">
+                    <md-icon md-svg-icon="assets/images/menu.svg">Menu</md-icon>
+                    Menu
+                </md-button>
+                <span flex></span>
+                <!--<input type="text" name="fname" placeholder="Lokasi atau Area" style="font-size:12pt;border: 0px;height: 27px; padding:10px;">-->
+                <!-- <md-button class="md-icon-button" aria-label="More">
+              <md-icon md-svg-icon="assets/images/search.svg"></md-icon>
+          </md-button> -->
             </div>
-	<div id="maps">		
-			
+        </md-toolbar>
+        
+        <md-progress-linear ng-show="progressbar" md-mode="indeterminate" flex></md-progress-linear>
+    </div>
 
-			
-    
-	<script src="/javascripts/jquery.js"></script>
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" style="overflow:hidden">
+        <md-toolbar class="md-theme-indigo">
+            <div class="md-toolbar-tools titlebar-dss" layout="column">
+                <div flex>
+                    <img src="assets/images/logo.png" alt="LAPAN_RI" class="logo" />
+                    <h2>@LAPAN_RI</h2>
+                </div>
+            </div>
+        </md-toolbar>
+        <div ng-cloak>
+            <md-tabs md-dynamic-height md-border-bottom>
+                <md-tab label="Prediksi">
+                    <md-content class="md-padding">
+                        <md-content layout-padding>
+                            <div style="overflow: auto; height:45%;">
+                                <span><font size="3"><b><u>Atmosfer :</u></b></font></span>
+                                <md-switch aria-label="Hujan" ng-model="dataInfo.Hujan.active" class="md-primary" ng-change="onSwitch('Hujan')">
+                                    Hujan 
+                                </md-switch>
+                                <md-switch aria-label="Suhu" ng-model="dataInfo.Suhu.active" class="md-primary" ng-change="onSwitch('Suhu')">
+                                    Suhu 
+                                </md-switch>
+                                <md-switch aria-label="Kelembapan" ng-model="dataInfo.Kelembapan.active" class="md-primary" ng-change="onSwitch('Kelembapan')">
+                                    Kelembapan 
+                                </md-switch>
+                                <md-switch aria-label="Tekanan" ng-model="dataInfo.Tekanan.active" class="md-primary" ng-change="onSwitch('Tekanan')">
+                                    Tekanan 
+                                </md-switch>
+                                <md-switch aria-label="Angin" ng-model="dataInfo.Angin.active" class="md-primary" ng-change="onSwitch('Angin')">
+                                    Angin 
+                                </md-switch>
+                                <span><font size="3"><b><u>Laut :</u></b></font></span>
+                                <md-switch aria-label="arus" ng-model="dataInfo.arus.active" class="md-primary" ng-change="onSwitch('arus')">
+                                    Arus
+                                </md-switch>
+                                <md-switch aria-label="SST" ng-model="dataInfo.SST.active" class="md-primary" ng-change="onSwitch('SST')">
+                                    SST
+                                </md-switch>
+                                <md-switch aria-label="Gelombang" ng-model="dataInfo.Gelombang.active" class="md-primary" ng-change="onSwitch('Gelombang')">
+                                    Gelombang
+                                </md-switch>
+                                <span><font size="3"><b><u>Posisi Ikan :</u></b></font></span>
+                                <md-switch aria-label="Ikan" ng-model="dataInfo.Ikan.active" class="md-primary" ng-change="onSwitch('Ikan')">
+                                    Ikan
+                                </md-switch>
+                                <div style="height:12%" class="whitespace">
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Observasi">
+                    <md-content class="md-padding">
+                        <md-content layout-padding>
+                            <div style="overflow: auto; height:45%">
+                                <span><font size="3"><b><u>Satelit :</u></b></font></span>
+                                <md-switch aria-label="Awan" ng-model="dataInfo.Awan.active" class="md-primary" ng-change="onSwitch('Awan')">
+                                    Awan
+                                </md-switch>
+                                <md-switch aria-label="Kapal" ng-model="dataInfo.Kapal.active" class="md-primary" ng-change="onSwitch('Kapal')">
+                                    Kapal - AIS
+                                </md-switch>
+                                <span><font size="3"><b><u>Land - Based :</u></b></font></span>
+                                <md-switch aria-label="AWS" ng-model="dataInfo.AWS.active" class="md-primary" ng-change="onSwitch('AWS')">
+                                    AWS
+                                </md-switch>
+                                <md-switch aria-label="Radar" ng-model="dataInfo.Radar.active" class="md-primary" ng-change="onSwitch('Radar')">
+                                    Radar
+                                </md-switch>
+                                <div style="height:10%" class="whitespace">
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </div>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/javascripts/bootstrap.min.js"></script>
-
+        </md-content>
+        <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="" class="layout-padding md-docs-dark-theme layout-gt-sm-row" style="position:absolute;width:100%;bottom:0px">
+            <md-button ng-click="toggleLeft()" class="md-primary md-raised" style="width:100%">
+                OK
+            </md-button>
+        </md-content>
+    </md-sidenav>
+    <!-- <md-button class="md-fab md-primary main-menu" aria-label="Use Android" style="position: absolute" ng-click="toggleLeft()">
+    <md-icon md-svg-src="assets/images/menu.svg"></md-icon>
+</md-button> -->
+    <div class="" layout="row" style="position:absolute;width:100%;bottom:-125px;">
+        <div flex></div>
+        <div class="legend"></div>
+        <div flex></div>
+    </div>
+    <div class="" layout="row" style="position:absolute;width:100%;#FFF;bottom:10px;">
+        <div flex></div>
+        <div class="legendTxt" layout="row">
+            <div flex style="text-align:center">
+                <span><mark style="background-color:#2196F3;color:#FFF;padding:2px">{{(colorange.max*1000).toFixed(3)}}</mark></span>
+            </div>
+            <div flex style="text-align:center">
+                <span><mark style="background-color:#2196F3;color:#FFF;padding:2px">{{((colorange.min+((colorange.max-colorange.min)*3/4))*1000).toFixed(3)}}</mark></span>
+            </div>
+            <div flex style="text-align:center">
+                <span><mark style="background-color:#2196F3;color:#FFF;padding:2px">{{((colorange.min+((colorange.max-colorange.min)*1/2))*1000).toFixed(3)}}</mark></span>
+            </div>
+            <div flex style="text-align:center">
+                <span><mark style="background-color:#2196F3;color:#FFF;padding:2px">{{((colorange.min+((colorange.max-colorange.min)*1/4))*1000).toFixed(3)}}</mark></span>
+            </div>
+            <div flex style="text-align:center">
+                <span><mark style="background-color:#2196F3;color:#FFF;padding:2px">{{(colorange.min*1000).toFixed(3)}}</mark></span>
+            </div>
+        </div>
+        <div flex></div>
+    </div>
+    <div class="" layout="row" style="position:absolute;width:100%;#FFF;bottom:45px;z-index:100;">
+        <div flex></div>
+        <div class="legendTxt" layout="row">
+            <div flex style="text-align:center">
+                <span style="color: #000"></span>
+            </div>
+            <div flex style="text-align:center">
+                <span style="color: #000">|</span>
+            </div>
+            <div flex style="text-align:center">
+                <span style="color: #000">|</span>
+            </div>
+            <div flex style="text-align:center">
+                <span style="color: #000">|</span>
+            </div>
+            <div flex style="text-align:center">
+                <span style="color: #000"></span>
+            </div>
+        </div>
+        <div flex></div>
+    </div>
+    <div my-map="" id="maps"></div>
+    </div>
+</section>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.5/typeahead.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js"></script>
+    <script src="/map/assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.js"></script>
+    <script src="/map/assets/js/app.js"></script>
+    <script src="/map/libs/angularjs/js/angular-material.min.js"></script>
+    <script src="/map/libs/angularjs/js/angular-animate.min.js"></script>
+    <script src="/map/libs/angularjs/js/angular-messages.min.js"></script>
+    <script src="/map/libs/angularjs/js/angular-aria.min.js"></script>
+    <script src="/map/libs/angularjs/js/ng-map.min.js"></script>
+    <script src="/map/libs/jlinq/jlinq.js"></script>
+    <script src="/map/scripts/js/main.js"></script>
+    <script src="/map/scripts/js/controller.js"></script>
 </body>
 
 </html>
