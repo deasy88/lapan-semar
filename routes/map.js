@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 /* GET users listing. */
-app.get('/map', function(req, res) {
+app.post('/map', function(req, res) {
             res.render('views/map', { message: req.flash('loginMessage') });
         });
         app.post('/dashboard', passport.authenticate('dashboard', {
