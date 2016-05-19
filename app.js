@@ -114,7 +114,7 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.post('/map', function(req, res){
+app.get('/map', function(req, res){
   console.log(req.connection.remoteAddress);
   res.render('map');
 });
