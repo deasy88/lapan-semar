@@ -114,6 +114,11 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+app.post('/map', function(req, res){
+  console.log(req.connection.remoteAddress);
+  res.render('map');
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
