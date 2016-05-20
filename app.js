@@ -114,6 +114,11 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+app.get('/map', function(req, res){
+  console.log(req.connection.remoteAddress);
+  res.render('map');
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -147,9 +152,9 @@ app.use(function(err, req, res, next) {
 
 // connection
 database.createPool( {
-    user          : "SYSTEM",
-    password      : "root",
-    connectString : "localhost/XE"
+	user          : "DSSSEMAR",
+    password      : "lapansemar",
+    connectString : "10.40.1.210/bismadb"
 } ).then(function() {
         console.log( "connected" );
 
