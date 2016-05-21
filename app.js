@@ -15,6 +15,8 @@ var dashboard = require('./routes/dashboard');
 
 var m_user = require('./models/user');
 
+require( "./connect.js" ) (database);
+
 var app = express();
 
 // detector
@@ -93,7 +95,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 function isLoggedIn(req, res, next){
-    console.log( 'status', req.isAuthenticated() );
+    // console.log( 'status', req.isAuthenticated() );
     if(req.isAuthenticated()){
         return next();
     }
@@ -112,11 +114,6 @@ app.post('/login',
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
-});
-
-app.get('/map', function(req, res){
-  console.log(req.connection.remoteAddress);
-  res.render('map');
 });
 
 // catch 404 and forward to error handler
@@ -149,19 +146,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-// connection
-database.createPool( {
-	user          : "DSSSEMAR",
-    password      : "lapansemar",
-    connectString : "10.40.1.210/bismadb"
-} ).then(function() {
-        console.log( "connected" );
-
-    }).catch(function(err) {
-        console.error('Error occurred creating database connection pool', err);
-        console.log('Exiting process');
-        process.exit(0);
-    });
 
 module.exports = app;
