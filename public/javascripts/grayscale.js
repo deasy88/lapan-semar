@@ -171,17 +171,18 @@ function init() {
 
     // Get the HTML DOM element that will contain your map 
     // We are using a div with id="map" seen below in the <body>
-    var mapElement = document.getElementById('map');
+    
+	//var mapElement = document.getElementById('map');
 
     // Create the Google Map using out element and options defined above
-    map = new google.maps.Map(mapElement, mapOptions);
+    //map = new google.maps.Map(mapElement, mapOptions);
 
     // Custom Map Marker Icon - Customize the map-marker.png file to customize your icon
-    var image = '/images/map-marker.png';
-    var myLatLng = new google.maps.LatLng(40.6700, -73.9400);
-    var beachMarker = new google.maps.Marker({
-        position: myLatLng,
-        map: map,
-        icon: image
-    });
+    //var image = '/images/map-marker.png';
+    //var myLatLng = new google.maps.LatLng(40.6700, -73.9400);
+    //var beachMarker = new google.maps.Marker({
+    //    position: myLatLng,
+    //    map: map,
+    //    icon: image
+    //});
 }

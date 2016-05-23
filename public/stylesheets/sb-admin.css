@@ -27,6 +27,14 @@ body {
     background-color: #fff;
 }
 
+#page-full {
+	width: 100%;
+	height: auto;
+	
+	top: 0;
+	left: 0;
+}
+
 .huge {
     font-size: 50px;
     line-height: normal;
