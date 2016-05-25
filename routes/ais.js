@@ -111,4 +111,3 @@ function getAisLocation(lokasiId, kapal, connection, callback) {
 		}
     );
 }
-
