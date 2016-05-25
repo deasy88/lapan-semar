@@ -29,7 +29,7 @@ function getAis(aisId, callback) {
                     kapal.TYPE_ID = results.rows[0][0];
                     kapal.NAME = results.rows[0][1];
                    
-                    getLocationDetails(results.rows[0][2], kapal, connection, callback);
+                    getAisDetails(results.rows[0][2], kapal, connection, callback);
                 }
             );
         }
@@ -76,7 +76,7 @@ function getAisLocation(lokasiId, kapal, connection, callback) {
         '   LATITUDE, \n' +
         '   TIMESTAMP \n' +
 		'   TANGGAL \n' +
-        'from AIS_POSITION_REPORT \n' +
+        'from AIS_POSITION_REPORT_IND \n' +
         'where MMSI = :MMSI',
         {
             MMSI: lokasiId
