@@ -50,17 +50,19 @@
         function init(){
             map = new OpenLayers.Map( 'map');
             layer = new OpenLayers.Layer.OSM( "Simple OSM Map");
+            // layer = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
+            //     "http://vmap0.tiles.osgeo.org/wms/vmap0", {layers: 'basic'} );
             map.addLayer(layer);
             // add layer
             var markers = new OpenLayers.Layer.Markers( "Markers" );
             map.addLayer(markers);
             // create icon
-            var size = new OpenLayers.Size(200, 200);
+            var size = new OpenLayers.Size(30, 30);
             var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-            var icon = new OpenLayers.Icon('/img/logolapan.png', size, offset);
+            var icon = new OpenLayers.Icon('/images/map-marker.png', size, offset);
             // create marker
-            marker = new OpenLayers.Marker(new OpenLayers.LonLat( 110.45, -8.00), icon);
-            marker.setOpacity(0.2);
+            marker = new OpenLayers.Marker(new OpenLayers.LonLat( 110.45, -8.00), icon.clone());
+            // marker.setOpacity(0.2);
             marker.events.register('mousedown', marker, function(evt) { 
             	alert(this.icon.url); 
             	OpenLayers.Event.stop(evt); 
