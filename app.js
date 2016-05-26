@@ -95,7 +95,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 function isLoggedIn(req, res, next){
-    // console.log( 'status', req.isAuthenticated() );
+    return next();
     if(req.isAuthenticated()){
         return next();
     }

@@ -7,9 +7,11 @@
         	{{ title }} <small>DSS SEMAR</small>
         </h1>
     </div>
-</div>
 
-	<div id="map" class="smallmap"></div>
+    <div class="col-md-12">
+    	<div id="map" class="smallmap"></div>
+    </div>
+</div>
 
 	<script src="/javascripts/OpenLayers.js"></script>
 	<script type="text/javascript">
@@ -41,14 +43,16 @@
 
             trigger: function(e) {
                 var lonlat = map.getLonLatFromPixel(e.xy);
-                console.log("You clicked near " + lonlat.lat + " N, " +
-                                              + lonlat.lon + " E");
+                console.log("You clicked near " + lonlat.lon + " E, " +
+                                              + lonlat.lat + " N");
             }
 
         });
 
         function init(){
-            map = new OpenLayers.Map( 'map');
+            map = new OpenLayers.Map( 'map' );
+            var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+    		var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
             layer = new OpenLayers.Layer.OSM( "Simple OSM Map");
             // layer = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
             //     "http://vmap0.tiles.osgeo.org/wms/vmap0", {layers: 'basic'} );
@@ -57,11 +61,11 @@
             var markers = new OpenLayers.Layer.Markers( "Markers" );
             map.addLayer(markers);
             // create icon
-            var size = new OpenLayers.Size(30, 30);
+            var size = new OpenLayers.Size(20, 30);
             var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
             var icon = new OpenLayers.Icon('/images/map-marker.png', size, offset);
             // create marker
-            marker = new OpenLayers.Marker(new OpenLayers.LonLat( 110.45, -8.00), icon.clone());
+            marker = new OpenLayers.Marker(new OpenLayers.LonLat( 12195069.239032, -909294.8883539 ), icon );
             // marker.setOpacity(0.2);
             marker.events.register('mousedown', marker, function(evt) { 
             	alert(this.icon.url); 
@@ -71,10 +75,7 @@
             markers.addMarker(marker);
 
             map.setCenter(
-                new OpenLayers.LonLat( 110.45, -8.00 ).transform(
-                    new OpenLayers.Projection("EPSG:4326"),
-                    new OpenLayers.Projection("EPSG:900913")
-                ), 10
+                new OpenLayers.LonLat( 12282054.577208, -892478.7421335 ), 9
             );
             
             var click = new OpenLayers.Control.Click();
@@ -91,6 +92,7 @@
 		    width: 100%;
 		    height: 500px;
 		    border: 1px solid #ccc;
+		    display: inherit;
 		}
 		@media only screen and (max-width: 600px) {
 		    body {
