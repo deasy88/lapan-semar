@@ -51,12 +51,30 @@
             map = new OpenLayers.Map( 'map');
             layer = new OpenLayers.Layer.OSM( "Simple OSM Map");
             map.addLayer(layer);
+            // add layer
+            var markers = new OpenLayers.Layer.Markers( "Markers" );
+            map.addLayer(markers);
+            // create icon
+            var size = new OpenLayers.Size(200, 200);
+            var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+            var icon = new OpenLayers.Icon('/img/logolapan.png', size, offset);
+            // create marker
+            marker = new OpenLayers.Marker(new OpenLayers.LonLat( 110.45, -8.00), icon);
+            marker.setOpacity(0.2);
+            marker.events.register('mousedown', marker, function(evt) { 
+            	alert(this.icon.url); 
+            	OpenLayers.Event.stop(evt); 
+            });
+            // add marker to layer
+            markers.addMarker(marker);
+
             map.setCenter(
                 new OpenLayers.LonLat( 110.45, -8.00 ).transform(
                     new OpenLayers.Projection("EPSG:4326"),
                     new OpenLayers.Projection("EPSG:900913")
                 ), 10
             );
+            
             var click = new OpenLayers.Control.Click();
             map.addControl(click);
             click.activate();
