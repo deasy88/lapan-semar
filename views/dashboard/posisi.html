@@ -31,7 +31,7 @@
 
 	<script src="/javascripts/OpenLayers.js"></script>
 	<script type="text/javascript">
-	var map, layer, markers, icon;
+	var map, layer, markers, icon, vectorLayer, points;
 
 	function get_position_projections(lon, lat) {
 		var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
@@ -49,12 +49,25 @@
 
 	function get_data() {
         markers.clearMarkers();
+        vectorLayer.removeAllFeatures();
 		$.post("/dashboard/map", {tanggal: $('input[name=tanggal]').val()}, function( res ) {
 			for( kapal in res.result ) {
-				var marker = new OpenLayers.Marker( 
-					get_position_projections( Number(res.result[kapal][0].LONGITUDE), Number(res.result[kapal][0].LATITUDE) ), icon.clone() );
-				markers.addMarker(marker);
-				console.log( res.result[kapal][0] );
+				if( res.result[kapal].length==1 ) {
+					var marker = new OpenLayers.Marker( 
+						get_position_projections( Number(res.result[kapal][0].LONGITUDE), Number(res.result[kapal][0].LATITUDE) ), icon.clone() );
+					markers.addMarker(marker);
+				} else {
+					points = new Array;
+					for(i=0; i<res.result[kapal].length; i++) {
+						var titik = get_position_projections( Number(res.result[kapal][i].LONGITUDE), Number(res.result[kapal][i].LATITUDE) ) ;
+						points.push( new OpenLayers.Geometry.Point( titik.lon, titik.lat ) ); 
+					}
+					var feature = new OpenLayers.Feature.Vector(
+				            new OpenLayers.Geometry.LineString(points)
+				    );
+				    vectorLayer.addFeatures(feature);
+				    // console.log( 'garis', points );
+				}
 			}
 		} );
 		return false;
@@ -96,13 +109,11 @@
         function init(){
             map = new OpenLayers.Map( 'map' );
             layer = new OpenLayers.Layer.OSM( "Simple OSM Map");
-            // layer = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
-            //     "http://vmap0.tiles.osgeo.org/wms/vmap0", {layers: 'basic'} );
             map.addLayer(layer);
-            // add layer
+
             markers = new OpenLayers.Layer.Markers( "Markers" );
             map.addLayer(markers);
-            // create icon
+
             var size = new OpenLayers.Size(25, 17);
             var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
             icon = new OpenLayers.Icon('/maps/assets/img/kapal.png', size, offset);
@@ -115,6 +126,15 @@
             // });
             // add marker to layer
             // markers.addMarker(marker);
+            var style = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default']);
+			style.fillOpacity = 0.2;
+			style.graphicOpacity = 1;
+			style.strokeWidth = 1; 
+			style.strokeColor = "#ff0000";
+			style.strokeOpacity = 0.5;
+
+            vectorLayer = new OpenLayers.Layer.Vector("Overlay", {style: style});
+		    map.addLayer(vectorLayer);    
 
             map.setCenter(
                 new OpenLayers.LonLat( 12282054.577208, -892478.7421335 ), 9
