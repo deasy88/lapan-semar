@@ -1,0 +1,44 @@
+{% extends '../layout/dashboard.html' %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+    	<h1 class="page-header">
+        	{{ title }} <small>DSS SEMAR</small>
+        </h1>
+    </div>
+
+    <div class="col-md-9">
+	    <table class="table table-bordered" style="font-size:9pt;">
+	    <thead>
+	    	<tr>
+	    		<th>No</th>
+	    		<th>MMSI</th>
+	    		<th>CALLSIGN</th>
+	    		<th>TYPE</th>
+	    		<th>SHIPNAME</th>
+	    		<th>ETA</th>
+	    		<th>DRAUGH</th>
+	    		<th>DESTINATION</th>
+	    		<th>TANGGAL</th>
+	    	</tr>
+	    </thead>
+	    <tbody>
+	    	{% for item in data.rows %}
+	    	<tr>
+	    		<td>{{ loop.index }}</td>
+	    		<td>{{ item.MMSI }}</td>
+	    		<td>{{ item.CALLSIGN }}</td>
+	    		<td>{{ item.TYPE }}</td>
+	    		<td>{{ item.SHIPNAME }}</td>
+	    		<td>{{ item.ETA }}</td>
+	    		<td>{{ item.DRAUGH }}</td>
+	    		<td>{{ item.DESTINATION }}</td>
+	    		<td>{{ item.TANGGAL }}</td>
+	    	</tr>
+	    	{% endfor %}
+	    </tbody>
+	    </table>
+    </div>
+</div>
+{% endblock %}

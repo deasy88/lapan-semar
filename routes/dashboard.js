@@ -49,4 +49,15 @@ router.get('/land_based', function(req, res, next) {
   	res.render('dashboard/map', { title: 'Land-Based' });
 });
 
+router.all('/data/kapal', function(req, res, next) {
+	table.get_all('AIS_SHIP').then( function(ship) {
+		res.render('dashboard/kapal', { title: 'Data Kapal', data:ship });
+	} );
+});
+
+router.all('/data/jenis_kapal', function(req, res, next) {
+  	res.render('dashboard/kapal', { title: 'Land-Based' });
+});
+
+
 module.exports = router;
