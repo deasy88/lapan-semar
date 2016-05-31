@@ -12,29 +12,17 @@
 	    <table class="table table-bordered table-data" style="font-size:9pt;">
 	    <thead>
 	    	<tr>
-	    		<th>No</th>
-	    		<th>MMSI</th>
-	    		<th>CALLSIGN</th>
-	    		<th>TYPE</th>
-	    		<th>SHIPNAME</th>
-	    		<th>ETA</th>
-	    		<th>DRAUGH</th>
-	    		<th>DESTINATION</th>
-	    		<th>TANGGAL</th>
+	    		<th width="10px">No</th>
+	    		<th>TYPE_ID</th>
+	    		<th>NAME</th>
 	    	</tr>
 	    </thead>
 	    <tbody>
 	    	{% for item in data.rows %}
 	    	<tr>
 	    		<td>{{ loop.index }}</td>
-	    		<td>{{ item.MMSI }}</td>
-	    		<td>{{ item.CALLSIGN }}</td>
-	    		<td>{{ item.TYPE }}</td>
-	    		<td>{{ item.SHIPNAME }}</td>
-	    		<td>{{ item.ETA }}</td>
-	    		<td>{{ item.DRAUGH }}</td>
-	    		<td>{{ item.DESTINATION }}</td>
-	    		<td>{{ item.TANGGAL.toDateString() }}</td>
+	    		<td>{{ item.TYPE_ID }}</td>
+	    		<td>{{ item.NAME }}</td>
 	    	</tr>
 	    	{% endfor %}
 	    </tbody>

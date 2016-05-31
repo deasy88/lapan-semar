@@ -56,7 +56,27 @@ router.all('/data/kapal', function(req, res, next) {
 });
 
 router.all('/data/jenis_kapal', function(req, res, next) {
-  	res.render('dashboard/kapal', { title: 'Land-Based' });
+  	table.get_all('AIS_SHIPTYPE').then( function(data) {
+		res.render('dashboard/jenis_kapal', { title: 'Data Jenis Kapal', data:data });
+	} );
+});
+
+router.all('/data/tujuan_kapal', function(req, res, next) {
+  	table.get_all('AIS_DESTINATION').then( function(data) {
+		res.render('dashboard/tujuan_kapal', { title: 'Data Tujuan Kapal', data:data });
+	} );
+});
+
+router.all('/data/posisi_kapal', function(req, res, next) {
+  	table.get_all('AIS_POSITION_REPORT_IND').then( function(data) {
+		res.render('dashboard/posisi_kapal', { title: 'Data Posisi Kapal', data:data });
+	} );
+});
+
+router.all('/data/nelayan', function(req, res, next) {
+  	table.get_all('NELAYAN').then( function(data) {
+		res.render('dashboard/nelayan', { title: 'Data Nelayan', data:data });
+	} );
 });
 
 
