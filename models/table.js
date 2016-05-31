@@ -7,7 +7,9 @@ module.exports = {
 	},
 
 	get_where: function (table, condition) {
-		return database.simpleExecute( "SELECT * FROM " + table + " WHERE " + condition, {}, { outFormat: database.OBJECT} );
+		var sql = "SELECT * FROM " + table + " WHERE " + condition;
+		console.log( sql );
+		return database.simpleExecute( sql, {}, { outFormat: database.OBJECT} );
 	}
 
 };
