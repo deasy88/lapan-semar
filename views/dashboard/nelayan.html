@@ -1,0 +1,51 @@
+{% extends '../layout/dashboard.html' %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+    	<h1 class="page-header">
+        	{{ title }} <small>DSS SEMAR</small>
+        </h1>
+    </div>
+
+    <div class="col-md-9">
+	    <table class="table table-bordered table-data" style="font-size:9pt;">
+	    <thead>
+	    	<tr>
+	    		<th width="10px">No</th>
+	    		<th>ID_NELAYAN</th>
+	    		<th>NAMA</th>
+	    		<th>ALAMAT</th>
+	    		<th>JENIS KELAMIN</th>
+	    		<th>NO TELP</th>
+	    		<th>KTP</th>
+	    		<th>JENIS KAPAL</th>
+	    		<th>NAMA KAPAL</th>
+	    	</tr>
+	    </thead>
+	    <tbody>
+	    	{% for item in data.rows %}
+	    	<tr>
+	    		<td>{{ loop.index }}</td>
+	    		<td>{{ item.ID_NELAYAN }}</td>
+	    		<td>{{ item.NAMA_NELAYAN }}</td>
+	    		<td>{{ item.ALAMAT_NELAYAN }}</td>
+	    		<td>{{ item.JENIS_KELAMIN }}</td>
+	    		<td>{{ item.NO_TLP_NELAYAN }}</td>
+	    		<td>{{ item.KTP }}</td>
+	    		<td>{{ item.JENIS_KAPAL }}</td>
+	    		<td>{{ item.NAMA_KAPAL }}</td>
+	    	</tr>
+	    	{% endfor %}
+	    </tbody>
+	    </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready( function() {
+	$('.table-data').DataTable();
+} );
+</script>
+
+{% endblock %}

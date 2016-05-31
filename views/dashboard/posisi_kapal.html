@@ -1,0 +1,65 @@
+{% extends '../layout/dashboard.html' %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+    	<h1 class="page-header">
+        	{{ title }} <small>DSS SEMAR</small>
+        </h1>
+    </div>
+
+    <div class="col-md-9">
+	    <table class="table table-bordered table-data" style="font-size:9pt;">
+	    <thead>
+	    	<tr>
+	    		<th width="10px">No</th>
+	    		<th>MMSI</th>
+	    		<th>NAVIGATIONAL</th>
+	    		<th>ROT</th>
+	    		<th>SOG</th>
+	    		<th>POS_ACCURACY</th>
+	    		<th>LONGITUDE</th>
+	    		<th>LATITUDE</th>
+	    		<th>COG</th>
+	    		<th>TIMESTAMP</th>
+	    		<th>MANEUVER</th>
+	    		<th>RAIM</th>
+	    		<th>RADIO</th>
+	    		<th>TANGGAL</th>
+	    		<th>REPINDICATOR</th>
+	    		<th>HDG</th>
+	    	</tr>
+	    </thead>
+	    <tbody>
+	    	{% for item in data.rows %}
+	    	<tr>
+	    		<td>{{ loop.index }}</td>
+	    		<td>{{ item.MMSI }}</td>
+	    		<td>{{ item.NABIGATIONAL }}</td>
+	    		<td>{{ item.ROT }}</td>
+	    		<td>{{ item.SOG }}</td>
+	    		<td>{{ item.POS_ACCURACY }}</td>
+	    		<td>{{ item.LONGITUDE }}</td>
+	    		<td>{{ item.LATITUDE }}</td>
+	    		<td>{{ item.COG }}</td>
+	    		<td>{{ item.TIMESTAMP }}</td>
+	    		<td>{{ item.MANEUVER }}</td>
+	    		<td>{{ item.RAIM }}</td>
+	    		<td>{{ item.RADIO }}</td>
+	    		<td>{{ item.TANGGAL.toDateString() }}</td>
+	    		<td>{{ item.REPINDICATOR }}</td>
+	    		<td>{{ item.HDG }}</td>
+	    	</tr>
+	    	{% endfor %}
+	    </tbody>
+	    </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready( function() {
+	$('.table-data').DataTable();
+} );
+</script>
+
+{% endblock %}
