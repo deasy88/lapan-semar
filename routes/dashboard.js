@@ -12,6 +12,7 @@ router.all('/map', function(req, res, next) {
 	var data = {};
 	data.tanggal = req.body.tanggal;
 	if( data.tanggal!=undefined ) {
+		console.log( "data tanggal", data.tanggal );
 		table.get_where('AIS_POSITION_REPORT_IND', " TANGGAL=TO_DATE('" +data.tanggal+ "','YYYY-MM-DD') ").then( function(result) {
 			data.result = {};
 			// console.log( result.rows[1] );
