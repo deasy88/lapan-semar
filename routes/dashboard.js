@@ -15,7 +15,7 @@ router.all('/map', function(req, res, next) {
 		console.log( "data tanggal", data.tanggal );
 		table.get_where('AIS_POSITION_REPORT_IND', " TANGGAL=TO_DATE('" +data.tanggal+ "','YYYY-MM-DD') ").then( function(result) {
 			data.result = {};
-			console.log( result.rows[1] );
+			console.log( result );
 			for(i=0; i<result.rows.length; i++) {
 				if( data.result[ result.rows[i].MMSI ]==undefined ) {
 					data.result[ result.rows[i].MMSI ] = new Array;
