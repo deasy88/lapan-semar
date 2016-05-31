@@ -1,0 +1,186 @@
+/* TODO
+html, body {margin: 0; padding: 0; }
+/*img[src^="http://10.30.20.4"]{opacity:0.7 !important}*/
+.main-menu{
+  box-shadow: none !important;
+}
+.logo{
+  width: 150px;
+  height: auto;
+}
+.title{
+
+}
+div.olControlZoom{
+  bottom: 8px;
+  top:auto;
+}
+.leaflet-top{
+  top: auto;
+  bottom: 10px !important;
+}
+
+.legend{
+    background-image: url('http://182.23.27.39/wms/wms?REQUEST=GetLegendGraphic&PALETTE=x-Rainbow&COLORBARONLY=true&WIDTH=40&HEIGHT=400');
+    background-repeat: no-repeat;
+    /*border-style: solid;*/
+    border-color: #FFFFFF;
+    border-width: 2px;
+    height: 400px;
+    width: 15px;
+    z-index:25;
+    box-shadow: 1px 1px 10px #000;
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+.legendTxt{
+  width:500px;
+  height:40px;
+  z-index:22;
+}
+.legendpoint{
+  width:500px;
+  height:40px;
+  z-index:22;
+}
+#maps {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+#overlay-menu {
+    position: absolute; top: 10px; left: 10px; z-index: 99;
+}
+a {
+    color: #900;
+    text-decoration: none;
+}
+
+a:hover {
+    color: red;
+    position: relative;
+}
+
+a[title]:hover:after {
+    content: attr(title);
+    padding: 4px 8px;
+    color: #333;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    z-index: 20;
+    white-space: nowrap;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0px 0px 4px #222;
+    -webkit-box-shadow: 0px 0px 4px #222;
+    box-shadow: 0px 0px 4px #222;
+    background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #eeeeee),color-stop(1, #cccccc));
+    background-image: -webkit-linear-gradient(top, #eeeeee, #cccccc);
+    background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
+    background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
+    background-image: -o-linear-gradient(top, #eeeeee, #cccccc);
+}
+
+.gm-style-iw {
+    width: 350px !important;
+    top: 15px !important;
+    left: 0px !important;
+    background-color: #fff;
+    box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);
+    /*border: 1px solid rgba(72, 181, 233, 0.6);*/
+    /*border-radius: 2px 2px 10px 10px;*/
+}
+
+div.gm-style-iw > div {
+    width: 100% !important;
+}
+#iw-container {
+    margin-bottom: 10px;
+}
+#iw-container .iw-title {
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    padding: 10px;
+    background-color: #3F51B5;
+    color: white;
+    margin: 0;
+    /*border-radius: 2px 2px 0 0;*/
+}
+#iw-container .iw-content {
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 400;
+    margin-right: 1px;
+    padding: 15px 5px 20px 15px;
+    max-height: 240px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.iw-content img {
+    float: right;
+    margin: 0 5px 5px 10px;
+}
+.iw-subTitle {
+    font-size: 16px;
+    font-weight: 700;
+    padding: 5px 0;
+}
+.iw-bottom-gradient {
+    position: absolute;
+    width: 326px;
+    height: 25px;
+    bottom: 10px;
+    right: 18px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+    background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+    background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+    background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+}
+.md-sidenav-left {
+    position: absolute !important;
+}
+.md-sidenav-right {
+    position: absolute !important;
+}
+
+.titlebar-dss {
+ background-image: url("../../assets/images/cover.jpg") !important;
+    max-height: 237px !important;
+    height: 200px !important;
+    text-align: center;
+    font-weight:900;
+    text-shadow: 0px 0px 3px #000;
+}
+md-backdrop{
+    position: fixed;
+    overflow: hidden;
+    display: none;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    background: rgba(209, 223, 252, 0.8);
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(209, 223, 252, 0.4);
+}

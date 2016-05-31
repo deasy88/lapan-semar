@@ -1,0 +1,20 @@
+{
+"type": "FeatureCollection",
+                                                                                
+"features": [
+{ "type": "Feature", "id": 0, "properties": { "TIPE": "Bulk Carrier", "LL": "225 m x 33 m", "DRAFT": "9,9 m", "STATUS": "Underway using Engine", "ARAH": "12,3 kn / 102°", "TUJUAN": "Pantai Ngedan", "CATAT": "1 h 35 min ago" }, "geometry": { "type": "Point", "coordinates": [ -7.9479181, 110.102787 ] } }
+,
+{ "type": "Feature", "id": 1, "properties": { "TIPE": "Bulk Carrier", "LL": "225 m x 33 m", "DRAFT": "9,9 m", "STATUS": "Underway using Engine", "ARAH": "12,3 kn / 102°", "TUJUAN": "Pantai Ngedan", "CATAT": "1 h 35 min ago" }, "geometry": { "type": "Point", "coordinates": [ -7.9401819, 110.1108713 ] } }
+,
+{ "type": "Feature", "id": 2, "properties": { "TIPE": "Bulk Carrier", "LL": "225 m x 33 m", "DRAFT": "9,9 m", "STATUS": "Underway using Engine", "ARAH": "12,3 kn / 102°", "TUJUAN": "Pantai Ngedan", "CATAT": "1 h 35 min ago" }, "geometry": { "type": "Point", "coordinates": [ -7.9401819, 110.1108713 ] } }
+,
+{ "type": "Feature", "id": 3, "properties": { "TIPE": "Bulk Carrier", "LL": "225 m x 33 m", "DRAFT": "9,9 m", "STATUS": "Underway using Engine", "ARAH": "12,3 kn / 102°", "TUJUAN": "Pantai Ngedan", "CATAT": "1 h 35 min ago" }, "geometry": { "type": "Point", "coordinates": [ -8.1729788, 110.3542829 ] } }
+,
+{ "type": "Feature", "id": 4, "properties": { "TIPE": "Bulk Carrier", "LL": "225 m x 33 m", "DRAFT": "9,9 m", "STATUS": "Underway using Engine", "ARAH": "12,3 kn / 102°", "TUJUAN": "Pantai Ngedan", "CATAT": "1 h 35 min ago" }, "geometry": { "type": "Point", "coordinates": [ -8.1783082, 110.3309283 ] } }
+,
+{ "type": "Feature", "id": 5, "properties": { "TIPE": "Bulk Carrier", "LL": "225 m x 33 m", "DRAFT": "9,9 m", "STATUS": "Underway using Engine", "ARAH": "12,3 kn / 102°", "TUJUAN": "Pantai Ngedan", "CATAT": "1 h 35 min ago" }, "geometry": { "type": "Point", "coordinates": [ -8.0231617, 110.0023905 ] } }
+,
+{ "type": "Feature", "id": 6, "properties": { "TIPE": "Bulk Carrier", "LL": "225 m x 33 m", "DRAFT": "9,9 m", "STATUS": "Underway using Engine", "ARAH": "12,3 kn / 102°", "TUJUAN": "Pantai Ngedan", "CATAT": "1 h 35 min ago" }, "geometry": { "type": "Point", "coordinates": [ -8.1298942, 109.6593274 ] } }
+
+]
+}

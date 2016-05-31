@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>DSS SEMAR - Sistem Embaran Maritim</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/stylesheets/grayscale.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond./javascripts/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+				  <img src="/maps/assets/img/logolapan.png" width='52' height='52'>
+				  <img src="/maps/assets/img/logodiy.png" width='52' height='52'>
+				  <img src="/maps/assets/img/logokkp.png" width='52' height='52'>
+				  <img src="/maps/assets/img/logobmkg.png" width='47' height='52'>
+                <a class="navbar-brand page-scroll" href="#page-top">
+                    <i class="fa fa-play-circle"></i>  <span class="light">DSS</span> SEMAR - LAPAN
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#about">Tentang</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#download">SEMAR</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#login">Login</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Intro Header -->
+    <header class="intro">
+        <div class="intro-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <h1 class="brand-heading">DSS SEMAR</h1>
+                        <p class="intro-text">Take more fishes in Decision Support System.</p>
+                        <a href="#about" class="btn btn-circle page-scroll">
+                            <i class="fa fa-angle-double-down animated"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="container content-section text-center">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Tentang Semar</h2>
+                <p>Sebuah peta global yang memberikan informasi mengenai titik koordinat suatu tempat dan perkiraan tekanan angin. Memberikan informasi mengenai tempat keberadaan ikan/plankton yang akan dicari para Nelayan. Sistem ini memberikan informasi penjelasan system keputusan pengamatan dan prediksi cuaca 3 hari mendatang.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="content-section text-center">
+        <div class="download-section">
+            <div class="container">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <h2>Kunjungi Syah Bandar DI Yogyakarta</h2>
+                    <p>Pilih Bergabung atau Anda akan kehilangan Ikan Besar!</p>
+                    <a href="www.lapan.go.id">Visit LAPAN</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="login" class="container content-section text-center">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Login</h2>
+                <form method="post" action="/login" class="form-horizontal" role="form">
+                	<div class="form-group">
+                		<label class="col-md-2">Username</label>
+                		<div class="col-md-5">
+                			<input type="text" name="username" placaholder="Username" class="form-control" />
+                		</div>
+                	</div>
+                	<div class="form-group">
+                		<label class="col-md-2">Password</label>
+                		<div class="col-md-5">
+                			<input type="password" name="password" placaholder="Password" class="form-control" />
+                		</div>
+                	</div>
+                	<div class="form-group">
+                		<div class="col-md-5">
+                			<button class="btn btn-primay btn-lg">Login</button>
+                		</div>
+                	</div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p>Copyright &copy; LAPAN 2016</p>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="/javascripts/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/javascripts/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="/javascripts/jquery.easing.min.js"></script>
+
+    <!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
+       <!-- Custom Theme JavaScript -->
+    <script src="/javascripts/grayscale.js"></script>
+
+</body>
+
+</html>

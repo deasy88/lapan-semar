@@ -1,15 +1,19 @@
-// var mongoose = require('mongoose');
-// var Schema = mongoose.Schema;
+var database = require('../services/database.js');
 
-// var userSchema = new Schema({
-// 	name : String,
-// 	username : {type:String, required:true, unique:true},
-// 	password: {type:String, required:true},
-// 	access: {type:String, enum:['admin', 'user']},
-// 	created_at: Date,
-// 	updated_at: Date
-// });
+module.exports = {
 
-// var User = mongoose.model('User', userSchema);
+	get: function () {
+		return database.simpleExecute( "SELECT * FROM USERS", {}, { outFormat: database.OBJECT} );
+	},
 
-// module.exports = User;
+	login: function (username, password) {
+		return database.simpleExecute( "SELECT * FROM USERS WHERE USERNAME='" + username + "' AND PASSWORD='" + password + "'",
+			{}, { outFormat: database.OBJECT} );
+	},
+
+	find_by_id: function (id) {
+		return database.simpleExecute( "SELECT * FROM USERS WHERE ID='" + id + "'",
+			{}, { outFormat: database.OBJECT} );
+	},	
+
+};
