@@ -67,6 +67,10 @@
 				    );
 				    vectorLayer.addFeatures(feature);
 				    // console.log( 'garis', points );
+				    var sz = res.result[kapal].length-1;
+				    var marker = new OpenLayers.Marker( 
+						get_position_projections( Number(res.result[kapal][sz].LONGITUDE), Number(res.result[kapal][sz].LATITUDE) ), icon.clone() );
+					markers.addMarker(marker);
 				}
 			}
 		} );

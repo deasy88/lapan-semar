@@ -9,7 +9,7 @@
     </div>
 
     <div class="col-md-9">
-	    <table class="table table-bordered" style="font-size:9pt;">
+	    <table class="table table-bordered table-data" style="font-size:9pt;">
 	    <thead>
 	    	<tr>
 	    		<th>No</th>
@@ -41,4 +41,11 @@
 	    </table>
     </div>
 </div>
+
+<script type="text/javascript">
+$(document).ready( function() {
+	$('.table-data').DataTable();
+} );
+</script>
+
 {% endblock %}
