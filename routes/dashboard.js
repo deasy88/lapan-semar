@@ -80,5 +80,10 @@ router.all('/data/nelayan', function(req, res, next) {
 	} );
 });
 
+router.all('/data/ikan', function(req, res, next) {
+	table.get_all('ZPPI').then( function(zppi) {
+		res.render('dashboard/ikan', { title: 'Data ikan', data:zppi });
+	} );
+})
 
 module.exports = router;
