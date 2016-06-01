@@ -1,0 +1,55 @@
+{% extends '../layout/dashboard.html' %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+    	<h1 class="page-header">
+        	{{ title }} <small>DSS SEMAR</small>
+        </h1>
+    </div>
+
+    <div class="col-md-9">
+	    <table class="table table-bordered table-data" style="font-size:9pt;">
+	    <thead>
+	    	<tr>
+	    		<th>No</th>
+	    		<th>ID LOCATION</th>
+	    		<th>NO ITEM</th>
+	    		<th>CITRA SPL</th>
+	    		<th>SPL</th>
+	    		<th>SPL MIN</th>
+	    		<th>SPL MAX</th>
+	    		<th>FRONT</th>
+	    		<th>KLOROFIL</th>
+				<th>KEDALAMAN</th>
+				<th>TANGGAL</th>
+	    	</tr>
+	    </thead>
+	    <tbody>
+	    	{% for item in data.rows %}
+	    	<tr>
+	    		<td>{{ loop.index }}</td>
+	    		<td>{{ item.LOCATION_ID }}</td>
+	    		<td>{{ item.ITEM_NO }}</td>
+	    		<td>{{ item.CITRA_SPL }}</td>
+	    		<td>{{ item.SPL }}</td>
+	    		<td>{{ item.SPL_MIN }}</td>
+	    		<td>{{ item.SPL_MAX }}</td>
+	    		<td>{{ item.FRONT }}</td>
+	    		<td>{{ item.KLOROFIL }}</td>
+				<td>{{ item.KEDALAMAN }}</td>
+				<td>{{ item.TANGGAL }}</td>
+	    	</tr>
+	    	{% endfor %}
+	    </tbody>
+	    </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready( function() {
+	$('.table-data').DataTable();
+} );
+</script>
+
+{% endblock %}
