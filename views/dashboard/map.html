@@ -10,11 +10,11 @@
 
     {% if view==1 %}
     <div class="col-md-12">
-	    <form class="form-horizontal" method="post" role="form">
+	    <form class="form-horizontal" method="post" role="form" onsubmit="return get_data();">
 		    <div class="form-group">
 		    	<label class="col-md-2">Tanggal</label>
 		    	<div class="col-md-3">
-		    		<input type="date" name="tanggal" class="form-control" />
+		    		<input type="date" name="tanggal" class="form-control" value="{{ data.tanggal }}" />
 		    	</div>
 		    	<div class="col-md-2">
 		    		<button class="btn btn-primary">Tampil</button>
