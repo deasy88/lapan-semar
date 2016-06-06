@@ -27,3 +27,5 @@ SELECT users_seq.nextval INTO :NEW.ID FROM dual;
 END;
 
 select * from ais_position_report where tanggal between to_date('2016-3-1','YYYY-MM-DD') and to_date('2016-3-31','YYYY-MM-DD');
+
+Oracle database set : export LD_LIBRARY_PATH=/usr/lib/oracle/12.1/client64/lib/

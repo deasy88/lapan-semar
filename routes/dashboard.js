@@ -31,11 +31,11 @@ router.all('/map', function(req, res, next) {
 });
 
 router.get('/atmosfer', function(req, res, next) {
-  	res.render('dashboard/map', { title: 'Atmosfer' });
+  	res.render('dashboard/atmosfer', { title: 'Atmosfer' });
 });
 
 router.get('/laut', function(req, res, next) {
-  	res.render('dashboard/map', { title: 'Laut' });
+  	res.render('dashboard/laut', { title: 'Laut' });
 });
 
 router.all('/posisi_ikan', function(req, res, next) {
@@ -61,7 +61,11 @@ router.all('/posisi_ikan', function(req, res, next) {
 });
 
 router.get('/satelite', function(req, res, next) {
-  	res.render('dashboard/map', { title: 'Satelite' });
+  	res.render('dashboard/satelite', { title: 'Satelite Lapan' });
+});
+
+router.get('/posisi_kapal', function(req, res, next) {
+  	res.render('dashboard/map', { title: 'Land-Based' });
 });
 
 router.get('/land_based', function(req, res, next) {
