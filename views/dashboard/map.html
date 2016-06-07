@@ -86,7 +86,7 @@
             var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
             var icon = new OpenLayers.Icon('/maps/assets/img/kapal.png', size, offset);
             // create marker
-            marker = new OpenLayers.Marker(new OpenLayers.LonLat( 12195069.239032, -909294.8883539 ), icon );
+            marker = new OpenLayers.Marker(new OpenLayers.LonLat( 111, -8 ), icon );
             // marker.setOpacity(0.2);
             marker.events.register('mousedown', marker, function(evt) { 
             	alert(this.icon.url); 
@@ -96,7 +96,7 @@
             markers.addMarker(marker);
 
             map.setCenter(
-                new OpenLayers.LonLat( 12282054.577208, -892478.7421335 ), 9
+                new OpenLayers.LonLat( 111, -8 ), 9
             );
             
             var click = new OpenLayers.Control.Click();

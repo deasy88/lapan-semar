@@ -4,8 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var proxyMiddleware = require('http-proxy-middleware');
-
 var swig = require('swig');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -18,12 +16,6 @@ var dashboard = require('./routes/dashboard');
 var m_user = require('./models/user');
 
 require( "./connect.js" ) (database);
-
-var proxy = proxyMiddleware('http://http://182.23.27.39:8080/', {
-				target: 'http://182.23.27.39:8080/wms',
-				changeOrigin: true,
-				xfwd: true
-	});
 
 var app = express();
 
@@ -103,7 +95,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 function isLoggedIn(req, res, next){
-    // return next();
+    // console.log( 'status', req.isAuthenticated() );
     if(req.isAuthenticated()){
         return next();
     }
@@ -123,14 +115,6 @@ app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
-
-//setting wms proxy middleware
-app.use('/', function(req, res, next){
-	httpProxy.createProxyServer({target:'http://182.23.27.39:8080/'});
-    next();
-});
-
-app.use(proxy);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
