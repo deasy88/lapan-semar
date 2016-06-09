@@ -4,7 +4,7 @@
 <div class="row">
 	<div class="col-lg-12">
     	<h1 class="page-header">
-        	{{ title }} <small>DSS SEMAR</small>
+        	{{ title }} <small>DSS SEMAR - DI. Yogyakarta</small>
         </h1>
     </div>
 
@@ -19,10 +19,6 @@
 		    	<div class="col-md-2">
 		    		<button class="btn btn-primary">Tampil</button>
 		    	</div>
-				<div role="group" aria-label="Animation controls">
-					<button id="play" type="button">Play</button>
-					<button id="pause" type="button">Pause</button>
-		    	</div>
 		    </div>
 		</form>
     </div>
@@ -36,31 +32,34 @@
 	<script src="/javascripts/OpenLayers.js"></script>
 	<script type="text/javascript">
 	var map, layer, markers, icon, vectorLayer, points;
+	
 	function get_position_projections(lon, lat) {
 		var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
     	var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
 		var position = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
 		return position;
 	}
+	
 	function get_position_projections_back(lon, lat) {
 		var toProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
     	var fromProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
 		var position = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
 		return position;
 	}
+	
 	function get_data() {
         markers.clearMarkers();
         vectorLayer.removeAllFeatures();
-		$.post("/dashboard/map", {tanggal: $('input[name=tanggal]').val()}, function( res ) {
-			for( kapal in res.result ) {
-				if( res.result[kapal].length==1 ) {
+		$.post("/dashboard/posisi_ikan", {tanggal: $('input[name=tanggal]').val()}, function( res ) {
+			for( ikan in res.result ) {
+				if( res.result[ikan].length==1 ) {
 					var marker = new OpenLayers.Marker( 
-						get_position_projections( Number(res.result[kapal][0].LONGITUDE), Number(res.result[kapal][0].LATITUDE) ), icon.clone() );
+						get_position_projections( Number(res.result[ikan][0].LONGITUDE.replace(",",".")), Number(res.result[ikan][0].LATITUDE.replace(",",".")) ), icon.clone() );
 					markers.addMarker(marker);
 				} else {
 					points = new Array;
-					for(i=0; i<res.result[kapal].length; i++) {
-						var titik = get_position_projections( Number(res.result[kapal][i].LONGITUDE), Number(res.result[kapal][i].LATITUDE) ) ;
+					for(i=0; i<res.result[ikan].length; i++) {
+						var titik = get_position_projections( Number(res.result[ikan][i].LONGITUDE.replace(",",".")), Number(res.result[ikan][i].LATITUDE.replace(",",".")) ) ;
 						points.push( new OpenLayers.Geometry.Point( titik.lon, titik.lat ) ); 
 					}
 					var feature = new OpenLayers.Feature.Vector(
@@ -68,10 +67,6 @@
 				    );
 				    vectorLayer.addFeatures(feature);
 				    // console.log( 'garis', points );
-				    var sz = res.result[kapal].length-1;
-				    var marker = new OpenLayers.Marker( 
-						get_position_projections( Number(res.result[kapal][sz].LONGITUDE), Number(res.result[kapal][sz].LATITUDE) ), icon.clone() );
-					markers.addMarker(marker);
 				}
 			}
 		} );
@@ -114,7 +109,7 @@
             map.addLayer(markers);
             var size = new OpenLayers.Size(25, 17);
             var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-            icon = new OpenLayers.Icon('/maps/assets/img/kapal.png', size, offset);
+            icon = new OpenLayers.Icon('/maps/assets/img/ikan.png', size, offset);
             // create marker
             // marker = new OpenLayers.Marker(new OpenLayers.LonLat( 12195069.239032, -909294.8883539 ), icon );
             // marker.setOpacity(0.2);
@@ -133,7 +128,7 @@
             vectorLayer = new OpenLayers.Layer.Vector("Overlay", {style: style});
 		    map.addLayer(vectorLayer);    
             map.setCenter(
-                new OpenLayers.LonLat( 111, -8 ), 9
+                new OpenLayers.LonLat( 12282054.577208, -892478.7421335 ), 9
             );
             
             var click = new OpenLayers.Control.Click();

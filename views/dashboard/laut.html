@@ -4,7 +4,7 @@
 <div class="row">
 	<div class="col-lg-12">
     	<h1 class="page-header">
-        	{{ title }} <small>DSS SEMAR</small>
+        	{{ title }} <small>DSS SEMAR  - DI. Yogyakarta</small>
         </h1>
     </div>
 
@@ -19,10 +19,6 @@
 		    	<div class="col-md-2">
 		    		<button class="btn btn-primary">Tampil</button>
 		    	</div>
-				<div role="group" aria-label="Animation controls">
-					<button id="play" type="button">Play</button>
-					<button id="pause" type="button">Pause</button>
-		    	</div>
 		    </div>
 		</form>
     </div>
@@ -35,23 +31,26 @@
 
 	<script src="/javascripts/OpenLayers.js"></script>
 	<script type="text/javascript">
-	var map, layer, markers, icon, vectorLayer, points;
+	var map, layer, markers, icon, vectorLayer, points, awan, wms;
+	
 	function get_position_projections(lon, lat) {
 		var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
     	var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
 		var position = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
 		return position;
 	}
+
 	function get_position_projections_back(lon, lat) {
 		var toProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
     	var fromProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
 		var position = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
 		return position;
 	}
+
 	function get_data() {
         markers.clearMarkers();
         vectorLayer.removeAllFeatures();
-		$.post("/dashboard/map", {tanggal: $('input[name=tanggal]').val()}, function( res ) {
+		$.post("/dashboard/atmosfer", {tanggal: $('input[name=tanggal]').val()}, function( res ) {
 			for( kapal in res.result ) {
 				if( res.result[kapal].length==1 ) {
 					var marker = new OpenLayers.Marker( 
@@ -77,6 +76,7 @@
 		} );
 		return false;
 	}
+
 	$(document).ready( function() {
 		
 		OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
@@ -87,6 +87,7 @@
                 'stopSingle': false,
                 'stopDouble': false
             },
+
             initialize: function(options) {
             	this.handlerOptions = OpenLayers.Util.extend(
                 	{}, this.defaultHandlerOptions
@@ -100,18 +101,43 @@
                     }, this.handlerOptions
                 );
             }, 
+
             trigger: function(e) {
                 var lonlat = map.getLonLatFromPixel(e.xy);
                 console.log("You clicked near " + lonlat.lon + " E, " +
                                               + lonlat.lat + " N");
             }
+
         });
+
         function init(){
             map = new OpenLayers.Map( 'map' );
             layer = new OpenLayers.Layer.OSM( "Simple OSM Map");
-            map.addLayer(layer);
+			
+			awan = new OpenLayers.Layer.WMS("awan", "http://182.23.27.39:8080/wms/wms?SERVICE=WMS",
+				{
+					layers: 'HYCOM/u:v-group',
+					styles: 'default-vector/x-Sst',
+					transparent: true
+				},
+				{
+					singleTile: true
+				}
+			);
+			
+			wms = new OpenLayers.Layer.WMS(
+				"WMS", "http://vmap0.tiles.osgeo.org/wms/vmap0",
+				{'layers':'basic'} 
+			);
+			
+			map.addLayer(wms);
+			map.addLayer(layer);
+			map.addLayer(awan);
+			map.addControl( new OpenLayers.Control.LayerSwitcher() );
+			
             markers = new OpenLayers.Layer.Markers( "Markers" );
             map.addLayer(markers);
+
             var size = new OpenLayers.Size(25, 17);
             var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
             icon = new OpenLayers.Icon('/maps/assets/img/kapal.png', size, offset);
@@ -130,8 +156,10 @@
 			style.strokeWidth = 1; 
 			style.strokeColor = "#ff0000";
 			style.strokeOpacity = 0.5;
+
             vectorLayer = new OpenLayers.Layer.Vector("Overlay", {style: style});
 		    map.addLayer(vectorLayer);    
+
             map.setCenter(
                 new OpenLayers.LonLat( 111, -8 ), 9
             );
@@ -140,6 +168,7 @@
             map.addControl(click);
             click.activate();
         }
+
         init();
 	} );
 	</script>

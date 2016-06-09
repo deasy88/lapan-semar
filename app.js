@@ -4,7 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var swig = require('swig');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -96,7 +95,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 function isLoggedIn(req, res, next){
-    return next();
     if(req.isAuthenticated()){
         return next();
     }

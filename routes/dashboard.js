@@ -35,15 +35,37 @@ router.get('/atmosfer', function(req, res, next) {
 });
 
 router.get('/laut', function(req, res, next) {
-  	res.render('dashboard/map', { title: 'Laut' });
+  	res.render('dashboard/laut', { title: 'Laut' });
 });
 
-router.get('/posisi_ikan', function(req, res, next) {
-  	res.render('dashboard/map', { title: 'Posisi Ikan' });
+router.all('/posisi_ikan', function(req, res, next) {
+	var data2 = {};
+	data2.tanggal = req.body.tanggal;
+	if( data2.tanggal!=undefined ) {
+		console.log( "data tanggal", data2.tanggal );
+		table.get_where('ZPPI', " TO_CHAR(TANGGAL,'YYYY-MM-DD')='" +data2.tanggal+ "' ").then( function(result) {
+			data2.result = {};
+			console.log( result );
+			for(i=0; i<result.rows.length; i++) {
+				if( data2.result[ result.rows[i].ITEM_NO ]==undefined ) {
+					data2.result[ result.rows[i].ITEM_NO ] = new Array;
+				}
+				data2.result[ result.rows[i].ITEM_NO ].push( result.rows[i] );
+			}
+			res.send( data2 )
+			// res.render('dashboard/posisi_ikan', { title: 'Live Map, Posisi Ikan', view: 1, data:data });
+		} );
+	} else {
+  	res.render('dashboard/posisi_ikan', { title: 'Posisi Ikan', view: 1 });
+	}
 });
 
 router.get('/satelite', function(req, res, next) {
-  	res.render('dashboard/map', { title: 'Satelite' });
+  	res.render('dashboard/satelite', { title: 'Satelite Lapan' });
+});
+
+router.get('/posisi_kapal', function(req, res, next) {
+  	res.render('dashboard/map', { title: 'Land-Based' });
 });
 
 router.get('/land_based', function(req, res, next) {
@@ -80,5 +102,10 @@ router.all('/data/nelayan', function(req, res, next) {
 	} );
 });
 
+router.all('/data/ikan', function(req, res, next) {
+	table.get_all('ZPPI').then( function(zppi) {
+		res.render('dashboard/ikan', { title: 'Data ikan', data:zppi });
+	} );
+})
 
 module.exports = router;
