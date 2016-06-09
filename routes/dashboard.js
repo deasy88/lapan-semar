@@ -31,7 +31,7 @@ router.all('/map', function(req, res, next) {
 });
 
 router.get('/atmosfer', function(req, res, next) {
-  	res.render('dashboard/map', { title: 'Atmosfer' });
+  	res.render('dashboard/atmosfer', { title: 'Atmosfer' });
 });
 
 router.get('/laut', function(req, res, next) {
