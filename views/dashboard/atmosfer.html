@@ -110,56 +110,63 @@
 
         });
 
+		function roundToTwo(num) {
+        	return +(Math.round(num + "e+2") + "e-2");
+    	}
+
         function init(){
-            map = new OpenLayers.Map( 'map' );
+            map = new L.Map( 'map' );
             layer = new OpenLayers.Layer.OSM( "Simple OSM Map");
 			
+			var bound = map.getBounds();
+			var bbox = roundToTwo(bound._southWest.lng) + "," + roundToTwo(bound._southWest.lat) + "," + roundToTwo(bound._northEast.lng) + "," + roundToTwo(bound._northEast.lat);
 			hujan = new OpenLayers.Layer.WMS("hujan", "http://182.23.27.39:8080/wms/wms?SERVICE=WMS",
 				{
 					layers: 'WRF sadewa/RAINFV',
 					styles: 'default-scalar/x-Sst',
-					transparent: true
+					transparent: true,
+					"BBOX": bbox
 				},
 				{
 					singleTile: true
 				}
 			);
 			
-			angin = new OpenLayers.Layer.WMS("angin", "http://182.23.27.39:8080/wms/wms?SERVICE=WMS",
-				{
-					layers: 'WRF sadewa/U10:V10-group',
-					styles: 'default-vector/x-Sst',
-					transparent: true
-				},
-				{
-					singleTile: true
-				}
-			);
+			// angin = new OpenLayers.Layer.WMS("angin", "http://182.23.27.39:8080/wms/wms?SERVICE=WMS",
+			// 	{
+			// 		layers: 'WRF sadewa/U10:V10-group',
+			// 		styles: 'default-vector/x-Sst',
+			// 		transparent: true
+			// 	},
+			// 	{
+			// 		singleTile: true
+			// 	}
+			// );
 			
-			wms = new OpenLayers.Layer.WMS(
-				"WMS", "http://vmap0.tiles.osgeo.org/wms/vmap0",
-				{'layers':'basic'} 
-			);
+			// wms = new OpenLayers.Layer.WMS(
+			// 	"WMS", "http://vmap0.tiles.osgeo.org/wms/vmap0",
+			// 	{'layers':'basic'} 
+			// );
 			
-			map.addLayer(wms);
+			// map.addLayer(wms);
 			map.addLayer(layer);
 			map.addLayer(hujan);
-			map.addLayer(angin);
+			// map.addLayer(angin);
 			
 			// Layer switcher
-			document.getElementById('hujan').onclick = function () {
-				var enable = this.className !== 'active';
-				hujan.setOpacity(enable ? 1 : 0);
-				this.className = enable ? 'active' : '';
-				return false;
-			};
+			// document.getElementById('hujan').onclick = function () {
+			// 	var enable = this.className !== 'active';
+			// 	hujan.setOpacity(enable ? 1 : 0);
+			// 	this.className = enable ? 'active' : '';
+			// 	return false;
+			// };
 
-			document.getElementById('angin').onclick = function () {
-				var enable = this.className !== 'active';
-				angin.setOpacity(enable ? 1 : 0);
-				this.className = enable ? 'active' : '';
-				return false;
-			};
+			// document.getElementById('angin').onclick = function () {
+			// 	var enable = this.className !== 'active';
+			// 	angin.setOpacity(enable ? 1 : 0);
+			// 	this.className = enable ? 'active' : '';
+			// 	return false;
+			// };
 			map.addControl( new OpenLayers.Control.LayerSwitcher() );
 			
             markers = new OpenLayers.Layer.Markers( "Markers" );
@@ -188,7 +195,7 @@
 		    map.addLayer(vectorLayer);    
 
             map.setCenter(
-                new OpenLayers.LonLat( 111, -8 ), 9
+                get_position_projections( 111, -8 ), 9
             );
             
             var click = new OpenLayers.Control.Click();

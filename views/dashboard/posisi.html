@@ -133,7 +133,7 @@
             vectorLayer = new OpenLayers.Layer.Vector("Overlay", {style: style});
 		    map.addLayer(vectorLayer);    
             map.setCenter(
-                new OpenLayers.LonLat( 111, -8 ), 9
+                get_position_projections( 111, -8 ), 9
             );
             
             var click = new OpenLayers.Control.Click();
