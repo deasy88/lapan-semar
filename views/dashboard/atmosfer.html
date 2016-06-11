@@ -25,192 +25,75 @@
     {% endif %}
 
     <div class="col-md-12">
-    	<div id="map" class="smallmap"></div>
+    	<div id="map" style="width: 100%; height: 500px"></div>
     </div>
 </div>
 
-	<script src="/javascripts/OpenLayers.js"></script>
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
 	<script type="text/javascript">
-	var map, layer, markers, icon, vectorLayer, points, hujan, wms, angin;
-	
-	function get_position_projections(lon, lat) {
-		var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
-    	var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
-		var position = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
-		return position;
-	}
+		var mymap = L.map('map');
+		mymap.setView(new L.LatLng(-2, 120), 4);
 
-	function get_position_projections_back(lon, lat) {
-		var toProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
-    	var fromProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
-		var position = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
-		return position;
-	}
+		// L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+		//     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		//     maxZoom: 18,
+		//     id: 'mapbox.streets',
+		//     accessToken: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw'
+		// }).addTo(mymap);
 
-	function get_data() {
-        markers.clearMarkers();
-        vectorLayer.removeAllFeatures();
-		$.post("/dashboard/atmosfer", {tanggal: $('input[name=tanggal]').val()}, function( res ) {
-			for( kapal in res.result ) {
-				if( res.result[kapal].length==1 ) {
-					var marker = new OpenLayers.Marker( 
-						get_position_projections( Number(res.result[kapal][0].LONGITUDE), Number(res.result[kapal][0].LATITUDE) ), icon.clone() );
-					markers.addMarker(marker);
-				} else {
-					points = new Array;
-					for(i=0; i<res.result[kapal].length; i++) {
-						var titik = get_position_projections( Number(res.result[kapal][i].LONGITUDE), Number(res.result[kapal][i].LATITUDE) ) ;
-						points.push( new OpenLayers.Geometry.Point( titik.lon, titik.lat ) ); 
-					}
-					var feature = new OpenLayers.Feature.Vector(
-				            new OpenLayers.Geometry.LineString(points)
-				    );
-				    vectorLayer.addFeatures(feature);
-				    // console.log( 'garis', points );
-				    var sz = res.result[kapal].length-1;
-				    var marker = new OpenLayers.Marker( 
-						get_position_projections( Number(res.result[kapal][sz].LONGITUDE), Number(res.result[kapal][sz].LATITUDE) ), icon.clone() );
-					markers.addMarker(marker);
-				}
-			}
-		} );
-		return false;
-	}
-
-	$(document).ready( function() {
-		
-		OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
-            defaultHandlerOptions: {
-                'single': true,
-                'double': false,
-                'pixelTolerance': 0,
-                'stopSingle': false,
-                'stopDouble': false
-            },
-
-            initialize: function(options) {
-            	this.handlerOptions = OpenLayers.Util.extend(
-                	{}, this.defaultHandlerOptions
-                );
-                OpenLayers.Control.prototype.initialize.apply(
-                	this, arguments
-                ); 
-                this.handler = new OpenLayers.Handler.Click(
-                	this, {
-                    	'click': this.trigger
-                    }, this.handlerOptions
-                );
-            }, 
-
-            trigger: function(e) {
-                var lonlat = map.getLonLatFromPixel(e.xy);
-                console.log("You clicked near " + lonlat.lon + " E, " +
-                                              + lonlat.lat + " N");
-            }
-
-        });
+		var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    	var osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 12, attribution: false});
+    	mymap.addLayer(osm);
 
 		function roundToTwo(num) {
-        	return +(Math.round(num + "e+2") + "e-2");
-    	}
+	        return +(Math.round(num + "e+2") + "e-2");
+	    }
 
-        function init(){
-            map = new L.Map( 'map' );
-            layer = new OpenLayers.Layer.OSM( "Simple OSM Map");
-			
-			var bound = map.getBounds();
-			var bbox = roundToTwo(bound._southWest.lng) + "," + roundToTwo(bound._southWest.lat) + "," + roundToTwo(bound._northEast.lng) + "," + roundToTwo(bound._northEast.lat);
-			hujan = new OpenLayers.Layer.WMS("hujan", "http://182.23.27.39:8080/wms/wms?SERVICE=WMS",
-				{
-					layers: 'WRF sadewa/RAINFV',
-					styles: 'default-scalar/x-Sst',
-					transparent: true,
-					"BBOX": bbox
-				},
-				{
-					singleTile: true
-				}
-			);
-			
-			// angin = new OpenLayers.Layer.WMS("angin", "http://182.23.27.39:8080/wms/wms?SERVICE=WMS",
-			// 	{
-			// 		layers: 'WRF sadewa/U10:V10-group',
-			// 		styles: 'default-vector/x-Sst',
-			// 		transparent: true
-			// 	},
-			// 	{
-			// 		singleTile: true
-			// 	}
-			// );
-			
-			// wms = new OpenLayers.Layer.WMS(
-			// 	"WMS", "http://vmap0.tiles.osgeo.org/wms/vmap0",
-			// 	{'layers':'basic'} 
-			// );
-			
-			// map.addLayer(wms);
-			map.addLayer(layer);
-			map.addLayer(hujan);
-			// map.addLayer(angin);
-			
-			// Layer switcher
-			// document.getElementById('hujan').onclick = function () {
-			// 	var enable = this.className !== 'active';
-			// 	hujan.setOpacity(enable ? 1 : 0);
-			// 	this.className = enable ? 'active' : '';
-			// 	return false;
-			// };
+		var bound = mymap.getBounds();
+        var bbox = roundToTwo(bound._southWest.lng) + "," + roundToTwo(bound._southWest.lat) + "," + roundToTwo(bound._northEast.lng) + "," + roundToTwo(bound._northEast.lat);
 
-			// document.getElementById('angin').onclick = function () {
-			// 	var enable = this.className !== 'active';
-			// 	angin.setOpacity(enable ? 1 : 0);
-			// 	this.className = enable ? 'active' : '';
-			// 	return false;
-			// };
-			map.addControl( new OpenLayers.Control.LayerSwitcher() );
-			
-            markers = new OpenLayers.Layer.Markers( "Markers" );
-            map.addLayer(markers);
+        $.get( 'http://182.23.27.39:8080/wms/wms', {
+            request: "GetMetadata",
+            item: "layerDetails",
+            layerName: "HYCOM/temperature" }, function (metadata) {
+            	console.log( "layer detail", metadata);
+                    
+      //       	$.get( 'http://182.23.27.39:8080/wms/wms', {
+		    //         request: "GetMetadata",
+		    //         item: "minmax",
+		    //         layers: "HYCOM/temperature",
+		    //         styles: "default-scalar/seq-GreysRev",
+		    //         "VERSION": "1.1.1",
+		    //         "BBOX": bbox,
+		    //         "srs": "EPSG:4326",
+		    //         "crs": "EPSG:4326",
+		    //         "height": 100,
+		    //         "width": 100,
+		    //         "time": metadata.nearestTimeIso}, function (res) {
+						// console.log( "minmax", res);
 
-            var size = new OpenLayers.Size(25, 17);
-            var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-            icon = new OpenLayers.Icon('/maps/assets/img/kapal.png', size, offset);
-            // create marker
-            // marker = new OpenLayers.Marker(new OpenLayers.LonLat( 12195069.239032, -909294.8883539 ), icon );
-            // marker.setOpacity(0.2);
-            // marker.events.register('mousedown', marker, function(evt) { 
-            // 	alert(this.icon.url); 
-            // 	OpenLayers.Event.stop(evt); 
-            // });
-            // add marker to layer
-            // markers.addMarker(marker);
-            var style = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default']);
-			style.fillOpacity = 0.2;
-			style.graphicOpacity = 1;
-			style.strokeWidth = 1; 
-			style.strokeColor = "#ff0000";
-			style.strokeOpacity = 0.5;
+						L.tileLayer.wms( 'http://182.23.27.39:8080/wms/wms', {
+				            format: 'image/png',
+				            transparent: true,
+				            layers: "HYCOM/temperature",
+				            version: "1.3.0",
+				            styles: "default-scalar/seq-GreysRev",
+				            COLORSCALERANGE: "10,100"
+				            // res.min + "," + res.max
+				        }).addTo(mymap);
 
-            vectorLayer = new OpenLayers.Layer.Vector("Overlay", {style: style});
-		    map.addLayer(vectorLayer);    
+		        // }, "JSON");
 
-            map.setCenter(
-                get_position_projections( 111, -8 ), 9
-            );
-            
-            var click = new OpenLayers.Control.Click();
-            map.addControl(click);
-            click.activate();
-        }
+        }, "JSON");
 
-        init();
-	} );
 	</script>
 
 	<style type="text/css">
 		.smallmap {
 		    width: 100%;
-		    height: 650px;
+		    height: 600px;
 		    border: 1px solid #ccc;
 		    display: inherit;
 		}
