@@ -38,6 +38,18 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <script type="text/javascript">
+    function toggleMenu() {
+        if ( $(".navbar-nav").is(":visible") ) 
+                $('#wrapper').css( 'padding-left', '0px' );
+            else
+                $('#wrapper').css( 'padding-left', '225px' );
+        $('.navbar-nav').collapse('toggle').promise().done( function() {
+            console.log( "ada" );
+        } );
+    }
+    </script>
+
 </head>
 
 <body>
@@ -54,12 +66,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-				  <img src="/maps/assets/img/logolapan.png" width='52' height='52'>
-				  <img src="/maps/assets/img/logodiy.png" width='52' height='52'>
-				  <img src="/maps/assets/img/logokkp.png" width='52' height='52'>
-				  <img src="/maps/assets/img/logobmkg.png" width='47' height='52'>
+                <a href="">  <img src="/maps/assets/img/logolapan.png" width='52' height='52'> </a>
+                <a href="">  <img src="/maps/assets/img/logodiy.png" width='52' height='52'> </a>
+                <a href="">  <img src="/maps/assets/img/logokkp.png" width='52' height='52'> </a>
+                <a href="">  <img src="/maps/assets/img/logobmkg.png" width='47' height='52'> </a>
+                <a class="navbar-brand" href="javascript:toggleMenu();"> <i class="fa fa-arrow-left"></i> </a>
                 <a class="navbar-brand" href="/dashboard">DSS Admin</a>
-				<a href="/dashboard/map" class="navbar-brand" method="get">LIVE MAP</a>
+                <a href="/dashboard/map" class="navbar-brand" method="get">LIVE MAP</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -224,7 +237,7 @@
             <!-- /.navbar-collapse -->
         </nav>
 
-        <div id="page-wrapper" style="position:fixed;bottom:0;top:0;padding:20px 0 0 0;overflow:scroll;">
+        <div id="page-wrapper" style="">
 
             <div class="container-fluid">
 

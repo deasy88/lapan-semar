@@ -27,3 +27,5 @@ SELECT users_seq.nextval INTO :NEW.ID FROM dual;
 END;
 
 select * from ais_position_report where tanggal between to_date('2016-3-1','YYYY-MM-DD') and to_date('2016-3-31','YYYY-MM-DD');
+
+position:fixed;bottom:0;top:0;padding:20px 0 0 0;overflow:scroll;
