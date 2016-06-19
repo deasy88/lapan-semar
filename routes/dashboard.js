@@ -12,10 +12,10 @@ router.all('/map', function(req, res, next) {
 	var data = {};
 	data.tanggal = req.body.tanggal;
 	if( data.tanggal!=undefined ) {
-		console.log( "data tanggal", data.tanggal );
+		// console.log( "data tanggal", data.tanggal );
 		table.get_where('AIS_POSITION_REPORT_IND', " TO_CHAR(TANGGAL,'YYYY-MM-DD')='" +data.tanggal+ "' ").then( function(result) {
 			data.result = {};
-			console.log( result );
+			// console.log( result );
 			for(i=0; i<result.rows.length; i++) {
 				if( data.result[ result.rows[i].MMSI ]==undefined ) {
 					data.result[ result.rows[i].MMSI ] = new Array;
@@ -42,10 +42,10 @@ router.all('/posisi_ikan', function(req, res, next) {
 	var data2 = {};
 	data2.tanggal = req.body.tanggal;
 	if( data2.tanggal!=undefined ) {
-		console.log( "data tanggal", data2.tanggal );
+		// console.log( "data tanggal", data2.tanggal );
 		table.get_where('ZPPI', " TO_CHAR(TANGGAL,'YYYY-MM-DD')='" +data2.tanggal+ "' ").then( function(result) {
 			data2.result = {};
-			console.log( result );
+			// console.log( result );
 			for(i=0; i<result.rows.length; i++) {
 				if( data2.result[ result.rows[i].ITEM_NO ]==undefined ) {
 					data2.result[ result.rows[i].ITEM_NO ] = new Array;
@@ -56,7 +56,7 @@ router.all('/posisi_ikan', function(req, res, next) {
 			// res.render('dashboard/posisi_ikan', { title: 'Live Map, Posisi Ikan', view: 1, data:data });
 		} );
 	} else {
-  	res.render('dashboard/posisi_ikan', { title: 'Posisi Ikan', view: 1 });
+  		res.render('dashboard/posisi_ikan', { title: 'Posisi Ikan', view: 1 });
 	}
 });
 
