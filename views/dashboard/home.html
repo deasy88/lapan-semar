@@ -4,8 +4,86 @@
 <div class="row">
 	<div class="col-lg-12">
     	<h1 class="page-header">
-        	Dashboard <small>DSS SEMAR  - DI. Yogyakarta</small>
+        	Dashboard <small>DSS SEMAR</small>
         </h1>
     </div>
 </div>
+<section class="content">
+            <h3>Pengaturan</h3>
+            <hr/>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="location">Pilih Lokasi</label>
+                    <input type="text" class="form-control" placeholder="Pilih Lokasi" id="location">
+                    <label class="control-label hide" for="location"><i class="fa fa-times-circle-o"></i> Silahkan isi</label>
+                </div>
+                <div class="form-group">
+                    <label for="flikrTags">Luasan wilayah</label>
+                    <input type="text" class="form-control" placeholder="Luas Wilayah" id="flikrTags">
+                    <label class="control-label hide" for="flikrTags"><i class="fa fa-times-circle-o"></i> Silahkan isi</label>
+                </div>
+                <br/>
+                <button type="button" id="pengaturan" class="btn bg-olive">Simpan</button>
+                <button type="button" id="skip" class="btn bg-gray">Skip</button>
+            </div>
+        </section>
+        <!-- /.content -->
+    </aside>
+
+    <!-- jQuery 2.0.2 -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script type="text/javascript">
+    var pengaturan = JSON.parse(localStorage.getItem('pengaturan'));
+    var user = JSON.parse(localStorage.getItem('user'));
+
+    if (pengaturan && !pengaturan.dummy) {
+        if (pengaturan.location) $('#location').val(pengaturan.location.trim());
+        if (pengaturan.flickr) $('#flikrTags').val(pengaturan.flickr.trim());
+    }
+
+    $('#pengaturan').on('click', function() {
+        var $loc = $('#location').val().trim(),
+            $flickr = $('#flikrTags').val().trim();
+
+        if ($loc.length <= 0) {
+            $('#location').parents('.form-group').addClass('has-error');
+            $('#location').next().removeClass('hide');
+            return false;
+        } else {
+            $('#location').parents('.form-group').removeClass('has-error');
+            $('#location').next().addClass('hide');
+        }
+
+        if ($flickr.length <= 0) {
+            $('#flikrTags').parents('.form-group').addClass('has-error');
+            $('#flikrTags').next().removeClass('hide');
+            return false;
+        } else {
+            $('#flikrTags').parents('.form-group').removeClass('has-error');
+            $('#flikrTags').next().addClass('hide');
+        }
+
+        var resp = dash.saveSetting(user._id, {
+            'location': $loc,
+            'flickr': $flickr
+        });
+
+        if (resp == 1) {
+            location.href = 'dashboard/map';
+        } else {
+            alert('Oops something went wrong!');
+        }
+    });
+    $('#skip').on('click', function() {
+        if (!(pengaturan && !pengaturan.dummy)) {
+            localStorage.setItem('pengaturan', JSON.stringify({
+                'dummy': 'object',
+                'location': 'DI Yogyakarta',
+                'flickr': 'sadeng'
+            }));
+        }
+        location.href = 'dashboard/map';
+    });
+    </script>
+	
 {% endblock %}
