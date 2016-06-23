@@ -1,23 +1,31 @@
-{% extends '../layout/dashboard.html' %}
+{% extends '../layout/map.html' %}
 
 {% block content %}
 <div class="row">
 	<div class="col-lg-12">
-    	<h1 class="page-header">
-        	{{ title }} <small>DSS SEMAR</small>
-        </h1>
+		<center><h1 class="page-header">
+        	{{ title }} <small>Decission Support System Embaran Maritim</small>
+        </h1></center>
     </div>
 
     {% if view==1 %}
     <div class="col-md-12">
 	    <form class="form-horizontal" method="post" role="form" onsubmit="return get_data();">
 		    <div class="form-group">
-		    	<label class="col-md-2">Tanggal</label>
+		    	<label class="col-md-2">Tanggal :</label>
 		    	<div class="col-md-3">
 		    		<input type="date" name="tanggal" class="form-control" value="{{ data.tanggal }}" />
 		    	</div>
 		    	<div class="col-md-2">
 		    		<button class="btn btn-primary">Tampil</button>
+		    	</div>
+				<label class="col-md-2">Waktu :</label>
+				<div id="clock">
+					<input type="time" name="jam" value="{{ data.jam }}" />
+				</div>
+				<div role="group" aria-label="Animation controls">
+					<button id="play" type="button">Play</button>
+					<button id="pause" type="button">Pause</button>
 		    	</div>
 		    </div>
 		</form>
@@ -31,8 +39,49 @@
 
 	<script src="/javascripts/OpenLayers.js"></script>
 	<script type="text/javascript">
+	var map, layer, markers, icon, vectorLayer, points;
+	function get_position_projections(lon, lat) {
+		var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+    	var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+		var position = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
+		return position;
+	}
+	function get_position_projections_back(lon, lat) {
+		var toProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+    	var fromProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+		var position = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
+		return position;
+	}
+	function get_data() {
+        markers.clearMarkers();
+        vectorLayer.removeAllFeatures();
+		$.post("/dashboard/map", {tanggal: $('input[name=tanggal]').val()}, function( res ) {
+			for( kapal in res.result ) {
+				if( res.result[kapal].length==1 ) {
+					var marker = new OpenLayers.Marker( 
+						get_position_projections( Number(res.result[kapal][0].LONGITUDE), Number(res.result[kapal][0].LATITUDE) ), icon.clone() );
+					markers.addMarker(marker);
+				} else {
+					points = new Array;
+					for(i=0; i<res.result[kapal].length; i++) {
+						var titik = get_position_projections( Number(res.result[kapal][i].LONGITUDE), Number(res.result[kapal][i].LATITUDE) ) ;
+						points.push( new OpenLayers.Geometry.Point( titik.lon, titik.lat ) ); 
+					}
+					var feature = new OpenLayers.Feature.Vector(
+				            new OpenLayers.Geometry.LineString(points)
+				    );
+				    vectorLayer.addFeatures(feature);
+				    // console.log( 'garis', points );
+				    var sz = res.result[kapal].length-1;
+				    var marker = new OpenLayers.Marker( 
+						get_position_projections( Number(res.result[kapal][sz].LONGITUDE), Number(res.result[kapal][sz].LATITUDE) ), icon.clone() );
+					markers.addMarker(marker);
+				}
+			}
+		} );
+		return false;
+	}
 	$(document).ready( function() {
-		var map, layer;
 		
 		OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
             defaultHandlerOptions: {
@@ -42,7 +91,6 @@
                 'stopSingle': false,
                 'stopDouble': false
             },
-
             initialize: function(options) {
             	this.handlerOptions = OpenLayers.Util.extend(
                 	{}, this.defaultHandlerOptions
@@ -56,45 +104,38 @@
                     }, this.handlerOptions
                 );
             }, 
-
             trigger: function(e) {
                 var lonlat = map.getLonLatFromPixel(e.xy);
                 console.log("You clicked near " + lonlat.lon + " E, " +
                                               + lonlat.lat + " N");
             }
-
         });
-
-		function get_position_projections(lon, lat) {
-			var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
-    		var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
-			var position = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
-			return position;
-		}
-
         function init(){
             map = new OpenLayers.Map( 'map' );
             layer = new OpenLayers.Layer.OSM( "Simple OSM Map");
-            // layer = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
-            //     "http://vmap0.tiles.osgeo.org/wms/vmap0", {layers: 'basic'} );
             map.addLayer(layer);
-            // add layer
-            var markers = new OpenLayers.Layer.Markers( "Markers" );
+            markers = new OpenLayers.Layer.Markers( "Markers" );
             map.addLayer(markers);
-            // create icon
-            var size = new OpenLayers.Size(60, 30);
+            var size = new OpenLayers.Size(25, 17);
             var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-            var icon = new OpenLayers.Icon('/maps/assets/img/kapal.png', size, offset);
+            icon = new OpenLayers.Icon('/maps/assets/img/kapal.png', size, offset);
             // create marker
-            marker = new OpenLayers.Marker(new OpenLayers.LonLat( 111, -8 ), icon );
+            // marker = new OpenLayers.Marker(new OpenLayers.LonLat( 12195069.239032, -909294.8883539 ), icon );
             // marker.setOpacity(0.2);
-            marker.events.register('mousedown', marker, function(evt) { 
-            	alert(this.icon.url); 
-            	OpenLayers.Event.stop(evt); 
-            });
+            // marker.events.register('mousedown', marker, function(evt) { 
+            // 	alert(this.icon.url); 
+            // 	OpenLayers.Event.stop(evt); 
+            // });
             // add marker to layer
-            markers.addMarker(marker);
-
+            // markers.addMarker(marker);
+            var style = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default']);
+			style.fillOpacity = 0.2;
+			style.graphicOpacity = 1;
+			style.strokeWidth = 1; 
+			style.strokeColor = "#ff0000";
+			style.strokeOpacity = 0.5;
+            vectorLayer = new OpenLayers.Layer.Vector("Overlay", {style: style});
+		    map.addLayer(vectorLayer);    
             map.setCenter(
                 new OpenLayers.LonLat( 111, -8 ), 9
             );
@@ -103,7 +144,6 @@
             map.addControl(click);
             click.activate();
         }
-
         init();
 	} );
 	</script>
@@ -111,7 +151,7 @@
 	<style type="text/css">
 		.smallmap {
 		    width: 100%;
-		    height: 650px;
+		    height: 580px;
 		    border: 1px solid #ccc;
 		    display: inherit;
 		}
@@ -163,6 +203,38 @@
 		        font-size: 12px;
 		    }
 		}
+		
+		function showTime() {
+			var a_p = "";
+			var today = new Date();
+			var curr_hour = today.getHours();
+			var curr_minute = today.getMinutes();
+			var curr_second = today.getSeconds();
+			if (curr_hour < 12) {
+				a_p = "AM";
+			} else {
+				a_p = "PM";
+			}
+			if (curr_hour == 0) {
+				curr_hour = 12;
+			}
+			if (curr_hour > 12) {
+				curr_hour = curr_hour - 12;
+			}
+			curr_hour = checkTime(curr_hour);
+			curr_minute = checkTime(curr_minute);
+			curr_second = checkTime(curr_second);
+		 document.getElementById('clock').innerHTML=curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
+			}
+
+		function checkTime(i) {
+			if (i < 10) {
+				i = "0" + i;
+			}
+			return i;
+		}
+		setInterval(showTime, 500);
+		
 	</style>
 
 {% endblock %}

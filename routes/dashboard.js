@@ -26,7 +26,7 @@ router.all('/map', function(req, res, next) {
 			// res.render('dashboard/posisi', { title: 'Live Map, Posisi Kapal', view: 1, data:data });
 		} );
 	} else {
-  		res.render('dashboard/posisi', { title: 'Live Map, Posisi Kapal', view: 1 });
+  		res.render('dashboard/map', { title: 'Live Map', view: 1 });
   	}
 });
 
