@@ -238,9 +238,9 @@ ul.alert-dropdown {
     position: fixed;
     right: 0;
     width:200px;
-    background: #ccc;
+    background: #fff;
     padding:5px;
-    border-radius: 5px 0 0 5px;
+    border-radius: 0 0 0 5px;
     border-top: solid 1px #eee;
     border-left: solid 1px #eee;
     border-bottom: solid 1px #eee;
@@ -249,4 +249,25 @@ ul.alert-dropdown {
 .sideMenu div {
     padding: 0;
     margin: 0;
+}
+
+.sideMenu .btn-toggle-menu {
+    position: absolute;
+    left:-28px;
+    top:-5px;
+}
+
+.sideMenu .subMenu {
+    position: absolute;
+    width: 200px;
+    left: -200px;
+    background: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    top:-300px;
+    border: solid 1px #eee;
+}
+
+.sideMenu .adaSub:hover > .subMenu {
+    display: block;
 }

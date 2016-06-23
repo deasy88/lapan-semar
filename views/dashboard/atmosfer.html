@@ -31,9 +31,9 @@
     <div class="sideMenu">
 	    <div class="form-group" style="padding:0;">
 		    <div class="col-sm-2">
-		    	<button class="btn btn-xs btn-primary" onclick="toggle_menu(this)"> <i class="fa fa-arrow-right"></i> </button>
+		    	<button class="btn btn-xs btn-primary btn-toggle-menu" onclick="toggle_menu(this)"> <i class="fa fa-arrow-right"></i> </button>
 	    	</div>
-	    	<div class="col-sm-10">
+	    	<!-- <div class="col-sm-10">
 		    	<select name="layer" class="form-control" placeholder="Pilih layer" onchange="get_layer(this);">
 		    		<option value=""></option>
 		    		<option value="SEMAR/RAINFV" data-server="1"> SADEWA Hujan </option>
@@ -44,6 +44,75 @@
 		    		<option value="HYCOM/u:v-group" data-server="0"> HYCOM Arus </option>
 		    		<option value="HIMA/ik" data-server="0"> Himawari Awan </option>
 		    	</select>
+		    </div> -->
+	    </div>
+	    <div class="form-group">
+	    	<div class="col-md-12" style="padding-top:5px">
+		    	<label>Prediksi</label>
+		    </div>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<button class="btn btn-primary col-md-12">Arus Laut</button>
+		    </div>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<button class="btn btn-primary col-md-12">Suhu Muka Laut</button>
+		    </div>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<button class="btn btn-primary col-md-12">Hujan</button>
+		    </div>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<button class="btn btn-primary col-md-12">Angin</button>
+		    </div>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<label>Pengamatan</label>
+		    </div>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<button class="btn btn-primary col-md-12">ZPPI<br/>Zona Potensi Penangkapan Ikan</button>
+		    </div>
+		    <div class="col-md-12 adaSub" style="padding-top:5px">
+		    	<button class="btn btn-primary col-md-12">Posisi Kapal</button>
+		    	<div class="subMenu" hidden>
+		    		<div class="form-group">
+				    	<div class="col-md-12" style="padding-top:5px">
+					    	<label>Tipe kapal</label>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary col-md-12">Hazard-Y</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary col-md-12">Passenger</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary col-md-12">Cargo</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary col-md-12">Future use</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary col-md-12">Tanker</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary col-md-12">Default</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary col-md-12">Other ships</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary col-md-12">HSC-Z</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary col-md-12">WIG</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary col-md-12">Other ship</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary col-md-12">Unidentified</button>
+					    </div>
+					</div>		
+		    	</div>
+		    </div>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<button class="btn btn-primary col-md-12">Awan</button>
 		    </div>
 	    </div>
     </div>
@@ -125,7 +194,7 @@
 			var show = $(th).data('show');
 			show = (show==undefined) ? true:show;
 			if( show ) {
-				$(".sideMenu").animate( {right:"-170px"} );
+				$(".sideMenu").animate( {right:"-200px"} );
 				$(th).data('show', false);
 				$(th).find("i").removeClass("fa-arrow-right");
 				$(th).find("i").addClass("fa-arrow-left");

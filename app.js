@@ -103,7 +103,7 @@ function isLoggedIn(req, res, next){
 
 
 app.use('/', routes);
-app.use('/dashboard', isLoggedIn, dashboard);
+app.use('/dashboard', dashboard);
 app.post('/login', 
     passport.authenticate('local', { failureRedirect: '/' }),
     function(req, res) {
