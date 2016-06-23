@@ -103,10 +103,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 function isLoggedIn(req, res, next){
-<<<<<<< HEAD
-    // return next();
-=======
->>>>>>> cf1588470334b6dcd1899c64c209ec025c9e069e
     if(req.isAuthenticated()){
         return next();
     }
@@ -115,7 +111,7 @@ function isLoggedIn(req, res, next){
 
 
 app.use('/', routes);
-app.use('/dashboard', dashboard);
+app.use('/dashboard', isLoggedIn, dashboard);
 app.post('/login', 
     passport.authenticate('local', { failureRedirect: '/' }),
     function(req, res) {
