@@ -34,7 +34,7 @@
                 </div>
             </center>
         </div>
-    	<div id="map-container" style="width: 100%; height: 500px"></div>
+    	<div id="map-container" style="width: 100%; height: 550px"></div>
     </div>
 
     <div class="sideMenu">
@@ -374,7 +374,7 @@ jQuery(document).ready(function () {
     });
     //ADDING MAP LAYER TO LEAFLET
     map.addLayer(osm);
-    map.setView(new L.LatLng(-2, 120), 6);
+    map.setView(new L.LatLng(-8, 110), 9);
     //pageFunction
     function roundToTwo(num) {
         return +(Math.round(num + "e+2") + "e-2");

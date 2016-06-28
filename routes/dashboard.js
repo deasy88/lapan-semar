@@ -8,6 +8,10 @@ router.get('/', function(req, res, next) {
   	res.render('dashboard/home', { title: 'Dashboard' });
 });
 
+router.get('/setting', function(req, res, next) {
+  	res.render('dashboard/setting', { title: 'Pengaturan' });
+});
+
 router.all('/map', function(req, res, next) {
 	var data = {};
 	data.tanggal = req.body.tanggal;
