@@ -2,9 +2,9 @@ module.exports = function ( database ) {
 
 	// connection
 	database.createPool( {
-	user          : "DSSSEMAR",
-	password      : "lapansemar",
-	connectString : "10.40.1.210/bismadb"
+	user          : "SYSTEM",
+	password      : "root",
+	connectString : "localhost/XE"
 	} ).then(function() {
 	        console.log( "connected" );
 	    }).catch(function(err) {

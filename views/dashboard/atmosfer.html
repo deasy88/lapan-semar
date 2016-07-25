@@ -2,11 +2,6 @@
 
 {% block content %}
 <div class="row">
-	<div class="col-lg-12">
-    	<h1 class="page-header">
-        	{{ title }} <small>DSS SEMAR - DI. Yogyakarta</small>
-        </h1>
-    </div>
 
     {% if view==1 %}
     <div class="col-md-12">
@@ -363,14 +358,13 @@ jQuery(document).ready(function () {
         if (typeof pageData.notify.map !== 'undefined') {
             pageData.notify.map.close();
         }
-        pageData.notify['map'] = $.notify({
+        /*pageData.notify['map'] = $.notify({
             title: 'SILAHKAN TUNGGU',
             message: 'Memuat Peta....'
-                    ///// 
-        });
+        });*/
     });
     osm.on("load", function (e) {
-        pageData.notify.map.close();
+        //pageData.notify.map.close();
     });
     //ADDING MAP LAYER TO LEAFLET
     map.addLayer(osm);
@@ -856,11 +850,10 @@ jQuery(document).ready(function () {
             pageData.points.ikan = null;
             return false;
         } else {
-            pageData.notify['zppi'] = $.notify({
+            /*pageData.notify['zppi'] = $.notify({
                 title: 'SILAHKAN TUNGGU',
                 message: 'Memuat Data ZPPI'
-                        ///// 
-            });
+            });*/
             $.get("/id/map2/get-zppi", {}, function (res) {
                 if (res.msg == 'ok') {
                     if ($("#data-date-info-zppi").length > 0) {
@@ -892,7 +885,7 @@ jQuery(document).ready(function () {
                     });
                     pageData.points['ikan'] = L.layerGroup(lg);
                     pageData.points.ikan.addTo(map);
-                    pageData.notify.zppi.close();
+                    //pageData.notify.zppi.close();
                 }
             }, "JSON");
         }
@@ -999,7 +992,7 @@ jQuery(document).ready(function () {
             $(this).addClass("btn-success");
         }
     });
-    $("#prediksi-arus").trigger("click");
+    //$("#prediksi-arus").trigger("click");
     $("#menutoggle").on("click", function (e) {
         if ($(this).data("open") == '1') {
             $(this).data("open", '0');
