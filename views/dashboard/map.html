@@ -1,240 +1,285 @@
 {% extends '../layout/map.html' %}
 
 {% block content %}
-<div class="row">
-	<div class="col-lg-12">
-		<center><h1 class="page-header">
-        	{{ title }} <small>Decission Support System Embaran Maritim</small>
-        </h1></center>
-    </div>
+	<div id="map" class="smallmap"></div>
 
-    {% if view==1 %}
-    <div class="col-md-12">
-	    <form class="form-horizontal" method="post" role="form" onsubmit="return get_data();">
-		    <div class="form-group">
-		    	<label class="col-md-2">Tanggal :</label>
-		    	<div class="col-md-3">
-		    		<input type="date" name="tanggal" class="form-control" value="{{ data.tanggal }}" />
-		    	</div>
-		    	<div class="col-md-2">
-		    		<button class="btn btn-primary">Tampil</button>
-		    	</div>
-				<label class="col-md-2">Waktu :</label>
-				<div id="clock">
-					<input type="time" name="jam" value="{{ data.jam }}" />
-				</div>
-				<div role="group" aria-label="Animation controls">
-					<button id="play" type="button">Play</button>
-					<button id="pause" type="button">Pause</button>
+	<div class="sideMenu">
+	    <div class="form-group" style="padding:0;">
+		    <div class="col-sm-2">
+		    	<button class="btn btn-xs btn-primary btn-toggle-menu" onclick="toggle_menu(this)"> <i class="fa fa-arrow-right"></i> </button>
+	    	</div>
+	    </div>
+	    <div class="form-group">
+	    	<div class="col-md-12" style="padding-top:5px">
+		    	<label>Prediksi</label>
+		    </div>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<button id="prediksi-arus" class="wms btn btn-primary data-menu not-stack col-md-12" data-key="arus">Arus Laut</button>
+		    </div>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<button id="prediksi-suhumukalaut" class="wms btn btn-primary data-menu not-stack col-md-12" data-layeralias="Suhu Muka Laut" data-key="suhumukalaut">Suhu Muka Laut</button>
+		    </div>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<button id="prediksi-hujan" class="wms btn btn-primary data-menu not-stack col-md-12" data-layeralias="HUJAN" data-key="hujan">Hujan</button>
+		    </div>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<button id="prediksi-angin" class="wms btn btn-primary data-menu not-stack col-md-12" data-layeralias="Angin" data-key="angin">Angin</button>
+		    </div>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<label>Pengamatan</label>
+		    </div>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<button id="pengamatan-zppi" class="btn btn-primary data-menu stack col-md-12">ZPPI<br/><small>Zona Potensi Penangkapan Ikan</small></button>
+		    </div>
+		    <div class="col-md-12 adaSub" style="padding-top:5px">
+		    	<button id="pengamatan-kapal" class="btn btn-primary data-menu stack col-md-12">Posisi Kapal</button>
+		    	<div class="subMenu" hidden>
+		    		<div class="form-group">
+				    	<div class="col-md-12" style="padding-top:5px">
+					    	<label>Tipe kapal</label>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	 <button class="btn btn-primary data-menu tipekapal col-md-12" data-val="36">Hazard-Y</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="37">Passenger</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="38">Cargo</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="39">Future use</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="40">Tanker</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="41">Default</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="42">Other ships</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="43">HSC-Z</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="44">WIG</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="81">Other ship</button>
+					    </div>
+					    <div class="col-md-12" style="padding-top:5px">
+					    	<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="0">UNIDENTIFIED</button>
+					    </div>
+					</div>		
 		    	</div>
 		    </div>
-		</form>
+		    <div class="col-md-12" style="padding-top:5px">
+		    	<button id="pengamatan-awan" class="wms btn btn-primary data-menu not-stack col-md-12" data-layeralias="Awan" data-key="awan">Awan</button>
+		    </div>
+	    </div>
     </div>
-    {% endif %}
-
-    <div class="col-md-12">
-    	<div id="map" class="smallmap"></div>
-    </div>
-</div>
-
-	<script src="/javascripts/OpenLayers.js"></script>
-	<script type="text/javascript">
-	var map, layer, markers, icon, vectorLayer, points;
-	function get_position_projections(lon, lat) {
-		var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
-    	var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
-		var position = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
-		return position;
-	}
-	function get_position_projections_back(lon, lat) {
-		var toProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
-    	var fromProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
-		var position = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
-		return position;
-	}
-	function get_data() {
-        markers.clearMarkers();
-        vectorLayer.removeAllFeatures();
-		$.post("/dashboard/map", {tanggal: $('input[name=tanggal]').val()}, function( res ) {
-			for( kapal in res.result ) {
-				if( res.result[kapal].length==1 ) {
-					var marker = new OpenLayers.Marker( 
-						get_position_projections( Number(res.result[kapal][0].LONGITUDE), Number(res.result[kapal][0].LATITUDE) ), icon.clone() );
-					markers.addMarker(marker);
-				} else {
-					points = new Array;
-					for(i=0; i<res.result[kapal].length; i++) {
-						var titik = get_position_projections( Number(res.result[kapal][i].LONGITUDE), Number(res.result[kapal][i].LATITUDE) ) ;
-						points.push( new OpenLayers.Geometry.Point( titik.lon, titik.lat ) ); 
-					}
-					var feature = new OpenLayers.Feature.Vector(
-				            new OpenLayers.Geometry.LineString(points)
-				    );
-				    vectorLayer.addFeatures(feature);
-				    // console.log( 'garis', points );
-				    var sz = res.result[kapal].length-1;
-				    var marker = new OpenLayers.Marker( 
-						get_position_projections( Number(res.result[kapal][sz].LONGITUDE), Number(res.result[kapal][sz].LATITUDE) ), icon.clone() );
-					markers.addMarker(marker);
-				}
-			}
-		} );
-		return false;
-	}
-	$(document).ready( function() {
-		
-		OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
-            defaultHandlerOptions: {
-                'single': true,
-                'double': false,
-                'pixelTolerance': 0,
-                'stopSingle': false,
-                'stopDouble': false
-            },
-            initialize: function(options) {
-            	this.handlerOptions = OpenLayers.Util.extend(
-                	{}, this.defaultHandlerOptions
-                );
-                OpenLayers.Control.prototype.initialize.apply(
-                	this, arguments
-                ); 
-                this.handler = new OpenLayers.Handler.Click(
-                	this, {
-                    	'click': this.trigger
-                    }, this.handlerOptions
-                );
-            }, 
-            trigger: function(e) {
-                var lonlat = map.getLonLatFromPixel(e.xy);
-                console.log("You clicked near " + lonlat.lon + " E, " +
-                                              + lonlat.lat + " N");
-            }
-        });
-        function init(){
-            map = new OpenLayers.Map( 'map' );
-            layer = new OpenLayers.Layer.OSM( "Simple OSM Map");
-            map.addLayer(layer);
-            markers = new OpenLayers.Layer.Markers( "Markers" );
-            map.addLayer(markers);
-            var size = new OpenLayers.Size(25, 17);
-            var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-            icon = new OpenLayers.Icon('/maps/assets/img/kapal.png', size, offset);
-            // create marker
-            // marker = new OpenLayers.Marker(new OpenLayers.LonLat( 12195069.239032, -909294.8883539 ), icon );
-            // marker.setOpacity(0.2);
-            // marker.events.register('mousedown', marker, function(evt) { 
-            // 	alert(this.icon.url); 
-            // 	OpenLayers.Event.stop(evt); 
-            // });
-            // add marker to layer
-            // markers.addMarker(marker);
-            var style = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default']);
-			style.fillOpacity = 0.2;
-			style.graphicOpacity = 1;
-			style.strokeWidth = 1; 
-			style.strokeColor = "#ff0000";
-			style.strokeOpacity = 0.5;
-            vectorLayer = new OpenLayers.Layer.Vector("Overlay", {style: style});
-		    map.addLayer(vectorLayer);    
-            map.setCenter(
-                new OpenLayers.LonLat( 111, -8 ), 9
-            );
-            
-            var click = new OpenLayers.Control.Click();
-            map.addControl(click);
-            click.activate();
-        }
-        init();
-	} );
-	</script>
 
 	<style type="text/css">
 		.smallmap {
-		    width: 100%;
-		    height: 580px;
-		    border: 1px solid #ccc;
-		    display: inherit;
+		    position: absolute;
+		    top:54px;
+		    left:0;
+		    right:0;
+		    bottom:0;
 		}
-		@media only screen and (max-width: 600px) {
-		    body {
-		        height           : 100%;
-		        margin           : 0;
-		        padding          : 0;
-		        width            : 100%;
-		    }
-		    #map {
-		        background : #7391ad;
-		        width      : 100%;
-		    }
-		    #map {
-		        border : 0;
-		        height : 250px;
-		    }
-		    #title {
-		        font-size   : 1.3em;
-		        line-height : 2em;
-		        text-indent : 1em;
-		        margin      : 0;
-		        padding     : 0;
-		    }
-		    #docs {
-		        bottom     : 0;
-		        padding    : 1em;
-		    }
-		    #shortdesc {
-		        color      : #aaa;
-		        font-size  : 0.8em;
-		        padding    : 1em;
-		        text-align : right;
-		    }
-		    #tags {
-		        display : none;
-		    }
+		.navbar {
+		    margin-bottom:0;
 		}
-		@media only screen and (orientation: landscape) and (max-width: 600px) {
-		    #shortdesc {
-		       float: right;
-		       width: 25%;
-		    }
-		    #map {
-		        width: 70%;
-		    }
-		    #docs {
-		        font-size: 12px;
-		    }
-		}
-		
-		function showTime() {
-			var a_p = "";
-			var today = new Date();
-			var curr_hour = today.getHours();
-			var curr_minute = today.getMinutes();
-			var curr_second = today.getSeconds();
-			if (curr_hour < 12) {
-				a_p = "AM";
-			} else {
-				a_p = "PM";
-			}
-			if (curr_hour == 0) {
-				curr_hour = 12;
-			}
-			if (curr_hour > 12) {
-				curr_hour = curr_hour - 12;
-			}
-			curr_hour = checkTime(curr_hour);
-			curr_minute = checkTime(curr_minute);
-			curr_second = checkTime(curr_second);
-		 document.getElementById('clock').innerHTML=curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
-			}
-
-		function checkTime(i) {
-			if (i < 10) {
-				i = "0" + i;
-			}
-			return i;
-		}
-		setInterval(showTime, 500);
-		
 	</style>
+
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+	<script type="text/javascript">
+		var map;
+		var osmUrl;
+		var osmAttrib;
+		var osm;
+		var wmsserver = 'http://182.23.27.39:8080/wms/wms';
+		var layerDefaults = {
+	        'id': 'def',
+	        'wmsId': 'def',
+	        'layer': 'def',
+	        'style': 'def',
+	        'legend': 'none',
+	        'stackedLayer': 'def',
+	        'stackedStyle': 'def',
+	        'legend': 'def',
+	        'alias': 'def',
+	        'active': false,
+	        'activeDates': null,
+	        'supportsTimeseries': false,
+	        'minMax': 'auto',
+	        'wmsLayer': false,
+	        'zIndex': 1,
+	        'opacity': 1,
+	        'stacked': false,
+	        'unit': 'def',
+	        'featureInfo': false,
+	        'belowMinColor':'extend',
+	        'aboveMinColor':'extend',
+	        'baseMap':'osm'
+	    };
+	    var layers = {};
+	    layers['arus'] = {
+	        'id': 'arus',
+	        'wmsId': 'HYCOM',
+	        'layer': 'HYCOM/u:v-group',
+	        'style': 'vector_fat_arrows/x-Rainbow',
+	        'legend': 'x-Rainbow',
+	        'alias': 'Arus',
+	        'minMax': '0,1.5',
+	        'zIndex': 11,
+	        'opacity': 1,
+	        'unit': 'm/detik',
+	        'belowMin':'transparent'
+	    };
+	    layers['suhumukalaut'] = {
+	        'id': 'suhumukalaut',
+	        'wmsId': 'HYCOM',
+	        'layer': 'HYCOM/temperature',
+	        'style': 'default-scalar/x-Sst',
+	        'stackedLayer': 'HYCOM/temperature',
+	        'stackedStyle': 'default-scalar/x-Sst',
+	        'legend': 'x-Sst',
+	        'alias': 'Suhu Muka Laut',
+	        'minMax': '26,32',
+	        'zIndex': 11,
+	        'opacity': 1,
+	        'unit': 'Celcius'
+	    };
+	    layers['hujan'] = {
+	        'id': 'hujan',
+	        'wmsId': 'WRF sadewa',
+	        'layer': 'WRF sadewa/RAINFV',
+	        'style': 'default-scalar/sadewa',
+	        'stackedLayer': 'WRF sadewa/RAINFV',
+	        'stackedStyle': 'default-scalar/sadewa',
+	        'legend': 'sadewa',
+	        'alias': 'Hujan',
+	        'minMax': '0.5,5',
+	        'zIndex': 11,
+	        'opacity': 1,
+	        'unit': 'mm/jam',
+	        'featureInfo': true,
+	        'belowMinColor':'transparent'
+	    };
+	    layers['angin'] = {
+	        'id': 'angin',
+	        'wmsId': 'WRF sadewa',
+	        'layer': 'WRF sadewa/U10:V10-group',
+	        'style': 'default-vector/x-Rainbow',
+	        'legend': 'x-Rainbow',
+	        'alias': 'Angin',
+	        'minMax': 'auto',
+	        'zIndex': 11,
+	        'opacity': 1,
+	        'unit': 'm/detik',
+	        'featureInfo': true,
+	        'belowMinColor':'extend',
+	        'baseMap':'mapbox'
+	    };
+	    layers['awan'] = {
+	        'id': 'awan',
+	        'wmsId': 'HIMA',
+	        'layer': 'HIMA/ik',
+	        'style': 'default-scalar/seq-GreysRev',
+	        'stackedLayer': 'HIMA/ik',
+	        'stackedStyle': 'default-scalar/seq-GreysRev',
+	        'legend': 'seq-GreysRev',
+	        'alias': 'awan',
+	        'minMax': '200,255',
+	        'zIndex': 11,
+	        'opacity': 1,
+	        'unit': 'Kelvin'
+	    };
+	    $.each(layers,function(k,v){
+	    	layers[k] = $.extend({},layerDefaults,v);
+	    });
+
+		function init_map() {
+			map = new L.Map('map', {
+		        center: [-2, 120],
+		        zoom: 5
+		    });
+		    osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+		   	osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+		    osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 12, attribution: false});
+		    osm.setZIndex(1);
+		    map.addLayer(osm);
+    		// map.setView(new L.LatLng(-8, 110), 9); focus to jogja
+		}
+
+		function roundToTwo(num) {
+	        return +(Math.round(num + "e+2") + "e-2");
+	    }
+
+		function arus() {
+			$.ajaxSetup({
+	            "async": true
+	        });
+
+			var arus = {
+		        'id': 'arus',
+		        'wmsId': 'HYCOM',
+		        'layer': 'HYCOM/u:v-group',
+		        'style': 'vector_fat_arrows/x-Rainbow',
+		        'legend': 'x-Rainbow',
+		        'alias': 'Arus',
+		        'minMax': '0,1.5',
+		        'zIndex': 2,
+		        'opacity': 1,
+		        'unit': 'm/detik',
+		        'belowMin':'transparent'
+		    };
+		    var drawObj = $.extend({}, layerDefaults, arus);
+        	var bound = map.getBounds();
+        	var bbox = roundToTwo(bound._southWest.lng) + "," + roundToTwo(bound._southWest.lat) + "," + roundToTwo(bound._northEast.lng) + "," + roundToTwo(bound._northEast.lat);
+        	
+        	var wmsLayer = L.tileLayer.wms( wmsserver, {
+	            format: 'image/png',
+	            transparent: true,
+	            layers: drawObj.layer,
+	            version: "1.3.0",
+	            //"BBOX": bbox,
+	            styles: drawObj.style,
+	            //"time": $("#select-time").val(),
+	            BELOWMINCOLOR: drawObj.belowMinColor,
+	            COLORSCALERANGE: drawObj.minMax
+	        } );
+
+	        wmsLayer.setZIndex( arus.zIndex );
+            wmsLayer.setOpacity( arus.opacity );
+
+	        wmsLayer.addTo(map);
+		}
+
+		$(document).ready( function(){
+			init_map();
+			arus();
+		});
+
+		function toggle_menu( th ) {
+			var show = $(th).data('show');
+			show = (show==undefined) ? true:show;
+			if( show ) {
+				$(".sideMenu").animate( {right:"-200px"} );
+				$(th).data('show', false);
+				$(th).find("i").removeClass("fa-arrow-right");
+				$(th).find("i").addClass("fa-arrow-left");
+			} else {
+				$(".sideMenu").animate( {right:"0px"} );
+				$(th).data('show', true);
+				$(th).find("i").removeClass("fa-arrow-left");
+				$(th).find("i").addClass("fa-arrow-right");
+			}
+		}
+	</script>
 
 {% endblock %}

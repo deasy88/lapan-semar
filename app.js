@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var proxyMiddleware = require('http-proxy-middleware');
+//var proxyMiddleware = require('http-proxy-middleware');
 
 var swig = require('swig');
 var passport = require('passport');
@@ -15,15 +15,22 @@ var database = require('./services/database.js');
 var routes = require('./routes/index');
 var dashboard = require('./routes/dashboard');
 
+var http = require('http');
+
 var m_user = require('./models/user');
 
 require( "./connect.js" ) (database);
 
+<<<<<<< HEAD
 var proxy = proxyMiddleware('http://http://10.30.40.3:3000/', {
 				target: 'http://testsemar.lapan.go.id/',
+=======
+/*var proxy = proxyMiddleware('http://http://182.23.27.39:8080/', {
+				target: 'http://182.23.27.39:8080/wms',
+>>>>>>> d990e277be1ccce2fb4c72441e430954720bad65
 				changeOrigin: true,
 				xfwd: true
-	});
+	});*/
 
 var application_root = __dirname,
     express = require( 'express' ),
@@ -86,7 +93,7 @@ app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(session({ secret: 'iniadalahrahasia' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session());
@@ -105,11 +112,12 @@ passport.deserializeUser(function(id, done) {
 
 passport.use( "local", new LocalStrategy(
     function(username, password, done) {
+    	console.log( "proses login" );
         m_user.login(username, password).then( function(res) {
-            // console.log( res );
+            console.log( res );
             done(null, res.rows[0]);
         } ).catch( function(err) {
-            // console.log( err );
+            console.log( err );
             done(null, false); 
         } );
     }
@@ -122,6 +130,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 function isLoggedIn(req, res, next){
+    return next();
     if(req.isAuthenticated()){
         return next();
     }
@@ -142,13 +151,19 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+<<<<<<< HEAD
 //setting proxy middleware
 app.use('/', function(req, res, next){
 	httpProxy.createProxyServer({target:'http://testsemar.lapan.go.id/'});
+=======
+// setting wms proxy middleware
+app.use('/', function(req, res, next){
+	//httpProxy.createProxyServer({target:'http://182.23.27.39:8080/'});
+>>>>>>> d990e277be1ccce2fb4c72441e430954720bad65
     next();
 });
 
-app.use(proxy);
+//app.use(proxy);
 
 //using vhost
 
@@ -183,5 +198,7 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+app.listen( 8000 );
 
 module.exports = app;
