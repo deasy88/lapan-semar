@@ -717,19 +717,19 @@
 		});
 
 		var ikanIcon = L.icon({
-			iconUrl: '/images/logo/Ikan 001 copy.png',
+			iconUrl: '/images/Ikan 001 copy.png',
 			iconSize: [30, 30]
 		});
 		var ikanIconBigger = L.icon({
-			iconUrl: '/images/logo/Ikan 001 copy.png',
+			iconUrl: '/images/Ikan 001 copy.png',
 			iconSize: [50, 40]
 		});
 		var boatIcon = L.icon({
-			iconUrl: '/images/logo/Icon Kapal 002 copy.png',
+			iconUrl: '/images/Icon Kapal 002 copy.png',
 			iconSize: [20, 15]
 		});
 		var boatIconBigger = L.icon({
-			iconUrl: '/images/logo/Icon Kapal 002 copy.png',
+			iconUrl: '/images/Icon Kapal 002 copy.png',
 			iconSize: [50, 40]
 		});
 
@@ -744,28 +744,28 @@
 					title: 'SILAHKAN TUNGGU',
 					message: 'Memuat Data ZPPI'
 				});
-				$.get("/en/map2/get-zppi", {}, function (res) {
+				$.get("/dashboard/posisi_ikan", {}, function (res) {
 					if (res.msg == 'ok') {
 						if ($("#data-date-info-zppi").length > 0) {
 							$("#data-date-info-zppi").remove();
 						}
 						if ($(".data-date-info").length == 0) {
-							var top = 10;
+							var top = 60;
 						} else {
-							var top = ($(".data-date-info").length + 1) * 10 + 30;
+							var top = ($(".data-date-info").length + 1) * 10 + 60;
 						}
 
 						$("<div/>", {
 							'id': "data-date-info-zppi",
 							'class': 'data-date-info',
 							'html': "Waktu Data ZPPI : " + res.tanggal,
-							'style': "padding:5px;position:absolute;left:50px;top:" + top + "px;z-index:100;background-color:#FFFFFF"
+							'style': "padding:5px;position:absolute;left:50px;top:" + top + "px;z-index:5000;background-color:#FFFFFF"
 						}).appendTo($("#map-content")).hide().slideDown();
 
 						var lg = [];
 						$.each(res.zppi, function (k, v) {
-							lg[k] = L.marker([v.LATITUDE.replace(",", "."), v.LONGITUDE.replace(",", ".")], {icon: ikanIcon}).addTo(map)
-									.bindPopup("Lokasi : <br/> " + v.LATITUDE.replace(",", ".") + "," + v.LONGITUDE.replace(",", "."))
+							lg[k] = L.marker([v[0].LATITUDE.replace(",", "."), v[0].LONGITUDE.replace(",", ".")], {icon: ikanIcon}).addTo(map)
+									.bindPopup("Lokasi : <br/> " + v[0].LATITUDE.replace(",", ".") + "," + v[0].LONGITUDE.replace(",", "."))
 									.on('mouseover', function (e) {
 										this.openPopup();
 									})
@@ -831,7 +831,7 @@
 							'id': "data-date-info-kapal",
 							'class': 'data-date-info',
 							'html': "Waktu Data Kapal : " + res.tanggal + " Jam " + res.jam,
-							'style': "padding:5px;position:absolute;left:50px;top:" + top + "px;z-index:100;background-color:#FFFFFF"
+							'style': "padding:5px;position:absolute;left:50px;top:" + top + "px;z-index:5000;background-color:#FFFFFF"
 						}).appendTo($("#map-content")).hide().slideDown();
 						var lg = [];
 						$.each(res.kapal, function (k, v) {
