@@ -436,7 +436,7 @@ jQuery(document).ready(function () {
                 });
             });
             $.ajaxSetup({
-                "async": true
+                "async": false
             });
 //            console.debug(dates);
             drawObj.activeDates = dates;
@@ -560,7 +560,7 @@ jQuery(document).ready(function () {
                 format: 'image/png',
                 transparent: true,
                 layers: drawObj.layer,
-                version: "1.3.0",
+                version: "1.1.1",
 //                "BBOX": bbox,
                 styles: drawObj.style,
                 "time": $("#select-time").val(),
@@ -861,7 +861,7 @@ jQuery(document).ready(function () {
                 message: 'Memuat Data ZPPI'
                         ///// 
             });
-            $.get("/id/map2/get-zppi", {}, function (res) {
+            $.get("ikan", {}, function (res) {
                 if (res.msg == 'ok') {
                     if ($("#data-date-info-zppi").length > 0) {
                         $("#data-date-info-zppi").remove();
