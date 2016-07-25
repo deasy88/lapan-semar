@@ -430,7 +430,7 @@ jQuery(document).ready(function () {
                 });
             });
             $.ajaxSetup({
-                "async": true
+                "async": false
             });
 //            console.debug(dates);
             drawObj.activeDates = dates;
@@ -554,7 +554,7 @@ jQuery(document).ready(function () {
                 format: 'image/png',
                 transparent: true,
                 layers: drawObj.layer,
-                version: "1.3.0",
+                version: "1.1.1",
 //                "BBOX": bbox,
                 styles: drawObj.style,
                 "time": $("#select-time").val(),
@@ -853,8 +853,14 @@ jQuery(document).ready(function () {
             /*pageData.notify['zppi'] = $.notify({
                 title: 'SILAHKAN TUNGGU',
                 message: 'Memuat Data ZPPI'
+<<<<<<< HEAD
+                        ///// 
+            });
+            $.get("ikan", {}, function (res) {
+=======
             });*/
             $.get("/id/map2/get-zppi", {}, function (res) {
+>>>>>>> d990e277be1ccce2fb4c72441e430954720bad65
                 if (res.msg == 'ok') {
                     if ($("#data-date-info-zppi").length > 0) {
                         $("#data-date-info-zppi").remove();

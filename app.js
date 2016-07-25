@@ -21,13 +21,37 @@ var m_user = require('./models/user');
 
 require( "./connect.js" ) (database);
 
+<<<<<<< HEAD
+var proxy = proxyMiddleware('http://http://10.30.40.3:3000/', {
+				target: 'http://testsemar.lapan.go.id/',
+=======
 /*var proxy = proxyMiddleware('http://http://182.23.27.39:8080/', {
 				target: 'http://182.23.27.39:8080/wms',
+>>>>>>> d990e277be1ccce2fb4c72441e430954720bad65
 				changeOrigin: true,
 				xfwd: true
 	});*/
 
+var application_root = __dirname,
+    express = require( 'express' ),
+    vhost = require( 'vhost' );
+
+function createVirtualHost(domainName, dirPath) {
+    return vhost(domainName, express.static( dirPath ));
+}
+
+//Create server
 var app = express();
+
+//Create the virtual hosts
+var tesemarHost = createVirtualHost("www.testsemar.lapan.go.id", "tesemar");
+var semarHost = createVirtualHost("www.semar.lapan.go.id", "semar");
+
+//Use the virtual hosts
+app.use(tesemarHost);
+app.use(semarHost);
+
+
 
 // detector
 function shutdown() {
@@ -127,13 +151,22 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+<<<<<<< HEAD
+//setting proxy middleware
+app.use('/', function(req, res, next){
+	httpProxy.createProxyServer({target:'http://testsemar.lapan.go.id/'});
+=======
 // setting wms proxy middleware
 app.use('/', function(req, res, next){
 	//httpProxy.createProxyServer({target:'http://182.23.27.39:8080/'});
+>>>>>>> d990e277be1ccce2fb4c72441e430954720bad65
     next();
 });
 
 //app.use(proxy);
+
+//using vhost
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
