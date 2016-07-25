@@ -21,16 +21,8 @@ var m_user = require('./models/user');
 
 require( "./connect.js" ) (database);
 
-<<<<<<< HEAD
-var proxy = proxyMiddleware('http://http://10.30.40.3:3000/', {
-				target: 'http://testsemar.lapan.go.id/',
-=======
-/*var proxy = proxyMiddleware('http://http://182.23.27.39:8080/', {
-				target: 'http://182.23.27.39:8080/wms',
->>>>>>> d990e277be1ccce2fb4c72441e430954720bad65
-				changeOrigin: true,
-				xfwd: true
-	});*/
+// var proxy = proxyMiddleware('http://http://10.30.40.3:3000/', {
+// 				target: 'http://testsemar.lapan.go.id/',
 
 var application_root = __dirname,
     express = require( 'express' ),
@@ -151,21 +143,11 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-<<<<<<< HEAD
 //setting proxy middleware
 app.use('/', function(req, res, next){
-	httpProxy.createProxyServer({target:'http://testsemar.lapan.go.id/'});
-=======
-// setting wms proxy middleware
-app.use('/', function(req, res, next){
-	//httpProxy.createProxyServer({target:'http://182.23.27.39:8080/'});
->>>>>>> d990e277be1ccce2fb4c72441e430954720bad65
+	// httpProxy.createProxyServer({target:'http://testsemar.lapan.go.id/'});
     next();
 });
-
-//app.use(proxy);
-
-//using vhost
 
 
 // catch 404 and forward to error handler
