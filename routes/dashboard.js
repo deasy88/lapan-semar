@@ -44,24 +44,19 @@ router.get('/laut', function(req, res, next) {
 
 router.all('/posisi_ikan', function(req, res, next) {
 	var data2 = {};
-	data2.tanggal = req.body.tanggal;
-	if( data2.tanggal!=undefined ) {
-		// console.log( "data tanggal", data2.tanggal );
-		table.get_where('ZPPI', " TO_CHAR(TANGGAL,'YYYY-MM-DD')='" +data2.tanggal+ "' ").then( function(result) {
-			data2.result = {};
-			// console.log( result );
-			for(i=0; i<result.rows.length; i++) {
-				if( data2.result[ result.rows[i].ITEM_NO ]==undefined ) {
-					data2.result[ result.rows[i].ITEM_NO ] = new Array;
-				}
-				data2.result[ result.rows[i].ITEM_NO ].push( result.rows[i] );
+	table.get_last_zppi().then( function(result) {
+		data2.msg = "ok";
+		data2.zppi = {};
+		data2.tanggal = "";
+		for(i=0; i<result.rows.length; i++) {
+			if( data2.zppi[ result.rows[i].ITEM_NO ]==undefined ) {
+				data2.zppi[ result.rows[i].ITEM_NO ] = new Array;
+				data2.tanggal = result.rows[i].TANGGAL;
 			}
-			res.send( data2 )
-			// res.render('dashboard/posisi_ikan', { title: 'Live Map, Posisi Ikan', view: 1, data:data });
-		} );
-	} else {
-  		res.render('dashboard/posisi_ikan', { title: 'Posisi Ikan', view: 1 });
-	}
+			data2.zppi[ result.rows[i].ITEM_NO ].push( result.rows[i] );
+		}
+		res.send( data2 );
+	} );
 });
 
 router.get('/satelite', function(req, res, next) {

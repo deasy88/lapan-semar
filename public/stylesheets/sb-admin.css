@@ -244,6 +244,7 @@ ul.alert-dropdown {
     border-top: solid 1px #eee;
     border-left: solid 1px #eee;
     border-bottom: solid 1px #eee;
+	z-index: 10000;
 }
 
 .sideMenu div {
@@ -253,7 +254,7 @@ ul.alert-dropdown {
 
 .sideMenu .btn-toggle-menu {
     position: absolute;
-    left:-28px;
+    left:-37px;
     top:-5px;
 }
 

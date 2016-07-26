@@ -21,11 +21,16 @@ var m_user = require('./models/user');
 
 require( "./connect.js" ) (database);
 
+
 /*var proxy = proxyMiddleware('http://http://182.23.27.39:8080/', {
 				target: 'http://182.23.27.39:8080/wms',
 				changeOrigin: true,
 				xfwd: true
 	});*/
+
+// var proxy = proxyMiddleware('http://http://10.30.40.3:3000/', {
+// 				target: 'http://testsemar.lapan.go.id/',
+
 
 var app = express();
 
@@ -134,6 +139,13 @@ app.use('/', function(req, res, next){
 });
 
 //app.use(proxy);
+
+//setting proxy middleware
+app.use('/', function(req, res, next){
+	// httpProxy.createProxyServer({target:'http://testsemar.lapan.go.id/'});
+    next();
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
