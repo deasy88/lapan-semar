@@ -2,9 +2,9 @@ module.exports = function ( database ) {
 
 	// connection
 	database.createPool( {
-	user          : "SYSTEM",
- 	password      : "root",
- 	connectString : "localhost/XE"
+		user          : "SYSTEM",
+	 	password      : "root",
+	 	connectString : "localhost/XE"
 	} ).then(function() {
 	        console.log( "connected" );
 	    }).catch(function(err) {

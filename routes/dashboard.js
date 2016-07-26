@@ -44,7 +44,6 @@ router.get('/laut', function(req, res, next) {
 
 router.all('/posisi_ikan', function(req, res, next) {
 	var data2 = {};
-	console.log( "start" );
 	table.get_last_zppi().then( function(result) {
 		data2.msg = "ok";
 		data2.zppi = {};
@@ -56,20 +55,36 @@ router.all('/posisi_ikan', function(req, res, next) {
 			}
 			data2.zppi[ result.rows[i].ITEM_NO ].push( result.rows[i] );
 		}
-		console.log( "send" );
 		res.send( data2 );
 	} ).catch( function(err) {
 		console.log( "exception", err );	
 	} );
-	console.log( "after" );
 });
 
 router.get('/satelite', function(req, res, next) {
   	res.render('dashboard/satelite', { title: 'Satelite Lapan' });
 });
 
-router.get('/posisi_kapal', function(req, res, next) {
-  	res.render('dashboard/map', { title: 'Land-Based' });
+router.all('/posisi_kapal', function(req, res, next) {
+  	var data2 = {};
+  	var tipe = req.body.type;
+	table.get_ship(tipe).then( function(result) {
+		data2.msg = "ok";
+		data2.kapal = {};
+		data2.tanggal = "";
+		data2.jam = "";
+		for(i=0; i<result.rows.length; i++) {
+			if( data2.kapal[ result.rows[i].MMSI ]==undefined ) {
+				data2.kapal[ result.rows[i].MMSI ] = new Array;
+				data2.tanggal = result.rows[i].TANGGAL;
+				data2.jam = result.rows[i].TIMESTAMP;
+			}
+			data2.kapal[ result.rows[i].MMSI ].push( result.rows[i] );
+		}
+		res.send( data2 );
+	} ).catch( function(err) {
+		console.log( "exception", err );	
+	} );
 });
 
 router.get('/land_based', function(req, res, next) {

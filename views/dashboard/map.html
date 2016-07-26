@@ -271,6 +271,13 @@
 		$.each(layers,function(k,v){
 			layers[k]=$.extend({},layerDefaults,v);
 		});
+
+		var monthNames = [
+						  "Januari", "Februari", "Maret",
+						  "April", "Mei", "Juni", "Juli",
+						  "Agustus", "September", "Oktober",
+						  "November", "Desember"
+						];
 	</script>
 
 	<script type="text/javascript">
@@ -739,10 +746,16 @@
 						} else {
 							var top = ($(".data-date-info").length + 1) * 10 + 60;
 						}
+						var da = new Date((res.tanggal || "").replace(/-/g,"/").replace(/[TZ]/g," "));
+
+						var day = da.getDate();
+						var monthIndex = da.getMonth();
+						var year = da.getFullYear();
+
 						$("<div/>", {
 							'id': "data-date-info-zppi",
 							'class': 'data-date-info',
-							'html': "Waktu Data ZPPI : " + res.tanggal,
+							'html': "Waktu Data ZPPI : " + day + ' ' + monthNames[monthIndex] + ' ' + year,
 							'style': "padding:5px;position:absolute;left:50px;top:" + top + "px;z-index:5000;background-color:#FFFFFF"
 						}).appendTo($("#map-content")).hide().slideDown();
 						var lg = [];
@@ -756,6 +769,10 @@
 										this.closePopup();
 									});
 						});
+						for(i=0; i<lg.length; i++){
+							if( lg[i]==undefined )
+								lg.splice(i, 1);
+						}
 						pageData.points['ikan'] = L.layerGroup(lg);
 						pageData.points.ikan.addTo(map);
 						pageData.notify.zppi.close();
@@ -797,15 +814,15 @@
 				}
 				return false;
 			} else {
-				$.get("/en/map2/get-ais", {'id': val}, function (res) {
+				$.post("/dashboard/posisi_kapal", {'type': val}, function (res) {
 					if (res.msg == 'ok') {
 						if ($("#data-date-info-kapal").length > 0) {
 							$("#data-date-info-kapal").remove();
 						}
 						if ($(".data-date-info").length == 0) {
-							var top = 10;
+							var top = 50;
 						} else {
-							var top = ($(".data-date-info").length + 1) * 10 + 30;
+							var top = ($(".data-date-info").length + 1) * 30 + 50;
 						}
 						$("<div/>", {
 							'id': "data-date-info-kapal",
