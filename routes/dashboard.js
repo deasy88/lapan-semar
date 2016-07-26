@@ -44,6 +44,7 @@ router.get('/laut', function(req, res, next) {
 
 router.all('/posisi_ikan', function(req, res, next) {
 	var data2 = {};
+	console.log( "start" );
 	table.get_last_zppi().then( function(result) {
 		data2.msg = "ok";
 		data2.zppi = {};
@@ -55,8 +56,12 @@ router.all('/posisi_ikan', function(req, res, next) {
 			}
 			data2.zppi[ result.rows[i].ITEM_NO ].push( result.rows[i] );
 		}
+		console.log( "send" );
 		res.send( data2 );
+	} ).catch( function(err) {
+		console.log( "exception", err );	
 	} );
+	console.log( "after" );
 });
 
 router.get('/satelite', function(req, res, next) {

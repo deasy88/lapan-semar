@@ -13,6 +13,7 @@ module.exports = {
 	},
 
 	get_last_zppi: function () {
+		console.log( "in model ");
 		var sql = "select z.* from zppi z where z.tanggal=(select * from (select z1.tanggal from zppi z1 order by z1.tanggal desc) where ROWNUM=1)";
 		return database.simpleExecute( sql, {}, { outFormat: database.OBJECT} );
 	},
