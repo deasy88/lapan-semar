@@ -244,7 +244,7 @@ ul.alert-dropdown {
     border-top: solid 1px #eee;
     border-left: solid 1px #eee;
     border-bottom: solid 1px #eee;
-    z-index: 10000;
+	z-index: 10000;
 }
 
 .sideMenu div {
