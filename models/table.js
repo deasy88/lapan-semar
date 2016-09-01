@@ -43,7 +43,15 @@ module.exports = {
             + "    left join AIS_POSITION_REPORT_IND2 b on a.MMSI=b.MMSI and a.tg=b.TANGGAL and a.TMP=b.\"TIMESTAMP\" "
             + "        left join AIS_SHIP c on b.MMSI=c.MMSI"
             + "            where c.TYPE=" +type+ " and  b.longitude > 95 and b.longitude < 145 and b.latitude>-9 and b.latitude<10 and LAND=0 FETCH FIRST 500 ROWS ONLY";
-    	return database.simpleExecute( sql, {}, { outFormat: database.OBJECT} );
+        var sql2 = "select a.*,b.LONGITUDE,B.LATITUDE "
+			+ ' from (select MMSI,max(TANGGAL) TG ,max("TIMESTAMP") TMP, trunc(TANGGAL) TGL2, to_char(TANGGAL,\'HH24\') HR'
+			+ ' from AIS_POSITION_REPORT_IND2 '
+			+ ' group by MMSI,trunc(TANGGAL),to_char(TANGGAL,\'HH24\') having trunc(TANGGAL)=to_date(' + tgl + ',\'YYYY-MM-DD\')     a'
+			+ ' left join AIS_POSITION_REPORT_IND2 b on a.MMSI=b.MMSI and a.tg=b.TANGGAL and a.TMP=b."TIMESTAMP"'
+			+ ' left join AIS_SHIP c on b.MMSI=c.MMSI'
+			+ ' where c.TYPE=' + type + ' and  b.longitude > 95 and b.longitude < 145 and b.latitude>-9 and b.latitude<10 and LAND=0"';
+		// and  to_char(TANGGAL,\'HH24\') = :tmp)
+    	return database.simpleExecute( sql2, {}, { outFormat: database.OBJECT} );
 	}
 
 };
