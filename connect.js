@@ -3,7 +3,7 @@ module.exports = function ( database ) {
 	// connection
 	database.createPool( {
 		user          : "SYSTEM",
-	 	password      : "root",
+	 	password      : "bismillah",
 	 	connectString : "localhost/XE"
 	} ).then(function() {
 	        console.log( "connected" );

@@ -35,23 +35,12 @@ module.exports = {
 		var d = new Date();
 		d.setDate( d.getDate()-1 );
 		var tgl = formatDate(d);
-		var sql = "select a.*,b.LONGITUDE,b.LATITUDE from "
-			+ "(select MMSI,max(TANGGAL) TG ,max(\"TIMESTAMP\") TMP, trunc(TANGGAL) TGL2, to_char(TANGGAL,'HH24') HR"
-    		+ "from AIS_POSITION_REPORT_IND2 "
-        	+ "group by MMSI,trunc(TANGGAL),to_char(TANGGAL,'HH24')"
-            + "having trunc(TANGGAL)=to_date('" + tgl + "','YYYY-MM-DD') and  to_char(TANGGAL,'HH24') = 15) a"
-            + "    left join AIS_POSITION_REPORT_IND2 b on a.MMSI=b.MMSI and a.tg=b.TANGGAL and a.TMP=b.\"TIMESTAMP\" "
-            + "        left join AIS_SHIP c on b.MMSI=c.MMSI"
-            + "            where c.TYPE=" +type+ " and  b.longitude > 95 and b.longitude < 145 and b.latitude>-9 and b.latitude<10 and LAND=0 FETCH FIRST 500 ROWS ONLY";
-        var sql2 = "select a.*,b.LONGITUDE,B.LATITUDE "
-			+ ' from (select MMSI,max(TANGGAL) TG ,max("TIMESTAMP") TMP, trunc(TANGGAL) TGL2, to_char(TANGGAL,\'HH24\') HR'
-			+ ' from AIS_POSITION_REPORT_IND2 '
-			+ ' group by MMSI,trunc(TANGGAL),to_char(TANGGAL,\'HH24\') having trunc(TANGGAL)=to_date(' + tgl + ',\'YYYY-MM-DD\')     a'
-			+ ' left join AIS_POSITION_REPORT_IND2 b on a.MMSI=b.MMSI and a.tg=b.TANGGAL and a.TMP=b."TIMESTAMP"'
-			+ ' left join AIS_SHIP c on b.MMSI=c.MMSI'
-			+ ' where c.TYPE=' + type + ' and  b.longitude > 95 and b.longitude < 145 and b.latitude>-9 and b.latitude<10 and LAND=0"';
-		// and  to_char(TANGGAL,\'HH24\') = :tmp)
-    	return database.simpleExecute( sql2, {}, { outFormat: database.OBJECT} );
+		var sql = " select m.* from ais_position_report_ind m  "
+			+ " left join ais_ship s on s.mmsi=m.mmsi "
+			+ " where s.type=" + type + " and m.tanggal=(select * from (select m.tanggal from ais_position_report_ind m "
+			+ " left join ais_ship s on s.mmsi=m.mmsi "
+			+ " where s.type=" + type + " order by m.tanggal desc) where ROWNUM=1)";
+    	return database.simpleExecute( sql, {}, { outFormat: database.OBJECT} );
 	}
 
 };
