@@ -70,16 +70,33 @@ router.all('/posisi_kapal', function(req, res, next) {
   	var tipe = req.body.type;
 	table.get_ship(tipe).then( function(result) {
 		data2.msg = "ok";
-		data2.kapal = {};
+		data2.kapal = new Array;
 		data2.tanggal = "";
 		data2.jam = "";
+		var sudah = new Array;
 		for(i=0; i<result.rows.length; i++) {
-			if( data2.kapal[ result.rows[i].MMSI ]==undefined ) {
-				data2.kapal[ result.rows[i].MMSI ] = new Array;
+			if(sudah[ result.rows[i].MMSI ]==undefined){
+				var tg = new Date(result.rows[i].TANGGAL);
+				var item = {
+					MMSI: result.rows[i].MMSI,
+					TG: result.rows[i].TANGGAL,
+					TMP: result.rows[i].TIMESTAMP,
+					TGL2: result.rows[i].TANGGAL,
+					HR: tg.getHours(),
+					LONGITUDE: result.rows[i].LONGITUDE,
+					LATITUDE: result.rows[i].LATITUDE
+				};
 				data2.tanggal = result.rows[i].TANGGAL;
-				data2.jam = result.rows[i].TIMESTAMP;
+				data2.jam = tg.getHours();
+				data2.kapal.push( item );
+				sudah[ result.rows[i].MMSI ] = result.rows[i].MMSI;
 			}
-			data2.kapal[ result.rows[i].MMSI ].push( result.rows[i] );
+			// if( data2.kapal[ result.rows[i].MMSI ]==undefined ) {
+			// 	data2.kapal[ result.rows[i].MMSI ] = new Array;
+			// 	data2.tanggal = result.rows[i].TANGGAL;
+			// 	data2.jam = result.rows[i].TIMESTAMP;
+			// }
+			// data2.kapal[ result.rows[i].MMSI ].push( result.rows[i] );
 		}
 		res.send( data2 );
 	} ).catch( function(err) {
