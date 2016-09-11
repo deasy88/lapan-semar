@@ -814,11 +814,11 @@
 				}
 				return false;
 			} else {
-				console.log('a');
+				// console.log('a');
 				$.post("/dashboard/posisi_kapal", {'type': val}, function (res) {
-					console.log('b');
+					// console.log('b');
 					if (res.msg == 'ok') {
-						console.log('c');
+						// console.log('c');
 						if ($("#data-date-info-kapal").length > 0) {
 							$("#data-date-info-kapal").remove();
 						}
@@ -834,7 +834,7 @@
 							'style': "padding:5px;position:absolute;left:50px;top:" + top + "px;z-index:5000;background-color:#FFFFFF"
 						}).appendTo($("#map-content")).hide().slideDown();
 						var lg = [];
-						console.log('d');
+						// console.log('d');
 						$.each(res.kapal, function (k, v) {
 							lg[k] = L.marker([v.LATITUDE, v.LONGITUDE], {icon: boatIcon})
 									.on('click', function (e) {
@@ -864,13 +864,13 @@
 										}, 'html');
 									});
 						});
-						console.log('e', lg, val);
+						// console.log('e', lg, val);
 						pageData.points.kapal[val] = L.layerGroup(lg);
-						console.log('e1');
+						// console.log('e1');
 						pageData.points.kapal['icon'] = 'boatIcon';
-						console.log('e2');
+						// console.log('e2');
 						pageData.points.kapal[val].addTo(map);
-						console.log('f');
+						// console.log('f');
 					} else {
 						$(t).removeClass("btn-success");
 						alert("Kapal Dengan Tipe Tersebut Tidak Ditemukan");
