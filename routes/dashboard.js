@@ -30,7 +30,7 @@ router.all('/map', function(req, res, next) {
 			// res.render('dashboard/posisi', { title: 'Live Map, Posisi Kapal', view: 1, data:data });
 		} );
 	} else {
-  		res.render('dashboard/map', { title: 'Live Map', view: 1 });
+  		res.render('dashboard/mapn', { title: 'Live Map', view: 1 });
   	}
 });
 
@@ -67,7 +67,8 @@ router.get('/satelite', function(req, res, next) {
 
 router.all('/posisi_kapal', function(req, res, next) {
   	var data2 = {};
-  	var tipe = req.body.type;
+  	var tipe = req.param("type");
+  	console.log("tipe", tipe);
 	table.get_ship(tipe).then( function(result) {
 		data2.msg = "ok";
 		data2.kapal = new Array;

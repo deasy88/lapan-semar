@@ -1,0 +1,985 @@
+{% extends '../layout/map.html' %}
+
+{% block content %}
+	<div id="map-container"></div>
+
+	<div id="map-content"></div>
+
+	<div style="display:block;position: absolute;bottom: 30px;width: 100%;background-color: none;z-index:2000; display: none" id="legend-container">
+		<center>
+			<div id="legend-img-container">
+				<img id="legend-img" width="500" height="20"><span id="legend-unit" style="padding-left: 5px;background-color:#ffffff"></span>
+			</div>
+			<div id="legend-values" style="position: relative">
+			</div>
+		</center>
+	</div>
+
+	<div id="popup-container" class="popup-window" style="width: 250px;height: auto;position: absolute;display: none;font-size: 0.85em">
+		<div class="panel-heading">
+			<div class="panel-title" style="width:180px;display: inline-block">
+			</div>
+			<div class="panel-close" style="display:inline-block;cursor:pointer">[X]</div>
+		</div>
+		<div class="panel-body"></div>
+	</div>
+
+	<div class="sideMenu">
+		<div class="form-group" style="padding:0;">
+			<div class="col-sm-2">
+				<button class="btn btn-sm btn-warning btn-toggle-menu" onclick="toggle_menu(this)"> <i class="fa fa-arrow-right"></i> </button>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-12" style="padding-top:5px">
+				<label>Prediksi</label>
+			</div>
+			<div class="col-md-12" style="padding-top:5px">
+				<button id="prediksi-arus" class="wms btn btn-primary data-menu not-stack col-md-12" data-key="arus">Arus Laut</button>
+			</div>
+			<div class="col-md-12" style="padding-top:5px">
+				<button id="prediksi-suhumukalaut" class="wms btn btn-primary data-menu not-stack col-md-12" data-layeralias="Suhu Muka Laut" data-key="suhumukalaut">Suhu Muka Laut</button>
+			</div>
+			<div class="col-md-12" style="padding-top:5px">
+				<button id="prediksi-hujan" class="wms btn btn-primary data-menu not-stack col-md-12" data-layeralias="HUJAN" data-key="hujan">Hujan</button>
+			</div>
+			<div class="col-md-12" style="padding-top:5px">
+				<button id="prediksi-angin" class="wms btn btn-primary data-menu not-stack col-md-12" data-layeralias="Angin" data-key="angin">Angin</button>
+			</div>
+			<div class="col-md-12" style="padding-top:5px">
+				<label>Pengamatan</label>
+			</div>
+			<div class="col-md-12" style="padding-top:5px">
+				<button id="pengamatan-zppi" class="btn btn-primary data-menu stack col-md-12" data-child="zppi-date" data-ignore="true">ZPPI<br/><small>Zona Potensi Penangkapan Ikan</small></button>
+			</div>
+			<div class="col-md-12 adaSub" style="padding-top:5px">
+				<button id="pengamatan-kapal" class="btn btn-primary data-menu stack col-md-12" data-child="boat-type" data-ignore="true">Posisi Kapal<br/><small>AIS</small></button>
+				<div class="subMenu" hidden>
+					<div class="form-group">
+						<div class="col-md-12" style="padding-top:5px">
+							<label>Tipe kapal</label>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							 <button class="btn btn-primary data-menu tipekapal col-md-12" data-val="36">Hazard-Y</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="37">Passenger</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="38">Cargo</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="39">Future use</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="40">Tanker</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="41">Default</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="42">Other ships</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="43">HSC-Z</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="44">WIG</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="81">Other ship</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="0">UNIDENTIFIED</button>
+						</div>
+					</div>		
+				</div>
+			</div>
+			<div class="col-md-12 adaSub" style="padding-top:5px">
+				<button id="pengamatan-kapal" class="btn btn-primary data-menu stack col-md-12">Posisi Kapal<br/><small>Teristerial</small></button>
+				<div class="subMenu" hidden>
+					<div class="form-group">
+						<div class="col-md-12" style="padding-top:5px">
+							<label>Tipe kapal</label>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							 <button class="btn btn-primary data-menu tipekapal col-md-12" data-val="36">Hazard-Y</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="37">Passenger</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="38">Cargo</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="39">Future use</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="40">Tanker</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="41">Default</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="42">Other ships</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="43">HSC-Z</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="44">WIG</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="81">Other ship</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="0">UNIDENTIFIED</button>
+						</div>
+					</div>		
+				</div>
+			</div>
+			<div class="col-md-12" style="padding-top:5px">
+				<button id="pengamatan-awan" class="wms btn btn-primary data-menu not-stack col-md-12" data-layeralias="Awan" data-key="awan">Awan</button>
+			</div>
+			<div class="col-md-12" style="padding-top:5px">
+				<button id="pengamatan-aws" class="aws btn btn-primary data-menu not-stack col-md-12" data-layeralias="AWS" data-key="aws">AWS<br/><small>Automatic Weather System</small></button>
+			</div>
+		</div>
+	</div>
+
+	<style type="text/css">
+		#map-container {
+			position: absolute;
+			top:54px;
+			left:0;
+			right:0;
+			bottom:0;
+			cursor: pointer;
+			background: #b2bfbf;
+		}
+		.navbar {
+			margin-bottom:0;			
+		}
+	</style>
+
+	<script type="text/javascript">
+		function toggle_menu( th ) {
+			var show = $(th).data('show');
+			show = (show==undefined) ? true:show;
+			if( show ) {
+				$(".sideMenu").animate( {right:"-200px"} );
+				$(th).data('show', false);
+				$(th).find("i").removeClass("fa-arrow-right");
+				$(th).find("i").addClass("fa-arrow-left");
+			} else {
+				$(".sideMenu").animate( {right:"0px"} );
+				$(th).data('show', true);
+				$(th).find("i").removeClass("fa-arrow-left");
+				$(th).find("i").addClass("fa-arrow-right");
+			}
+		}
+	</script>
+
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+	<script src="/javascripts/bootstrap-notify.min.js"></script>
+
+	
+	<script type="text/javascript">
+		var wmsserver = 'http://182.23.27.39:8080/wms/wms';
+		var docevt = null;
+		var stackWms = {};
+		var mapLayers = {};
+		var pageData = {};
+		//setup initate
+		pageData["notify"] = {};
+		pageData["loadTiles"] = false;
+		pageData["draw"] = null;
+		pageData["activeLayers"] = {};
+		pageData["points"] = {};
+		pageData["boatSelect"] = 0;
+		pageData["maps"]={};
+		pageData["activeBaseMap"] = {
+			layer:null,
+			name:''
+		};
+		//Notification holder
+		var layerDefaults={
+			'id': 'def',
+			'wmsId': 'def',
+			'layer': 'def',
+			'style': 'def',
+			'legend': 'none',
+			'stackedLayer': 'def',
+			'stackedStyle': 'def',
+			'legend': 'def',
+			'alias': 'def',
+			'active': false,
+			'activeDates': null,
+			'supportsTimeseries': false,
+			'minMax': 'auto',
+			'wmsLayer': false,
+			'zIndex': 10,
+			'opacity': 1,
+			'stacked': false,
+			'unit': 'def',
+			'featureInfo': false,
+			'belowMinColor':'extend',
+			'aboveMinColor':'extend',
+			'baseMap':'osm'
+		}
+		var layers = {};
+		layers['arus'] = {
+			'id': 'arus',
+			'wmsId': 'HYCOM',
+			'layer': 'HYCOM/u:v-group',
+			'style': 'sized-with-color/chem',
+			'legend': 'chem',
+			'alias': 'Arus',
+			'minMax': '0,1.5',
+			'zIndex': 11,
+			'opacity': 1,
+			'unit': 'm/detik',
+			'width': 128,
+			'height': 128,
+			'belowMin':'transparent'
+		};
+		layers['suhumukalaut'] = {
+			'id': 'suhumukalaut',
+			'wmsId': 'HYCOM',
+			'layer': 'HYCOM/temperature',
+			'style': 'default-scalar/x-Sst',
+			'stackedLayer': 'HYCOM/temperature',
+			'stackedStyle': 'default-scalar/x-Sst',
+			'legend': 'x-Sst',
+			'alias': 'Suhu Muka Laut',
+			'minMax': '26,32',
+			'zIndex': 11,
+			'opacity': 1,
+			'width': 128,
+			'height': 128,
+			'unit': 'Celcius'
+		};
+		layers['hujan'] = {
+			'id': 'hujan',
+			'wmsId': 'WRF sadewa',
+			'layer': 'WRF sadewa/RAINFV',
+			'style': 'default-scalar/sadewa',
+			'stackedLayer': 'WRF sadewa/RAINFV',
+			'stackedStyle': 'default-scalar/sadewa',
+			'legend': 'sadewa',
+			'alias': 'Hujan',
+			'minMax': '0.5,5',
+			'zIndex': 11,
+			'opacity': 1,
+			'width': 128,
+			'height': 128,
+			'unit': 'mm/jam',
+			'featureInfo': true,
+			'belowMinColor':'transparent'
+		};
+		layers['angin'] = {
+			'id': 'angin',
+			'wmsId': 'WRF sadewa',
+			// 'layer': 'WRF sadewa/U10:V10-group',
+			// 'style': 'wind-sized/seq-Reds',
+			// 'stackedLayer': 'WRF sadewa/U10:V10-group',
+			// 'stackedStyle': 'sized_arrows/seq-Reds',
+			'layer': 'WRF sadewa/U10:V10-group',
+			'style': 'sized-with-color/chem',
+			'legend': 'chem',
+			'alias': 'Angin',
+			'minMax': 'auto',
+			'zIndex': 11,
+			'opacity': 1,
+			'width': 128,
+			'height': 128,
+			'unit': 'm/detik',
+			'featureInfo': true,
+			'belowMinColor':'extend',
+			'baseMap':'mapbox'
+		};
+		layers['awan'] = {
+			'id': 'awan',
+			'wmsId': 'HIMA',
+			'layer': 'HIMA/ik',
+			'style': 'default-scalar/seq-Blues-inv',
+			'stackedLayer': 'HIMA/ik',
+			'stackedStyle': 'default-scalar/seq-Blues-inv',
+			'legend': 'seq-Blues-inv',
+			'alias': 'awan',
+			'minMax': '200,255',
+			'zIndex': 11,
+			'opacity': 1,
+			'width': 128,
+			'height': 128,
+			'unit': 'Kelvin'
+		};
+		$.each(layers,function(k,v){
+			layers[k]=$.extend({},layerDefaults,v);
+		});
+
+		var monthNames = [
+						  "Januari", "Februari", "Maret",
+						  "April", "Mei", "Juni", "Juli",
+						  "Agustus", "September", "Oktober",
+						  "November", "Desember"
+						];
+	</script>
+
+	<script type="text/javascript">
+	jQuery(document).ready(function () {
+		$.notifyDefaults({
+			delay: 0,
+			newest_on_top: true,
+			allow_dismiss: true,
+			placement: {
+				from: "bottom",
+				align: "left"
+			},
+			offset: {
+				x: 10,
+				y: 80
+			},
+			animate: {
+				enter: 'animated fadeInRight',
+				exit: 'animated fadeOutRight'
+			},
+			z_index: 2000
+		});
+		pageData.maps['mapbox'] = L.tileLayer('https://api.mapbox.com/styles/v1/hendriprayugo/cioasg27b006wb3nfbzvgcely/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVuZHJpcHJheXVnbyIsImEiOiJjaWlpamthNnUwMHE5dWNrcDlodnAxOGgwIn0.OdKW9hysCK29qvhTAfP3xQ', {
+			attribution: 'Basemap Imagery © <a href="http://mapbox.com">Mapbox </a><a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+			maxZoom: 18,
+			transparent: true,
+			zIndex: 100
+		});
+		//var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+		var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+		var osm = new L.TileLayer('https://api.mapbox.com/styles/v1/hendriprayugo/cioasg27b006wb3nfbzvgcely/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVuZHJpcHJheXVnbyIsImEiOiJjaWlpamthNnUwMHE5dWNrcDlodnAxOGgwIn0.OdKW9hysCK29qvhTAfP3xQ', {
+        attribution: 'Basemap Imagery © <a href="http://mapbox.com">Mapbox </a><a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+        maxZoom: 18,
+        transparent: true,
+        zIndex: 100
+		});
+		osm.setZIndex(100);
+		osm.on("loading", function (e) {
+			if (typeof pageData.notify.map !== 'undefined') {
+				pageData.notify.map.close();
+			}
+			pageData.notify['map'] = $.notify({
+				title: 'SILAHKAN TUNGGU',
+				message: 'Memuat Peta....'
+			});
+		});
+		osm.on("load", function (e) {
+			pageData.notify.map.close();
+		});
+		pageData.maps['osm'] = osm;
+		var map = new L.Map('map-container', {
+			center: [-9.2660423, 109.9724345],
+			zoom: 8
+		});
+		
+		map.addLayer(pageData.maps.osm);
+		function roundToTwo(num) {
+			return +(Math.round(num + "e+2") + "e-2");
+		}
+		function roundToOne(num) {
+			return +(Math.round(num + "e+1") + "e-1");
+		}
+		function pad(str, max) {
+			str = str.toString();
+			return str.length < max ? pad("0" + str, max) : str;
+		}
+		function setAvailDates(key) {
+			var drawObj = layers[key];
+			if (!$.isEmptyObject(drawObj.metaData.datesWithData)) {
+				var dates = {};
+				var i, j;
+				var y, m, d = "";
+				i = 0;
+				$.ajaxSetup({
+					"async": false
+				});
+				$.each(drawObj.metaData.datesWithData, function (k, v) {
+					y = k;
+					$.each(v, function (k2, v2) {
+						m = parseInt(k2) + 1;
+						$.each(v2, function (k3, v3) {
+							d = v3;
+							var indate = y + "-" + pad(m, 2) + "-" + pad(d, 2);
+							$.get(wmsserver, {
+								request: "GetMetadata",
+								item: "timesteps",
+								layerName: drawObj.layer,
+								day: indate},
+									function (res) {
+										$.each(res.timesteps, function (tk, tv) {
+											var idd = indate + "T" + tv;
+											var resdate = new Date(idd);
+											var wibdate = resdate.getFullYear() + "-" + pad(resdate.getMonth() + 1, 2) + "-" + pad(resdate.getDate(), 2);
+											if (typeof dates[wibdate] === 'undefined') {
+												j = 0;
+												dates[wibdate] = {};
+												dates[wibdate]['dateText'] = wibdate;
+												dates[wibdate]['times'] = [];
+											}
+											if (typeof dates[wibdate]['times'][j] === 'undefined') {
+												dates[wibdate]['times'][j] = {};
+												dates[wibdate]['times'][j]['dateObj'] = resdate;
+												dates[wibdate]['times'][j]['stringDate'] = resdate.getFullYear() + "-" + pad(resdate.getMonth() + 1, 2) + "-" + pad(resdate.getDate(), 2);
+												dates[wibdate]['times'][j]['stringTime'] = pad(resdate.getHours(), 2) + ":" + pad(resdate.getMinutes(), 2) + " WIB";
+												dates[wibdate]['times'][j]['stringUTC'] = idd;
+												j++;
+											}
+										});
+									}, "JSON");
+							i++;
+						});
+					});
+				});
+				$.ajaxSetup({
+					"async": true
+				});
+	
+				drawObj.activeDates = dates;
+				if (!$.isEmptyObject(dates)) {
+					if ($("#timerange-container").length > 0) {
+						$("#timerange-container").fadeOut().remove();
+					}
+					var timeRange = $("<div/>", {
+						"id": "timerange-container",
+						"style": "position:absolute;bottom:0px;left:0px;padding:10px;background-color:#FFFFFF;z-index:2000;"
+					}).appendTo($("#map-content")); //.hide();
+					var selectElement = $("<select/>", {
+						"id": "select-date",
+						"class": "timeRange"
+					}).appendTo(timeRange);
+					var selectTimeElement = $("<select/>", {
+						"id": "select-time",
+						"class": "timeRange"
+					}).appendTo(timeRange);
+					selectTimeElement.on("change", function (e) {
+						drawLayerTime(this);
+					})
+							;
+					$.each(dates, function (k, v) {
+						$("<option/>", {
+							"value": v.dateText,
+							"data-activedateid": k,
+							"html": v.dateText
+						}).appendTo(selectElement);
+					});
+					var resdate = new Date(drawObj.metaData.nearestTimeIso);
+					var tanggalFileNear = resdate.getFullYear() + "-" + pad(resdate.getMonth() + 1, 2) + "-" + pad(resdate.getDate(), 2);
+					$(selectElement).val(tanggalFileNear).trigger("change");
+					$(selectElement).on("change", function (e) {
+						var d = new Date();
+						var d2 = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours());
+						var isoDate = d2.toISOString();
+						var dataKey = $(this).find(":selected").data("activedateid");
+						var times = drawObj.activeDates[dataKey].times;
+						$(selectTimeElement).html("");
+						$.each(times, function (k, v) {
+							if (v.stringUTC == isoDate) {
+								$("<option/>", {
+									"value": v.stringUTC,
+									"html": v.stringTime,
+									"selected": "selected"
+								}).appendTo(selectTimeElement);
+							} else {
+								$("<option/>", {
+									"value": v.stringUTC,
+									"html": v.stringTime
+								}).appendTo(selectTimeElement);
+							}
+						});
+						$("#select-time").trigger("change");
+					});
+					timeRange.fadeIn();
+					selectElement.trigger("focus").trigger("change");
+				}
+			}
+		}
+		function drawLayer(key) {
+			var drawObj = layers[key];
+			var bound = map.getBounds();
+			var bbox = roundToTwo(bound._southWest.lng) + "," + roundToTwo(bound._southWest.lat) + "," + roundToTwo(bound._northEast.lng) + "," + roundToTwo(bound._northEast.lat);
+			$.get(wmsserver, {
+				request: "GetMetadata",
+				item: "layerDetails",
+				layerName: drawObj.layer}, function (res) {
+					if (res.supportsTimeseries === true) {
+						layers[key]["metaData"] = res;
+						setAvailDates(key);
+					}
+			}, "JSON");
+		}
+		function drawLayerTime(element) {
+			var drawObj = pageData.draw;
+			var mmaxstyle = drawObj.style.split("/");
+			var bound = map.getBounds();
+			var bbox = roundToTwo(bound._southWest.lng) + "," + roundToTwo(bound._southWest.lat) + "," + roundToTwo(bound._northEast.lng) + "," + roundToTwo(bound._northEast.lat);
+			if (drawObj.minMax === "auto") {
+				$.get(wmsserver, {
+					request: "GetMetadata",
+					item: "minmax",
+					layers: drawObj.layer,
+					styles: mmaxstyle[0],
+					"VERSION": "1.1.1",
+					"BBOX": bbox,
+					"srs": "EPSG:4326",
+					"crs": "EPSG:4326",
+					"height": 50,
+					"width": 50,
+					"time": $(element).val()}, function (res) {
+						drawObj.minMax = res.min + "," + res.max;
+						drawIt(drawObj);
+				}, "JSON");
+			} else {
+				drawIt(drawObj);
+			}
+		}
+		function drawIt(drawObj) {
+			map.closePopup();
+			hideLegend();
+			$.ajaxSetup({
+				"async": true
+			});
+			if (drawObj.legend !== 'none') {
+				showLegend(drawObj);
+			}
+			if (drawObj.active === false) {
+				drawObj.wmsLayer = L.tileLayer.wms(wmsserver, {
+					format: 'image/png',
+					transparent: true,
+					layers: drawObj.layer,
+					version: "1.3.0",
+					styles: drawObj.style,
+					"time": $("#select-time").val(),
+					BELOWMINCOLOR: drawObj.belowMinColor,
+					COLORSCALERANGE: drawObj.minMax
+				});
+				drawObj.wmsLayer.setZIndex(stackWms.zIndex);
+				drawObj.wmsLayer.setOpacity(stackWms.opacity);
+				drawObj.wmsLayer.addTo(map);
+			} else {
+				map.closePopup();
+				drawObj.wmsLayer.setParams({
+					layers: drawObj.layer,
+					styles: drawObj.style,
+					"time": $("#select-time").val(),
+					BELOWMINCOLOR: drawObj.belowMinColor,
+					COLORSCALERANGE: drawObj.minMax
+				});
+				drawObj.wmsLayer.setZIndex(stackWms.zIndex);
+				drawObj.wmsLayer.setOpacity(stackWms.opacity);
+			}
+			drawObj.active = true;
+			pageData.activeLayers[drawObj.id] = drawObj.id;
+		}
+		function showLegend(drawObj) {
+			var url = wmsserver + "?REQUEST=GetLegendGraphic&PALETTE=" + drawObj.legend + "&COLORBARONLY=true&WIDTH=500&HEIGHT=25&vertical=false";
+			$("#legend-img").one("load", function () {
+				$("#legend-container").fadeIn();
+				var mmax = drawObj.minMax.split(",");
+				var min = roundToTwo(parseFloat(mmax[0]).toFixed(20));
+				var max = roundToTwo(parseFloat(mmax[1]).toFixed(20));
+				var range = max - min;
+				var step = roundToOne(range / 10);
+				var pixelStep = 500 / 10;
+				var startPos = $('#legend-img').offset().left;
+				for (i = 0; i <= 10; i++) {
+					var val = $("<span/>", {
+						"class": "legend-values",
+						"style": "display:inline-block;background-color:#FFFFFF;position:absolute;",
+						"html": roundToOne(min + (i * step))
+					}).appendTo($("#legend-values"));
+					var textWidth = val.width();
+					var textCenter = textWidth / 2;
+					var currentPixel = startPos + (i * pixelStep);
+					$("<span/>", {
+						"html": "|",
+						"style": "display:inline-block;background-color:none;position:absolute;left:" + (currentPixel - 1) + "px"
+					}).appendTo($("#legend-img-container"));
+					val.attr("style", val.attr("style") + "left:" + (currentPixel - textCenter - 1) + "px");
+				}
+			}).attr("src", url);
+			$("#legend-unit").html(drawObj.unit);
+		}
+		function hideLegend() {
+			$("#legend-container").hide();
+			$("#legend-img").attr("src", "");
+			$("#legend-values").html("");
+			$("#legend-unit").html("");
+			$("#legend-img-container").html('<img id="legend-img" width="500" height="20"><span id="legend-unit" style="padding-left: 5px;background-color:#ffffff"></span>');
+		}
+		function zppiClicked(v) {
+			alert("ZPPI");
+			console.debug(v);
+		}
+		function kapalClicked(v) {
+			console.debug(v);
+		}
+		map.on('zoomend', function () {
+			$.each(pageData.activeLayers, function (k, v) {
+				layers[k].wmsLayer.redraw();
+			});
+			if (typeof pageData.points.ikan !== 'undefined' && pageData.points.ikan !== null) {
+				if (map.getZoom() > 7) {
+					pageData.points.ikan.eachLayer(function (layer) {
+						layer.setIcon(ikanIconBigger);
+					});
+				} else {
+					pageData.points.ikan.eachLayer(function (layer) {
+						layer.setIcon(ikanIcon);
+					});
+				}
+			}
+			if (typeof pageData.points.kapal !== 'undefined' && pageData.points.kapal !== null) {
+				if (map.getZoom() > 7 && pageData.points.kapal.icon !== 'boatIconBigger') {
+					$.each(pageData.points.kapal, function (k, v) {
+						console.debug(v);
+						$.each(v._layers, function (k2, v2) {
+							v2.setIcon(boatIconBigger);
+						});
+						pageData.points.kapal.icon = 'boatIconBigger';
+					});
+				} else if (map.getZoom() < 8 && pageData.points.kapal.icon !== 'boatIcon') {
+					$.each(pageData.points.kapal, function (k, v) {
+						console.debug(v);
+						$.each(v._layers, function (k2, v2) {
+							v2.setIcon(boatIcon);
+						});
+						pageData.points.kapal.icon = 'boatIcon';
+					});
+				}
+			}
+		});
+		map.on("click", function (e) {
+			if ($.isEmptyObject(pageData.activeLayers)) {
+				return false;
+			}
+			$.each(pageData.activeLayers, function (k, v) {
+				if (!layers[k].featureInfo) {
+					return true;
+				}
+				var bound = map.getBounds();
+				var bbox = roundToTwo(bound._southWest.lng) + "," + roundToTwo(bound._southWest.lat) + "," + roundToTwo(bound._northEast.lng) + "," + roundToTwo(bound._northEast.lat);
+				var latlng = e.latlng;
+				var point = map.latLngToContainerPoint(latlng, map.getZoom());
+				var size = map.getSize();
+				var params = {
+					"SERVICE": "WMS",
+					"VERSION": "1.1.1",
+					"REQUEST": "GetFeatureInfo",
+					"LAYERS": layers[k].layer,
+					"QUERY_LAYERS": layers[k].layer,
+					"STYLES": layers[k].style,
+					"BBOX": bbox,
+					"HEIGHT": size.y,
+					"WIDTH": size.x,
+					"FORMAT": "image/png",
+					"INFO_FORMAT": "text/xml",
+					"SRS": "EPSG:4326",
+					"TIME": $("#select-time").val(),
+					"ELEVATION": 0,
+					"X": point.x,
+					"Y": point.y
+				};
+				$.get(wmsserver, params, function (res) {
+					var data = $(res).find('FeatureInfoResponse');
+					if ($(data).find("Feature").find("FeatureInfo").length === 0) {
+						return false;
+					}
+					L.popup()
+							.setLatLng(latlng)
+							.setContent("<div id='lpopup' style='width:400px'></div>")
+							.openOn(map);
+					var target = $("#lpopup");
+					$("<div/>", {
+						"class": "container-fluid"
+					}).appendTo(target);
+					var row = $("<div/>", {
+						"class": "row"
+					});
+					var row0 = row;
+					$("<div/>", {
+						"class": "col-md-12",
+						"html": "<b>" + layers[k].alias + "</b>"
+					}).appendTo(row0);
+					var row1 = row;
+					$("<div/>", {
+						"class": "col-md-12",
+						"html": roundToTwo(parseFloat($(data).find("Feature").find("FeatureInfo").find("value").text())) + " " + layers[k].unit
+					}).appendTo(row1);
+					row1.appendTo(target);
+				}, "xml");
+			});
+		});
+		$(".not-stack").on("click", function (e) {
+			if ($(this).hasClass("btn-primary")) {
+				$(".not-stack.btn-success").removeClass("btn-success").addClass("btn-primary");
+				$(this).removeClass("btn-primary").addClass("btn-success");
+			} else {
+				$(this).removeClass("btn-success").addClass("btn-primary");
+			}
+		});
+		$(".stack").on("click", function (e) {
+			if ($(this).hasClass("btn-primary")) {
+				$(this).removeClass("btn-primary").addClass("btn-success");
+			} else {
+				$(this).removeClass("btn-success").addClass("btn-primary");
+			}
+		});
+		$(".wms").on("click", function (e) {
+			var key = $(this).data("key");
+			var btnData = layers[key];
+			pageData.draw = btnData;
+			if (pageData.loadTiles && btnData.active) {
+				return false;
+			} else {
+				if (btnData.active) {
+					btnData.active = false;
+					map.closePopup();
+					map.removeLayer(btnData.wmsLayer);
+					delete pageData.activeLayers[btnData.id];
+					hideLegend();
+					if ($("#timerange-container").length > 0) {
+						$("#timerange-container").fadeOut().remove();
+					}
+				} else {
+					stackWms['opacity'] = btnData.opacity;
+					stackWms['zIndex'] = btnData.zIndex;
+					var checkZIndex = false;
+					$.each(pageData.activeLayers, function (k, v) {
+						map.removeLayer(layers[k].wmsLayer);
+						layers[k].active = false;
+						delete pageData.activeLayers[k];
+					});
+					drawLayer(key);
+				}
+			}
+		});
+		
+		var awsIcon = L.icon({
+			iconUrl: '/images/aws.png',
+			iconSize: [90, 90]
+		});
+		
+		$("#pengamatan-aws").on("click", function (e) {
+			$.get("http://api.openweathermap.org/data/2.5/weather?lat=-7.97&lon=110.6&APPID=4d1742c7a7f260eb7e547c1ed2ef556d", {}, function (res) {
+			console.log(res);
+		
+		var marker = L.marker([-8.1926332, 110.798387], {icon: awsIcon}).addTo(map)
+		.bindPopup("Lokasi : " + res.coord.lon + " , " + res.coord.lat + "<br/>Suhu : " + res.main.temp + "<br/>Tekanan : " + res.main.pressure + "<br/>Angin : " + res.wind.speed + " , " + res.wind.deg)
+									.on('mouseover', function (e) {
+										this.openPopup();
+									})
+									.on('mouseout', function (e) {
+										this.closePopup();
+									});
+		}, "JSON");
+		});
+		
+		var ikanIcon = L.icon({
+			iconUrl: '/images/Ikan 001 copy.png',
+			iconSize: [30, 30]
+		});
+		var ikanIconBigger = L.icon({
+			iconUrl: '/images/Ikan 001 copy.png',
+			iconSize: [50, 40]
+		});
+		var boatIcon = L.icon({
+			iconUrl: '/images/Icon Kapal 002 copy.png',
+			iconSize: [20, 15]
+		});
+		var boatIconBigger = L.icon({
+			iconUrl: '/images/Icon Kapal 002 copy.png',
+			iconSize: [50, 40]
+		});
+		$("#pengamatan-zppi").on("click", function (e) {
+			if (typeof pageData.points.ikan != 'undefined' && pageData.points.ikan !== null) {
+				$("#data-date-info-zppi").remove();
+				pageData.points.ikan.clearLayers();
+				pageData.points.ikan = null;
+				return false;
+			} else {
+				pageData.notify['zppi'] = $.notify({
+					title: 'SILAHKAN TUNGGU',
+					message: 'Memuat Data ZPPI'
+				});
+				$.get("/dashboard/posisi_ikan", {}, function (res) {
+					if (res.msg == 'ok') {
+						if ($("#data-date-info-zppi").length > 0) {
+							$("#data-date-info-zppi").remove();
+						}
+						if ($(".data-date-info").length == 0) {
+							var top = 60;
+						} else {
+							var top = ($(".data-date-info").length + 1) * 10 + 60;
+						}
+						var da = new Date((res.tanggal || "").replace(/-/g,"/").replace(/[TZ]/g," "));
+
+						var day = da.getDate();
+						var monthIndex = da.getMonth();
+						var year = da.getFullYear();
+
+						$("<div/>", {
+							'id': "data-date-info-zppi",
+							'class': 'data-date-info',
+							'html': "Waktu Data ZPPI : " + day + ' ' + monthNames[monthIndex] + ' ' + year,
+							'style': "padding:5px;position:absolute;left:50px;top:" + top + "px;z-index:5000;background-color:#FFFFFF"
+						}).appendTo($("#map-content")).hide().slideDown();
+						var lg = [];
+						$.each(res.zppi, function (k, v) {
+							lg[k] = L.marker([v[0].LATITUDE.replace(",", "."), v[0].LONGITUDE.replace(",", ".")], {icon: ikanIcon}).addTo(map)
+									.bindPopup("Lokasi : <br/> " + v[0].LATITUDE.replace(",", ".") + "," + v[0].LONGITUDE.replace(",", "."))
+									.on('mouseover', function (e) {
+										this.openPopup();
+									})
+									.on('mouseout', function (e) {
+										this.closePopup();
+									});
+						});
+						for(i=0; i<lg.length; i++){
+							if( lg[i]==undefined )
+								lg.splice(i, 1);
+						}
+						pageData.points['ikan'] = L.layerGroup(lg);
+						pageData.points.ikan.addTo(map);
+						pageData.notify.zppi.close();
+					}
+				}, "JSON");
+			}
+		});
+		$("#pengamatan-kapal").on("click", function (e) {
+			if (pageData.boatSelect === 0) {
+				$("#boat-type").fadeIn();
+				pageData.boatSelect = 1;
+			} else {
+				$("#boat-type").fadeOut();
+				var selected = 0;
+				$(".tipekapal.btn-success").each(function (i, e) {
+					selected++;
+				});
+				if (selected > 0) {
+					$(this).addClass("btn-success");
+				}
+				pageData.boatSelect = 0;
+			}
+		});
+		$(".tipekapal").on("click", function (e) {
+			console.log("tipekapal");
+			var val = $(this).data("val");
+			var t = $(this);
+			if (typeof pageData.points.kapal == 'undefined') {
+				pageData.points['kapal'] = {};
+				pageData.points.kapal['icon'] = '';
+			}
+			if (typeof pageData.points.kapal[val] != 'undefined' && pageData.points.kapal[val] !== null) {
+				console.log("a");
+				pageData.points.kapal[val].clearLayers();
+				pageData.points.kapal[val] = null;
+				delete pageData.points.kapal[val];
+				$(".info_" + val).remove();
+				$(this).removeClass("btn-success");
+				if ($(".tipekapal.btn-success").length == 0) {
+					$("#data-date-info-kapal").remove();
+				}
+				return false;
+			} else {
+				console.log("b");
+				$.get("/dashboard/posisi_kapal", {'type': val}, function (res) {
+					console.log(res);
+					if (res.msg == 'ok') {
+						if ($("#data-date-info-kapal").length > 0) {
+							$("#data-date-info-kapal").remove();
+						}
+						if ($(".data-date-info").length == 0) {
+							var top = 50;
+						} else {
+							var top = ($(".data-date-info").length + 1) * 30 + 50;
+						}
+						$("<div/>", {
+							'id': "data-date-info-kapal",
+							'class': 'data-date-info',
+							'html': "Waktu Data Kapal : " + res.tanggal + " Jam " + res.jam,
+							'style': "padding:5px;position:absolute;left:50px;top:" + top + "px;z-index:5000;background-color:#FFFFFF"
+						}).appendTo($("#map-content")).hide().slideDown();
+						var lg = [];
+						$.each(res.kapal, function (k, v) {
+							lg[k] = L.marker([v.LATITUDE, v.LONGITUDE], {icon: boatIcon})
+									.on('click', function (e) {
+										$.get("/dashboard/posisi_kapal", {mmsi: v.MMSI, tanggal: v.TG, tmp: v.TMP}, function (res) {
+											var id = 'popup-container' + "_kapal" + "_" + v.MMSI;
+											if ($("#" + id).length > 0) {
+												$("#" + id).remove();
+											}
+											var newwindow = null;
+											newwindow = $("#popup-container").clone().appendTo("#popup-colection").draggable({handle: ".panel-heading"}).resizable();
+											newwindow.attr("id", id);
+											newwindow.addClass("active");
+											newwindow.addClass("info_" + val);
+											newwindow.find("div.panel-title").html(v.MMSI);
+											var elem = newwindow.find("div.panel-body");
+											elem.html(res);
+											var ev = docevt;
+											if (typeof ev !== 'undefined') {
+												newwindow.position({
+													my: "left+3 bottom-3",
+													of: ev,
+													collision: "fit"
+												});
+											}
+											newwindow.slideDown();
+											newwindow.trigger("mouseenter");
+										}, 'html');
+									});
+						});
+						pageData.points.kapal[val] = L.layerGroup(lg);
+						pageData.points.kapal['icon'] = 'boatIcon';
+						pageData.points.kapal[val].addTo(map);
+					} else {
+						$(t).removeClass("btn-success");
+						alert("Kapal Dengan Tipe Tersebut Tidak Ditemukan");
+					}
+				}, "JSON");
+				$(this).addClass("btn-success");
+			}
+		});
+		$("#prediksi-arus").trigger("click");
+		$("#menutoggle").on("click", function (e) {
+			if ($(this).data("open") == '1') {
+				$(this).data("open", '0');
+				$(this).next().slideUp();
+			} else {
+				$(this).data("open", '1');
+				$(this).next().slideDown();
+			}
+		});
+		$("#popup-colection").on("mouseenter", ".popup-window", function (e) {
+			$(".popup-window").removeClass("active");
+			$(this).addClass("active");
+		});
+		$("#popup-colection").on("click", ".panel-close", function (e) {
+			$(this).parent().parent().slideUp();
+		});
+		$("#map-container").on("mousedown", function (e) {
+			docevt = e;
+		});
+		
+		
+		
+        // disable drag and zoom handlers
+        //map.dragging.disable();
+        //map.touchZoom.disable();
+        //map.doubleClickZoom.disable();
+
+        // disable tap handler, if present.
+        if (map.tap) map.tap.disable();
+	});
+
+</script>
+
+{% endblock %}
