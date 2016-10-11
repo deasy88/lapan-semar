@@ -9,6 +9,7 @@ module.exports.OBJECT = oracledb.OBJECT;
 
 function createPool(config) {
     return new Promise(function(resolve, reject) {
+        oracledb.autoCommit = true;
         oracledb.createPool(
             config,
             function(err, p) {

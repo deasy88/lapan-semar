@@ -8,7 +8,7 @@
         </h1>
     </div>
 
-    <div class="col-md-9">
+    <div class="col-md-12">
 	    <table class="table table-bordered table-data" style="font-size:9pt;">
 	    <thead>
 	    	<tr>
@@ -21,6 +21,7 @@
 	    		<th>DRAUGH</th>
 	    		<th>DESTINATION</th>
 	    		<th>TANGGAL</th>
+	    		<th width="40px"></th>
 	    	</tr>
 	    </thead>
 	    <tbody>
@@ -32,20 +33,131 @@
 	    		<td>{{ item.TYPE }}</td>
 	    		<td>{{ item.SHIPNAME }}</td>
 	    		<td>{{ item.ETA }}</td>
-	    		<td>{{ item.DRAUGH }}</td>
+	    		<td>{{ item.DRAUGHT }}</td>
 	    		<td>{{ item.DESTINATION }}</td>
 	    		<td>{{ item.TANGGAL.toDateString() }}</td>
+	    		<td>
+	    			<button class="btn btn-default btn-xs" data-toggle="modal" data-target="#form" data-detail='{{ item.json }}'> <span class="fa fa-edit"></span> </button> &nbsp; 
+	    			<button class="btn btn-default btn-xs" onclick="hapus(this)" data-detail='{{ item.json }}'> <span class="fa fa-remove"></span> </button>
+	    		</td>
 	    	</tr>
 	    	{% endfor %}
 	    </tbody>
 	    </table>
+
+	    <br/>
+
+	    <button class="btn btn-default" data-toggle="modal" data-target="#form">Tambah Data</button>
     </div>
+
+    <div id="form" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Input/Edit Data Kapal</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" method="post" role="form">
+						<input type="hidden" name="OLD_MMSI" />
+						<div class="form-group">
+							<label class="col-md-3">MMSI</label>
+							<div class="col-md-9">
+								<input type="number" name="MMSI" class="form-control" placeholder="MMSI" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">CALLSIGN</label>
+							<div class="col-md-9">
+								<input type="text" name="CALLSIGN" class="form-control" placeholder="CALLSIGN" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">TYPE</label>
+							<div class="col-md-9">
+								<input type="number" name="TYPE" class="form-control" placeholder="TYPE" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">SHIPNAME</label>
+							<div class="col-md-9">
+								<input type="text" name="SHIPNAME" class="form-control" placeholder="SHIPNAME" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">ETA</label>
+							<div class="col-md-9">
+								<input type="text" name="ETA" class="form-control" placeholder="ETA" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">DRAUGHT</label>
+							<div class="col-md-9">
+								<input type="text" name="DRAUGHT" class="form-control" placeholder="DRAUGHT" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">DESTINATION</label>
+							<div class="col-md-9">
+								<input type="text" name="DESTINATION" class="form-control" placeholder="DESTINATION" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">TANGGAL</label>
+							<div class="col-md-9">
+								<input type="date" name="TANGGAL" class="form-control" placeholder="TANGGAL" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-9">
+								<button class="btn btn-default">Simpan</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script type="text/javascript">
 $(document).ready( function() {
 	$('.table-data').DataTable();
 } );
+
+$('#form').on('shown.bs.modal', function (e) {
+    var b = $(e.relatedTarget);
+    var detail = b.data('detail');
+    $('#form').find('input[name=OLD_MMSI]').val('');
+    if(detail!=undefined){
+    	console.log("edit",detail);
+    	$('#form').find('input[name=OLD_MMSI]').val(detail.MMSI);
+    	$('#form').find('input[name=MMSI]').val(detail.MMSI);
+    	$('#form').find('input[name=CALLSIGN]').val(detail.CALLSIGN);
+    	$('#form').find('input[name=TYPE]').val(detail.TYPE);
+    	$('#form').find('input[name=SHIPNAME]').val(detail.SHIPNAME);
+    	$('#form').find('input[name=ETA]').val(detail.ETA);
+    	$('#form').find('input[name=DRAUGHT]').val(detail.DRAUGHT);
+    	$('#form').find('input[name=DESTINATION]').val(detail.DESTINATION);
+    	var tgl = moment(detail.TANGGAL).format('GGGG-MM-DD');
+    	console.log(detail.TANGGAL);
+    	console.log(tgl);
+    	$('#form').find('input[name=TANGGAL]').val(tgl);
+    }else{
+    	console.log("insert");
+    }
+} );
+
+function hapus(th){
+	var detail = $(th).data('detail');
+	if(detail!=undefined){
+		if(confirm('Yakin akan dihapus ?')){
+			$.post(location.href, {MMSI: detail.MMSI, CMD: 'delete'}, function(res){
+				location.reload();
+			});
+		}
+	}
+}
 </script>
 
 {% endblock %}

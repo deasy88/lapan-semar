@@ -1,7 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
+var moment = require('moment');
+
 var table = require('../models/table');
+
+// var database = require('../services/database.js');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -109,8 +113,82 @@ router.get('/land_based', function(req, res, next) {
   	res.render('dashboard/map', { title: 'Land-Based' });
 });
 
-router.all('/data/kapal', function(req, res, next) {
+router.post('/data/kapal', function(req, res, next) {
+	var old_mmsi = req.body.OLD_MMSI;
+	var mmsi = req.body.MMSI;
+	var callsign = req.body.CALLSIGN;
+	var type = req.body.TYPE;
+	var shipname = req.body.SHIPNAME;
+	var eta = req.body.ETA;
+	var draught = req.body.DRAUGHT;
+	var destination = req.body.DESTINATION;
+	var tanggal = req.body.TANGGAL;
+	var cmd = req.body.CMD;
+	if(cmd!=undefined && cmd.length>0){
+		if(mmsi.length>0){
+			table.exec_query(
+				"DELETE FROM AIS_SHIP WHERE MMSI=:mmsi",
+				{
+					mmsi: mmsi
+				}
+			).then( function(has) {
+				console.log("delete",has);
+				res.send({result: true});
+			} );
+		}
+		return;
+	}
+	if(old_mmsi!=undefined && old_mmsi.trim().length==0){
+		var tgl = moment(tanggal).format('DD-MMM-GGGG');
+		table.exec_query(
+			"INSERT INTO AIS_SHIP VALUES(:mmsi, :callsign, :type, :shipname, :eta, :draught, :destination, :tanggal)",
+			{
+				mmsi: mmsi,
+				callsign: callsign,
+				type: type,
+				shipname: shipname,
+				eta: eta,
+				draught: draught,
+				destination: destination,
+				tanggal: tgl
+			}
+		).then( function(has) {
+			console.log(has);
+			res.redirect("/dashboard/data/kapal");
+		} );
+	}else{
+		var tgl = moment(tanggal).format('DD-MMM-GGGG');
+		table.exec_query("SELECT * FROM AIS_SHIP WHERE MMSI=:mmsi", {mmsi: old_mmsi}).then(function(has){
+			if(has.rows.length>0){
+				table.exec_query(
+					"UPDATE AIS_SHIP SET MMSI=:mmsi, CALLSIGN=:callsign, TYPE=:type, SHIPNAME=:shipname, ETA=:eta, DRAUGHT=:draught, DESTINATION=:destination, TANGGAL=:tanggal WHERE MMSI=:old_mmsi",
+					{
+						mmsi: mmsi,
+						callsign: callsign,
+						type: type,
+						shipname: shipname,
+						eta: eta,
+						draught: draught,
+						destination: destination,
+						tanggal: tgl,
+						old_mmsi: old_mmsi
+					}
+				).then( function(has) {
+					console.log(has);
+					res.redirect("/dashboard/data/kapal");
+				} );
+			}else{
+				res.redirect("/dashboard/data/kapal");
+			}
+		});
+	}
+});
+
+router.get('/data/kapal', function(req, res, next) {
 	table.get_all('AIS_SHIP').then( function(ship) {
+		for(i=0;i<ship.rows.length;i++){
+			ship.rows[i].json = JSON.stringify(ship.rows[i]);
+		}
 		res.render('dashboard/kapal', { title: 'Data Kapal', data:ship });
 	} );
 });

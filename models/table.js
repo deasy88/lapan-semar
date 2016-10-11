@@ -40,8 +40,12 @@ module.exports = {
 			+ " where s.type=" + type + " and m.tanggal=(select * from (select m.tanggal from ais_position_report_ind m "
 			+ " left join ais_ship s on s.mmsi=m.mmsi "
 			+ " where s.type=" + type + " order by m.tanggal desc) where ROWNUM=1)";
-		console.log(sql);
+		// console.log(sql);
     	return database.simpleExecute( sql, {}, { outFormat: database.OBJECT} );
+	},
+
+	exec_query: function(sql, opt){
+		return database.simpleExecute( sql, opt, { outFormat: database.OBJECT} );
 	}
 
 };

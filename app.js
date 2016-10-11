@@ -19,6 +19,8 @@ var http = require('http');
 
 var m_user = require('./models/user');
 
+var moment = require('moment');
+
 require( "./connect.js" ) (database);
 
 
@@ -111,7 +113,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 function isLoggedIn(req, res, next){
-    // return next();
+    return next();
     if(req.isAuthenticated()){
         return next();
     }
