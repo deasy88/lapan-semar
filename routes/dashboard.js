@@ -193,8 +193,62 @@ router.get('/data/kapal', function(req, res, next) {
 	} );
 });
 
-router.all('/data/jenis_kapal', function(req, res, next) {
+router.post('/data/jenis_kapal', function(req, res, next) {
+	var old_type = req.body.OLD_TYPE;
+	var type_id = req.body.TYPE_ID;
+	var name = req.body.NAME;
+	var cmd = req.body.CMD;
+	if(cmd!=undefined && cmd.length>0){
+		if(type_id.length>0){
+			table.exec_query(
+				"DELETE FROM AIS_SHIPTYPE WHERE TYPE_ID=:type_id",
+				{
+					type_id: type_id
+				}
+			).then( function(has) {
+				console.log("delete",has);
+				res.send({result: true});
+			} );
+		}
+		return;
+	}
+	if(old_type!=undefined && old_type.trim().length==0){
+		table.exec_query(
+			"INSERT INTO AIS_SHIPTYPE VALUES(:type_id, :name)",
+			{
+				type_id: type_id,
+				name: name
+			}
+		).then( function(has) {
+			console.log(has);
+			res.redirect("/dashboard/data/jenis_kapal");
+		} );
+	}else{
+		table.exec_query("SELECT * FROM AIS_SHIPTYPE WHERE TYPE_ID=:type_id", {type_id: old_type}).then(function(has){
+			if(has.rows.length>0){
+				table.exec_query(
+					"UPDATE AIS_SHIPTYPE SET TYPE_ID=:type_id, NAME=:name WHERE TYPE_ID=:old_type",
+					{
+						type_id: type_id,
+						name: name,
+						old_type: old_type
+					}
+				).then( function(has) {
+					console.log(has);
+					res.redirect("/dashboard/data/jenis_kapal");
+				} );
+			}else{
+				res.redirect("/dashboard/data/jenis_kapal");
+			}
+		});
+	}
+});
+
+router.get('/data/jenis_kapal', function(req, res, next) {
   	table.get_all('AIS_SHIPTYPE').then( function(data) {
+  		for(i=0;i<data.rows.length;i++){
+			data.rows[i].json = JSON.stringify(data.rows[i]);
+		}
 		res.render('dashboard/jenis_kapal', { title: 'Data Jenis Kapal', data:data });
 	} );
 });
