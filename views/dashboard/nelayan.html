@@ -8,7 +8,7 @@
         </h1>
     </div>
 
-    <div class="col-md-9">
+    <div class="col-md-12">
 	    <table class="table table-bordered table-data" style="font-size:9pt;">
 	    <thead>
 	    	<tr>
@@ -21,6 +21,7 @@
 	    		<th>KTP</th>
 	    		<th>JENIS KAPAL</th>
 	    		<th>NAMA KAPAL</th>
+	    		<th width="40px"></th>
 	    	</tr>
 	    </thead>
 	    <tbody>
@@ -28,24 +29,150 @@
 	    	<tr>
 	    		<td>{{ loop.index }}</td>
 	    		<td>{{ item.ID_NELAYAN }}</td>
-	    		<td>{{ item.NAMA_NELAYAN }}</td>
-	    		<td>{{ item.ALAMAT_NELAYAN }}</td>
-	    		<td>{{ item.JENIS_KELAMIN }}</td>
-	    		<td>{{ item.NO_TLP_NELAYAN }}</td>
+	    		<td>{{ item.NAMA }}</td>
+	    		<td>{{ item.ALAMAT }}</td>
+	    		<td>
+	    			{% if item.JENIS_KELAMIN=='L' %}
+	    			Laki-laki
+	    			{% else %}
+	    			Perempuan
+	    			{% endif %}
+	    		</td>
+	    		<td>{{ item.TELEPON }}</td>
 	    		<td>{{ item.KTP }}</td>
 	    		<td>{{ item.JENIS_KAPAL }}</td>
 	    		<td>{{ item.NAMA_KAPAL }}</td>
+	    		<td>
+	    			<button class="btn btn-default btn-xs" data-toggle="modal" data-target="#form" data-detail='{{ item.json }}'> <span class="fa fa-edit"></span> </button> &nbsp; 
+	    			<button class="btn btn-default btn-xs" onclick="hapus(this)" data-detail='{{ item.json }}'> <span class="fa fa-remove"></span> </button>
+	    		</td>
 	    	</tr>
 	    	{% endfor %}
 	    </tbody>
 	    </table>
+
+	    <br/>
+
+	    <button class="btn btn-default" data-toggle="modal" data-target="#form">Tambah Data</button>
     </div>
+
+    <div id="form" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Input/Edit Data Nelayan</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" method="post" role="form">
+						<input type="hidden" name="OLD_ID" />
+						<div class="form-group">
+							<label class="col-md-3">ID_NELAYAN</label>
+							<div class="col-md-9">
+								<input type="number" name="ID_NELAYAN" class="form-control" placeholder="ID_NELAYAN" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">NAMA</label>
+							<div class="col-md-9">
+								<input type="text" name="NAMA" class="form-control" placeholder="NAMA" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">ALAMAT</label>
+							<div class="col-md-9">
+								<textarea name="ALAMAT" class="form-control" placeholder="ALAMAT"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">JENIS KELAMIN</label>
+							<div class="col-md-9">
+								<select name="JENIS_KELAMIN" class="form-control" placeholder="JENIS KELAMIN">
+									<option value="L">Laki-laki</option>
+									<option value="P">Perempuan</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">TELEPON</label>
+							<div class="col-md-9">
+								<input type="text" name="TELEPON" class="form-control" placeholder="TELEPON" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">KTP</label>
+							<div class="col-md-9">
+								<input type="text" name="KTP" class="form-control" placeholder="KTP" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">JENIS KAPAL</label>
+							<div class="col-md-9">
+								<select name="JENIS_KAPAL" class="form-control" placeholder="JENIS KAPAL">
+									{% for st in shiptype %}
+									<option value="{{ st.NAME }}">{{ st.NAME }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3">NAMA KAPAL</label>
+							<div class="col-md-9">
+								<input type="text" name="NAMA_KAPAL" class="form-control" placeholder="NAMA KAPAL" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-9">
+								<button class="btn btn-default">Simpan</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </div>
 
 <script type="text/javascript">
 $(document).ready( function() {
 	$('.table-data').DataTable();
 } );
+
+$('#form').on('shown.bs.modal', function (e) {
+    var b = $(e.relatedTarget);
+    var detail = b.data('detail');
+    $('#form').find('input[name=OLD_ID]').val('');
+    if(detail!=undefined){
+    	console.log("edit",detail);
+    	$('#form').find('input[name=OLD_ID]').val(detail.ID_NELAYAN);
+    	$('#form').find('input[name=ID_NELAYAN]').val(detail.ID_NELAYAN);
+    	$('#form').find('input[name=NAMA]').val(detail.NAMA);
+    	$('#form').find('textarea[name=ALAMAT]').val(detail.ALAMAT);
+    	$('#form').find('select[name=JENIS_KELAMIN]').val(detail.JENIS_KELAMIN);
+    	$('#form').find('input[name=TELEPON]').val(detail.TELEPON);
+    	$('#form').find('input[name=KTP]').val(detail.KTP);
+    	$('#form').find('select[name=JENIS_KAPAL]').val(detail.JENIS_KAPAL);
+    	$('#form').find('input[name=NAMA_KAPAL]').val(detail.NAMA_KAPAL);
+    	// var tgl = moment(detail.TANGGAL).format('GGGG-MM-DD');
+    	// console.log(detail.TANGGAL);
+    	// console.log(tgl);
+    	// $('#form').find('input[name=TANGGAL]').val(tgl);
+    }else{
+    	console.log("insert");
+    }
+} );
+
+function hapus(th){
+	var detail = $(th).data('detail');
+	if(detail!=undefined){
+		if(confirm('Yakin akan dihapus ?')){
+			$.post(location.href, {ID_NELAYAN: detail.ID_NELAYAN, CMD: 'delete'}, function(res){
+				location.reload();
+			});
+		}
+	}
+}
 </script>
 
 {% endblock %}

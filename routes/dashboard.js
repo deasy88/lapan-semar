@@ -265,9 +265,87 @@ router.all('/data/posisi_kapal', function(req, res, next) {
 	} );
 });
 
-router.all('/data/nelayan', function(req, res, next) {
+router.post('/data/nelayan', function(req, res, next) {
+	var old_id = req.body.OLD_ID;
+	var id_nelayan = req.body.ID_NELAYAN;
+	var nama = req.body.NAMA;
+	var alamat = req.body.ALAMAT;
+	var jenis_kelamin = req.body.JENIS_KELAMIN;
+	var telepon = req.body.TELEPON;
+	var ktp = req.body.KTP;
+	var jenis_kapal = req.body.JENIS_KAPAL;
+	var nama_kapal = req.body.NAMA_KAPAL;
+	var cmd = req.body.CMD;
+	if(cmd!=undefined && cmd.length>0){
+		if(id_nelayan.length>0){
+			table.exec_query(
+				"DELETE FROM NELAYAN WHERE id_nelayan=:id_nelayan",
+				{
+					id_nelayan: id_nelayan
+				}
+			).then( function(has) {
+				console.log("delete",has);
+				res.send({result: true});
+			} );
+		}
+		return;
+	}
+	if(old_id!=undefined && old_id.trim().length==0){
+		table.exec_query(
+			"INSERT INTO NELAYAN VALUES(:id_nelayan, :nama, :alamat, :jenis_kelamin, :telepon, :ktp, :jenis_kapal, :nama_kapal)",
+			{
+				id_nelayan: id_nelayan,
+				nama: nama,
+				alamat: alamat,
+				jenis_kelamin: jenis_kelamin,
+				telepon: telepon,
+				ktp: ktp,
+				jenis_kapal: jenis_kapal,
+				nama_kapal: nama_kapal
+			}
+		).then( function(has) {
+			console.log(has);
+			res.redirect("/dashboard/data/nelayan");
+		} );
+	}else{
+		console.log('here');
+		table.exec_query("SELECT * FROM NELAYAN WHERE ID_NELAYAN=:id_nelayan", {id_nelayan: old_id}).then(function(has){
+			console.log('here 1', has);
+			if(has.rows.length>0){
+				console.log('here 2');
+				table.exec_query(
+					"UPDATE NELAYAN SET ID_NELAYAN=:id_nelayan, NAMA=:nama, ALAMAT=:alamat, JENIS_KELAMIN=:jenis_kelamin, TELEPON=:telepon, KTP=:ktp, JENIS_KAPAL=:jenis_kapal, NAMA_KAPAL=:nama_kapal WHERE ID_NELAYAN=:old_id",
+					{
+						id_nelayan: id_nelayan,
+						nama: nama,
+						alamat: alamat,
+						jenis_kelamin: jenis_kelamin,
+						telepon: telepon,
+						ktp: ktp,
+						jenis_kapal: jenis_kapal,
+						nama_kapal: nama_kapal,
+						old_id: old_id
+					}
+				).then( function(has) {
+					console.log('here 3');
+					console.log(has);
+					res.redirect("/dashboard/data/nelayan");
+				} );
+			}else{
+				res.redirect("/dashboard/data/nelayan");
+			}
+		});
+	}
+});
+
+router.get('/data/nelayan', function(req, res, next) {
   	table.get_all('NELAYAN').then( function(data) {
-		res.render('dashboard/nelayan', { title: 'Data Nelayan', data:data });
+  		for(i=0;i<data.rows.length;i++){
+			data.rows[i].json = JSON.stringify(data.rows[i]);
+		}
+  		table.get_all('AIS_SHIPTYPE').then( function(shiptype) {
+			res.render('dashboard/nelayan', { title: 'Data nelayan', data:data, shiptype: shiptype.rows });
+  		} );
 	} );
 });
 
