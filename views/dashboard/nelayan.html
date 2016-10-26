@@ -29,8 +29,8 @@
 	    	<tr>
 	    		<td>{{ loop.index }}</td>
 	    		<td>{{ item.ID_NELAYAN }}</td>
-	    		<td>{{ item.NAMA }}</td>
-	    		<td>{{ item.ALAMAT }}</td>
+	    		<td>{{ item.NAMA_NELAYAN }}</td>
+	    		<td>{{ item.ALAMAT_NELAYAN }}</td>
 	    		<td>
 	    			{% if item.JENIS_KELAMIN=='L' %}
 	    			Laki-laki
@@ -38,7 +38,7 @@
 	    			Perempuan
 	    			{% endif %}
 	    		</td>
-	    		<td>{{ item.TELEPON }}</td>
+	    		<td>{{ item.NO_TLP_NELAYAN }}</td>
 	    		<td>{{ item.KTP }}</td>
 	    		<td>{{ item.JENIS_KAPAL }}</td>
 	    		<td>{{ item.NAMA_KAPAL }}</td>
@@ -147,10 +147,10 @@ $('#form').on('shown.bs.modal', function (e) {
     	console.log("edit",detail);
     	$('#form').find('input[name=OLD_ID]').val(detail.ID_NELAYAN);
     	$('#form').find('input[name=ID_NELAYAN]').val(detail.ID_NELAYAN);
-    	$('#form').find('input[name=NAMA]').val(detail.NAMA);
-    	$('#form').find('textarea[name=ALAMAT]').val(detail.ALAMAT);
+    	$('#form').find('input[name=NAMA]').val(detail.NAMA_NELAYAN);
+    	$('#form').find('textarea[name=ALAMAT]').val(detail.ALAMAT_NELAYAN);
     	$('#form').find('select[name=JENIS_KELAMIN]').val(detail.JENIS_KELAMIN);
-    	$('#form').find('input[name=TELEPON]').val(detail.TELEPON);
+    	$('#form').find('input[name=TELEPON]').val(detail.NO_TLP_NELAYAN);
     	$('#form').find('input[name=KTP]').val(detail.KTP);
     	$('#form').find('select[name=JENIS_KAPAL]').val(detail.JENIS_KAPAL);
     	$('#form').find('input[name=NAMA_KAPAL]').val(detail.NAMA_KAPAL);

@@ -314,7 +314,7 @@ router.post('/data/nelayan', function(req, res, next) {
 			if(has.rows.length>0){
 				console.log('here 2');
 				table.exec_query(
-					"UPDATE NELAYAN SET ID_NELAYAN=:id_nelayan, NAMA=:nama, ALAMAT=:alamat, JENIS_KELAMIN=:jenis_kelamin, TELEPON=:telepon, KTP=:ktp, JENIS_KAPAL=:jenis_kapal, NAMA_KAPAL=:nama_kapal WHERE ID_NELAYAN=:old_id",
+					"UPDATE NELAYAN SET ID_NELAYAN=:id_nelayan, NAMA_NELAYAN=:nama, ALAMAT_NELAYAN=:alamat, JENIS_KELAMIN=:jenis_kelamin, NO_TLP_NELAYAN=:telepon, KTP=:ktp, JENIS_KAPAL=:jenis_kapal, NAMA_KAPAL=:nama_kapal WHERE ID_NELAYAN=:old_id",
 					{
 						id_nelayan: id_nelayan,
 						nama: nama,
