@@ -7,6 +7,7 @@
 
 	<div style="display:block;position: absolute;bottom: 30px;width: 100%;background-color: none;z-index:2000; display: none" id="legend-container">
 		<center>
+			<div id=""><h4>Legenda<h4></div>
 			<div id="legend-img-container">
 				<img id="legend-img" width="500" height="20"><span id="legend-unit" style="padding-left: 5px;background-color:#ffffff"></span>
 			</div>
@@ -27,7 +28,7 @@
 	<div class="sideMenu">
 		<div class="form-group" style="padding:0;">
 			<div class="col-sm-2">
-				<button class="btn btn-sm btn-warning btn-toggle-menu" onclick="toggle_menu(this)"> <i class="fa fa-arrow-right"></i> </button>
+				<button class="btn btn-sm btn-warning btn-toggle-menu" onclick="toggle_menu(this)"> <i class="fa fa-arrow-right"></i></button>
 			</div>
 		</div>
 		<div class="form-group">
@@ -47,13 +48,16 @@
 				<button id="prediksi-angin" class="wms btn btn-primary data-menu not-stack col-md-12" data-layeralias="Angin" data-key="angin">Angin</button>
 			</div>
 			<div class="col-md-12" style="padding-top:5px">
+				<button id="prediksi-wave" class="wms btn btn-primary data-menu not-stack col-md-12" data-layeralias="Wave" data-key="wave">Gelombang</button>
+			</div>
+			<div class="col-md-12" style="padding-top:5px">
 				<label>Pengamatan</label>
 			</div>
 			<div class="col-md-12" style="padding-top:5px">
 				<button id="pengamatan-zppi" class="btn btn-primary data-menu stack col-md-12" data-child="zppi-date" data-ignore="true">ZPPI<br/><small>Zona Potensi Penangkapan Ikan</small></button>
 			</div>
 			<div class="col-md-12 adaSub" style="padding-top:5px">
-				<button id="pengamatan-kapal" class="btn btn-primary data-menu stack col-md-12" data-child="boat-type" data-ignore="true">Posisi Kapal<br/><small>AIS</small></button>
+				<button id="pengamatan-kapal" class="btn btn-primary data-menu stack col-md-12">Posisi Kapal<br/><small>AIS Satelit LAPAN A2</small></button>
 				<div class="subMenu" hidden>
 					<div class="form-group">
 						<div class="col-md-12" style="padding-top:5px">
@@ -96,55 +100,56 @@
 				</div>
 			</div>
 			<div class="col-md-12 adaSub" style="padding-top:5px">
-				<button id="pengamatan-kapal" class="btn btn-primary data-menu stack col-md-12">Posisi Kapal<br/><small>Teristerial</small></button>
-				<div class="subMenu" hidden>
-					<div class="form-group">
-						<div class="col-md-12" style="padding-top:5px">
-							<label>Tipe kapal</label>
-						</div>
-						<div class="col-md-12" style="padding-top:5px">
-							 <button class="btn btn-primary data-menu tipekapal col-md-12" data-val="36">Hazard-Y</button>
-						</div>
-						<div class="col-md-12" style="padding-top:5px">
-							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="37">Passenger</button>
-						</div>
-						<div class="col-md-12" style="padding-top:5px">
-							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="38">Cargo</button>
-						</div>
-						<div class="col-md-12" style="padding-top:5px">
-							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="39">Future use</button>
-						</div>
-						<div class="col-md-12" style="padding-top:5px">
-							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="40">Tanker</button>
-						</div>
-						<div class="col-md-12" style="padding-top:5px">
-							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="41">Default</button>
-						</div>
-						<div class="col-md-12" style="padding-top:5px">
-							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="42">Other ships</button>
-						</div>
-						<div class="col-md-12" style="padding-top:5px">
-							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="43">HSC-Z</button>
-						</div>
-						<div class="col-md-12" style="padding-top:5px">
-							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="44">WIG</button>
-						</div>
-						<div class="col-md-12" style="padding-top:5px">
-							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="81">Other ship</button>
-						</div>
-						<div class="col-md-12" style="padding-top:5px">
-							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="0">UNIDENTIFIED</button>
-						</div>
-					</div>		
-				</div>
+				<button id="pengamatan-kapal-teristerial" class="btn btn-primary data-menu stack col-md-12" data-child="boat-type" data-ignore="true">Posisi Kapal<br/><small>AIS Teristerial</small></button>
 			</div>
 			<div class="col-md-12" style="padding-top:5px">
 				<button id="pengamatan-awan" class="wms btn btn-primary data-menu not-stack col-md-12" data-layeralias="Awan" data-key="awan">Awan</button>
 			</div>
 			<div class="col-md-12" style="padding-top:5px">
-				<button id="pengamatan-aws" class="aws btn btn-primary data-menu not-stack col-md-12" data-layeralias="AWS" data-key="aws">AWS<br/><small>Automatic Weather System</small></button>
+				<button id="pengamatan-aws" class="aws btn btn-primary data-menu not-stack col-md-12" data-layeralias="AWS" data-key="aws">Cuaca Lokal<br/><small>Automatic Weather System</small></button>
 			</div>
 		</div>
+		                        <div data-parent="menu-root" id="boat-type" style="position: absolute;top: 0px; width: 250px; background-color: #ffffff;padding: 10px;right:-255px">
+                                <button class="btn btn-primary data-menu-back" style="margin-bottom:10px">Back</button>
+                                <input type="hidden" id="shipDatePickerHdn" val="">
+                                <br/>Pilih Tanggal
+                                <div class="form-group">
+                                    <div class='input-group date' id='shipDatePicker'>
+                                        <input type='text' class="form-control"/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                    <div class='input-group' style="margin-top:10px">
+                                        Jam : <select id="shipDatePickerTime"></select>
+                                    </div>
+                                </div>
+                                <h4>Tipe Kapal</h4>
+                                                                    <button class="btn btn-primary disabled data-menu tipekapal" data-val="36">Hazard-Y</button>
+                                                                        <button class="btn btn-primary disabled data-menu tipekapal" data-val="37">Passenger</button>
+                                                                        <button class="btn btn-primary disabled data-menu tipekapal" data-val="38">Cargo</button>
+                                                                        <button class="btn btn-primary disabled data-menu tipekapal" data-val="39">future use</button>
+                                                                        <button class="btn btn-primary disabled data-menu tipekapal" data-val="40">Tanker</button>
+                                                                        <button class="btn btn-primary disabled data-menu tipekapal" data-val="41">default</button>
+                                                                        <button class="btn btn-primary disabled data-menu tipekapal" data-val="42">Other ships</button>
+                                                                        <button class="btn btn-primary disabled data-menu tipekapal" data-val="43">HSC-Z</button>
+                                                                        <button class="btn btn-primary disabled data-menu tipekapal" data-val="44">WIG</button>
+                                                                        <button class="btn btn-primary disabled data-menu tipekapal" data-val="81">Other ship</button>
+                                                                    <button class="btn btn-primary disabled data-menu tipekapal" data-val="0">UNIDENTIFIED</button>
+                            </div>
+                            <div data-parent="menu-root" id="zppi-date" style="position: absolute;top: 0px; width: 250px; background-color: #ffffff;padding: 10px;right:-255px">
+                                <button class="btn btn-primary data-menu-back" style="margin-bottom:10px">Back</button>
+                                <br/>Pilih Tanggal
+                                <div class='input-group date' id='zppiDatePicker'>
+                                    <input type='text' class="form-control"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                                <div class='input-group'>
+                                    <button class="btn btn-primary pull-right" style="margin-top:10px" id="clear-zppi">Clear Zppi</button>
+                                </div>
+                            </div>
 	</div>
 
 	<style type="text/css">
@@ -159,6 +164,11 @@
 		}
 		.navbar {
 			margin-bottom:0;			
+		}
+		.custom .leaflet-popup-tip,
+		.custom .leaflet-popup-content-wrapper {
+		background: #e93434;
+		color: #ffffff;
 		}
 	</style>
 
@@ -314,6 +324,22 @@
 			'width': 128,
 			'height': 128,
 			'unit': 'Kelvin'
+		};
+		layers['wave'] = {
+			'id': 'wave',
+			'wmsId': 'WAVE',
+			'layer': 'tesWAVE/WAVEDIR',
+			'style': 'default-scalar/seq-Blues-inv',
+			'stackedLayer': 'tesWAVE/WAVEDIR',
+			'stackedStyle': 'default-scalar/seq-Blues-inv',
+			'legend': 'seq-Blues-inv',
+			'alias': 'wave',
+			'minMax': '200,255',
+			'zIndex': 11,
+			'opacity': 1,
+			'width': 128,
+			'height': 128,
+			'unit': 'mil/hour'
 		};
 		$.each(layers,function(k,v){
 			layers[k]=$.extend({},layerDefaults,v);
@@ -768,19 +794,25 @@
 		});
 		
 		$("#pengamatan-aws").on("click", function (e) {
-			$.get("http://api.openweathermap.org/data/2.5/weather?lat=-7.97&lon=110.6&APPID=4d1742c7a7f260eb7e547c1ed2ef556d", {}, function (res) {
+			$.get("http://api.openweathermap.org/data/2.5/weather?units=metric&lat=-7.97&lon=110.6&APPID=4d1742c7a7f260eb7e547c1ed2ef556d", {}, function (res) {
 			console.log(res);
 		
 		var marker = L.marker([-8.1926332, 110.798387], {icon: awsIcon}).addTo(map)
-		.bindPopup("Lokasi : " + res.coord.lon + " , " + res.coord.lat + "<br/>Suhu : " + res.main.temp + "<br/>Tekanan : " + res.main.pressure + "<br/>Angin : " + res.wind.speed + " , " + res.wind.deg)
-									.on('mouseover', function (e) {
-										this.openPopup();
-									})
-									.on('mouseout', function (e) {
-										this.closePopup();
-									});
+		.bindPopup('<span style="font-size:18px">' + "Lokasi : " + res.coord.lon + " , " + res.coord.lat + "<br/>Suhu : " + parseFloat(res.main.temp).toFixed(2) + " Celcius" + "<br/>Tekanan : " + res.main.pressure + " hPa" + "<br/>Angin : " + res.wind.speed + " m/s, " + res.wind.deg + " <sup>o</sup>" + '<span>', customOptions)
+									//.on('mouseover', function (e) {
+									//	this.openPopup();
+									//})
+									//.on('mouseout', function (e) {
+									//	this.closePopup();
+									//});
 		}, "JSON");
 		});
+		
+		var customOptions =
+        {
+        'maxWidth': '500',
+        'className' : 'custom'
+        }
 		
 		var ikanIcon = L.icon({
 			iconUrl: '/images/Ikan 001 copy.png',
@@ -834,7 +866,7 @@
 						var lg = [];
 						$.each(res.zppi, function (k, v) {
 							lg[k] = L.marker([v[0].LATITUDE.replace(",", "."), v[0].LONGITUDE.replace(",", ".")], {icon: ikanIcon}).addTo(map)
-									.bindPopup("Lokasi : <br/> " + v[0].LATITUDE.replace(",", ".") + "," + v[0].LONGITUDE.replace(",", "."))
+									.bindPopup('<span style="font-size:22px">' + "Lokasi : <br/> " + v[0].LATITUDE.replace(",", ".") + "," + v[0].LONGITUDE.replace(",", ".") + '<span>', customOptions )
 									.on('mouseover', function (e) {
 										this.openPopup();
 									})
@@ -901,7 +933,7 @@
 						} else {
 							var top = ($(".data-date-info").length + 1) * 30 + 50;
 						}
-						$("<div/>", {
+						$("<div/>", {	
 							'id': "data-date-info-kapal",
 							'class': 'data-date-info',
 							'html': "Waktu Data Kapal : " + res.tanggal + " Jam " + res.jam,
@@ -911,6 +943,7 @@
 						$.each(res.kapal, function (k, v) {
 							lg[k] = L.marker([v.LATITUDE, v.LONGITUDE], {icon: boatIcon})
 									.on('click', function (e) {
+									lg[k].bindPopup(L.popup({maxWidth: 600, closeOnClick: false, }).setContent('<span style="font-size:18px">' + "Lokasi Kapal : " + res.LATITUDE + " , " + res.LONGITUDE + '<span>' , customOptions)).openPopup();
 										$.get("/dashboard/posisi_kapal", {mmsi: v.MMSI, tanggal: v.TG, tmp: v.TMP}, function (res) {
 											var id = 'popup-container' + "_kapal" + "_" + v.MMSI;
 											if ($("#" + id).length > 0) {
@@ -934,12 +967,16 @@
 											}
 											newwindow.slideDown();
 											newwindow.trigger("mouseenter");
+											lg[k].closePopup();
+											lg[k].unbindPopup();
+											lg[k].bindPopup(L.popup({maxWidth: 600, closeOnClick: false}).setContent(res)).openPopup();
 										}, 'html');
 									});
 						});
 						pageData.points.kapal[val] = L.layerGroup(lg);
 						pageData.points.kapal['icon'] = 'boatIcon';
 						pageData.points.kapal[val].addTo(map);
+						pageData.notify.ais.close();
 					} else {
 						$(t).removeClass("btn-success");
 						alert("Kapal Dengan Tipe Tersebut Tidak Ditemukan");
