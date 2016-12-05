@@ -1,6 +1,12 @@
 {% extends '../layout/map.html' %}
 
 {% block content %}
+	<style type="text/css">
+		.sideMenu{
+			width: 250px;
+		}
+	</style>
+
 	<div id="map-container"></div>
 
 	<div id="map-content"></div>
@@ -144,6 +150,7 @@
 		var stackWms = {};
 		var mapLayers = {};
 		var pageData = {};
+
 		//setup initate
 		pageData["notify"] = {};
 		pageData["loadTiles"] = false;
