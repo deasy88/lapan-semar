@@ -8,8 +8,33 @@
         </h1>
     </div>
 
-    <div class="col-md-12">
-	    <table class="table table-bordered table-data" style="font-size:9pt;">
+    <div class="col-md-12" id="divData">
+    	<style type="text/css">
+			@media print{
+				table{
+					width:100%;
+					border-top:solid 1px #ccc;
+					border-left:solid 1px #ccc;
+				}
+				table th{
+					font-weight: bold;
+				}
+				table th, table td{
+					border-right:solid 1px #ccc;
+					border-bottom:solid 1px #ccc;
+				}
+				button{
+					display: none;
+				}
+				.dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate{
+					display: none;
+				}
+				th:last-child, td:last-child{
+					display: none;
+				}
+			}
+		</style>
+	    <table class="table table-bordered table-data" style="font-size:9pt;" width="100%">
 	    <thead>
 	    	<tr>
 	    		<th width="10px">No</th>
@@ -53,7 +78,8 @@
 
 	    <br/>
 
-	    <button class="btn btn-default" data-toggle="modal" data-target="#form">Tambah Data</button>
+	    <button class="btn btn-default" data-toggle="modal" data-target="#form"> <span class="fa fa-plus"></span>Tambah Data</button> &nbsp; 
+	    <button class="btn btn-default" onclick="doPrint()"> <span class="fa fa-print"></span> Print Data</button> &nbsp; 
     </div>
 
     <div id="form" class="modal fade" role="dialog">
@@ -173,6 +199,14 @@ function hapus(th){
 		}
 	}
 }
+
+function doPrint(){
+	w=window.open();
+	w.document.write($('#divData').html());
+	w.print();
+	w.close();
+}
 </script>
+
 
 {% endblock %}
