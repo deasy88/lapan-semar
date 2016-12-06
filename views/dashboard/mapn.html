@@ -62,10 +62,10 @@
 				<label>Pengamatan</label>
 			</div>
 			<div class="col-md-12" style="padding-top:5px">
-				<button id="pengamatan-zppi" class="btn btn-primary data-menu stack col-md-12" data-child="zppi-date" data-ignore="true" data-submenu="zppi-next">ZPPI<br/><small>Zona Potensi Penangkapan Ikan</small></button>
+				<button id="pengamatan-zppi" class="btn btn-primary data-menu col-md-12" data-child="zppi-date" data-ignore="true" data-submenu="zppi-next">ZPPI<br/><small>Zona Potensi Penangkapan Ikan</small></button>
 			</div>
 			<div class="col-md-12 adaSub" style="padding-top:5px">
-				<button id="pengamatan-kapal" class="btn btn-primary data-menu stack col-md-12" data-submenu="posisikapal-next">Posisi Kapal<br/><small>AIS Satelit LAPAN A2</small></button>
+				<button id="pengamatan-kapal" class="btn btn-primary data-menu col-md-12" data-submenu="posisikapal-next">Posisi Kapal<br/><small>AIS Satelit LAPAN A2</small></button>
 			</div>
 			<div class="col-md-12 adaSub" style="padding-top:5px">
 				<button id="pengamatan-kapal-teristerial" class="btn btn-primary data-menu stack col-md-12" data-child="boat-type" data-ignore="true">Posisi Kapal<br/><small>AIS Teristerial</small></button>
@@ -79,11 +79,11 @@
 		</div>
 		<div class="form-group" style="display: none" id="posisikapal-next">
 						<div class="col-md-12" style="padding-top:5px">
-							<button class="btn btn-primary" id="backButton">Back</button>
+							<button class="btn btn-primary" id="backButton1">Back</button>
 						</div>
 						<div class="col-md-12" style="padding-top:5px">
-							<label>Pilih Tanggal</label>
-                                    <div class='input-group date' id='shipDatePicker'>
+							<label>Pilih Tanggal</label><br/>
+                                    <div class='input-group date' id='shipDatePicker1'>
                                         <input type='text' class="form-control"/>
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
@@ -132,7 +132,23 @@
 							<button class="btn btn-primary data-menu tipekapal col-md-12" data-val="0">UNIDENTIFIED</button>
 						</div>
 		</div>		
-		
+		<div class="form-group" style="display: none" id="zppi-next">
+						<div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary" id="backButton2">Back</button>
+						</div>
+						<div class="col-md-12" style="padding-top:5px">
+							<label>Pilih Tanggal</label><br/>
+                                    <div class='input-group date' id='shipDatePicker2'>
+                                        <input type='text' class="form-control"/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                        </div>
+                        <div class="col-md-12" style="padding-top:5px">
+							<button class="btn btn-primary">Clear Zppi</button>
+						</div>
+        </div>
 	</div>
 
 	<style type="text/css">
@@ -183,14 +199,40 @@
 				}
 			});
 
-			$('#backButton').unbind('all').click(function(){
+			$('#backButton1').unbind('all').click(function(){
 				var a = $("#menu-home");
 				var b = $('#posisikapal-next');
 				b.fadeOut();
 				a.fadeIn();
 			});
 
-			$('#shipDatePicker').datepicker();
+			$('#backButton2').unbind('all').click(function(){
+				var a = $("#menu-home");
+				var b = $('#zppi-next');
+				b.fadeOut();
+				a.fadeIn();
+			});
+
+			$('#shipDatePicker1').datepicker({autoclose: true});
+			$('#shipDatePicker2').datepicker({autoclose: true});
+
+			$('#shipDatePicker1').on("dp.change", function (e) {
+		        if (e.date == false) {
+		            return false;
+		        }
+		        $("#shipDatePickerTime").html("");
+		        $.get("http://182.23.27.42/en/map4/get-ais-time", {'date': $('#shipDatePicker1').val().format("YYYY-MM-DD")}, function (res) {
+		            if (res.status == 'ok') {
+		                var last = 00;
+		                $.each(res.jam, function (k, v) {
+		                    $("#shipDatePickerTime").append($("<option/>", {"value": v, "html": v}));
+		                    last = v;
+		                });
+		                $("#shipDatePickerTime").val(last);
+		                $("#shipDatePickerTime").trigger("change");
+		            }
+		        }, 'JSON');
+		    });
 		})
 	</script>
 
