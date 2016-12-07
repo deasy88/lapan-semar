@@ -266,6 +266,7 @@ router.all('/data/posisi_kapal', function(req, res, next) {
 });
 
 router.post('/data/nelayan', function(req, res, next) {
+	console.log('a');
 	var old_id = req.body.OLD_ID;
 	var id_nelayan = req.body.ID_NELAYAN;
 	var nama = req.body.NAMA;
@@ -276,6 +277,7 @@ router.post('/data/nelayan', function(req, res, next) {
 	var jenis_kapal = req.body.JENIS_KAPAL;
 	var nama_kapal = req.body.NAMA_KAPAL;
 	var cmd = req.body.CMD;
+	console.log('b');
 	if(cmd!=undefined && cmd.length>0){
 		if(id_nelayan.length>0){
 			table.exec_query(
@@ -291,8 +293,10 @@ router.post('/data/nelayan', function(req, res, next) {
 		return;
 	}
 	if(old_id!=undefined && old_id.trim().length==0){
+		console.log('c');
 		table.exec_query(
-			"INSERT INTO NELAYAN VALUES(:id_nelayan, :nama, :alamat, :jenis_kelamin, :telepon, :ktp, :jenis_kapal, :nama_kapal)",
+			"INSERT INTO NELAYAN(ID_NELAYAN,NAMA_NELAYAN,ALAMAT_NELAYAN,JENIS_KELAMIN,NO_TLP_NELAYAN,KTP,JENIS_KAPAL,NAMA_KAPAL) "
+			+ "VALUES(:id_nelayan,:nama,:alamat,:jenis_kelamin,:telepon,:ktp,:jenis_kapal,:nama_kapal)",
 			{
 				id_nelayan: id_nelayan,
 				nama: nama,
@@ -306,8 +310,11 @@ router.post('/data/nelayan', function(req, res, next) {
 		).then( function(has) {
 			console.log(has);
 			res.redirect("/dashboard/data/nelayan");
-		} );
+		}).catch(function(err) {
+            console.log(err);
+        });
 	}else{
+		console.log('d');
 		console.log('here');
 		table.exec_query("SELECT * FROM NELAYAN WHERE ID_NELAYAN=:id_nelayan", {id_nelayan: old_id}).then(function(has){
 			console.log('here 1', has);
