@@ -1,0 +1,9 @@
+Aplikasi DSS SEMAR
+
+Merupakan Aplikasi yang dibangun dan dirancang tampilan aplikasi prediksi dan pengamatan cuaca berbasis Web dengan menggunakan platform engine NodeJS diatas framework Express.js dan dibuat dengan tamplate SWIG (Module).
+DSS SEMAR DIY telah dapat menampilkan fitur dari berbagai sumber data seperti:
+•	Data prediksi atmosfer (hujan dan angin) diambil dari SADEWA dengan resolusi data tiap jam dan 5 km. Satuan hujan adalah mm/jam dan satuan angin adalah m/detik.
+•	Data prediksi arus dan suhu permukaan laut diambil dari HYCOM (Hybrid Coordinate Ocean Model) untuk 6 hari ke depan dan mempunyai resolusi spasial 1/12 derajat. Satuan arus laut adaah m/detik dan satuan suhu permukaan laut adalah derajat Celcius.
+•	Data ZPPI (Zona Potensi Penangkapan Ikan) dikembangkan dan dihasilkan oleh Pusat Pemanfaatan Penginderaan Jauh LAPAN, yang berlaku untuk dua hari ke depan.
+•	Data posisi kapal diolah dari instrumen AIS (Automatic Identification System) yang dipasang pada satelit LAPAN-A2. Satelit tersebut dikembangkan oleh Pusat Teknologi Roket LAPAN.
+•	Data awan diambil dari Himawri-8 dengan resolusi spasial 5 km dan resolusi waktu 1 jam.
